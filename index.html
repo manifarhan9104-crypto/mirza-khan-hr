@@ -2,7 +2,6 @@
 <html lang="fa" dir="rtl">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -12,52 +11,41 @@
 
     <meta
         name="description"
-        content="سامانه جامع منابع انسانی و حضور و غیاب کشت و صنعت میرزا کوچک خان"
+        content="سامانه جامع منابع انسانی و حضور و غیاب میرزا کوچک خان"
     >
 
-    <meta
-        name="theme-color"
-        content="#0f766e"
-    >
-
-    <title>میرزا کوچک خان | سامانه منابع انسانی</title>
+    <title>سامانه منابع انسانی میرزا کوچک خان</title>
 
     <link
         rel="stylesheet"
         href="style.css"
     >
-
 </head>
-
 
 <body>
 
 <div class="app">
 
-
-    <!-- ==================================================
+    <!-- ==========================================
          SIDEBAR
-    ================================================== -->
+    =========================================== -->
 
-    <aside
-        class="sidebar"
-        id="sidebar"
-    >
+    <aside id="sidebar" class="sidebar">
 
-        <div class="sidebar-header">
+        <div class="sidebar-logo">
 
-            <div class="brand-logo">
+            <div class="logo-icon">
                 م
             </div>
 
-            <div class="brand-text">
+            <div class="logo-text">
 
                 <strong>
                     میرزا کوچک خان
                 </strong>
 
                 <span>
-                    منابع انسانی
+                    سامانه منابع انسانی
                 </span>
 
             </div>
@@ -67,132 +55,67 @@
 
         <nav class="sidebar-nav">
 
-            <div class="nav-title">
-                منوی اصلی
-            </div>
-
-
             <a
                 href="#"
                 class="menu-item active"
                 data-page="dashboard"
             >
-
-                <span class="menu-icon">
-                    🏠
-                </span>
-
-                <span>
-                    داشبورد
-                </span>
-
+                <span>📊</span>
+                <span>داشبورد</span>
             </a>
-
 
             <a
                 href="#"
                 class="menu-item"
                 data-page="employees"
             >
-
-                <span class="menu-icon">
-                    👥
-                </span>
-
-                <span>
-                    کارکنان
-                </span>
-
+                <span>👥</span>
+                <span>کارکنان</span>
             </a>
-
 
             <a
                 href="#"
                 class="menu-item"
                 data-page="attendance"
             >
-
-                <span class="menu-icon">
-                    🕐
-                </span>
-
-                <span>
-                    حضور و غیاب
-                </span>
-
+                <span>🕘</span>
+                <span>حضور و غیاب</span>
             </a>
-
 
             <a
                 href="#"
                 class="menu-item"
                 data-page="leave"
             >
-
-                <span class="menu-icon">
-                    🏖️
-                </span>
-
-                <span>
-                    مرخصی و مأموریت
-                </span>
-
+                <span>🏖️</span>
+                <span>مرخصی و مأموریت</span>
             </a>
-
-
-            <div class="nav-title">
-                مدیریت
-            </div>
-
 
             <a
                 href="#"
                 class="menu-item"
                 data-page="reports"
             >
-
-                <span class="menu-icon">
-                    📊
-                </span>
-
-                <span>
-                    گزارش‌ها
-                </span>
-
+                <span>📈</span>
+                <span>گزارش‌ها</span>
             </a>
-
 
             <a
                 href="#"
                 class="menu-item"
                 data-page="notifications"
             >
-
-                <span class="menu-icon">
-                    🔔
-                </span>
-
-                <span>
-                    اعلان‌ها
-                </span>
-
+                <span>🔔</span>
+                <span>اعلان‌ها</span>
             </a>
-
 
             <a
                 href="#"
                 class="menu-item"
                 data-page="settings"
             >
-
-                <span class="menu-icon">
-                    ⚙️
-                </span>
-
-                <span>
-                    تنظیمات
-                </span>
-
+                <span>⚙️</span>
+                <span>تنظیمات</span>
             </a>
 
         </nav>
@@ -200,79 +123,57 @@
 
         <div class="sidebar-footer">
 
-            <div class="company-mini">
-
-                <span>
-                    کشت و صنعت
-                </span>
-
-                <strong>
-                    میرزا کوچک خان
-                </strong>
-
+            <div class="system-version">
+                نسخه 1.8
             </div>
 
-            <small>
-                HR System v1.8
-            </small>
+            <div>
+                کشت و صنعت میرزا کوچک خان
+            </div>
 
         </div>
 
     </aside>
 
 
-
-    <!-- ==================================================
+    <!-- ==========================================
          MAIN
-    ================================================== -->
+    =========================================== -->
 
-    <main class="main-content">
+    <main class="main">
 
+        <!-- HEADER -->
 
-        <!-- ==================================================
-             TOP HEADER
-        ================================================== -->
+        <header class="topbar">
 
-        <header class="top-header">
+            <button
+                id="mobileMenu"
+                class="mobile-menu"
+                type="button"
+            >
+                ☰
+            </button>
 
-            <div class="header-right">
+            <div class="topbar-title">
 
-                <button
-                    class="mobile-menu"
-                    id="mobileMenu"
-                    type="button"
-                    aria-label="باز کردن منو"
-                >
-                    ☰
-                </button>
+                <h1 id="pageTitle">
+                    داشبورد
+                </h1>
 
-
-                <div>
-
-                    <h1 id="pageTitle">
-                        داشبورد
-                    </h1>
-
-                    <p id="todayDate">
-                        امروز
-                    </p>
-
-                </div>
+                <span id="todayDate">
+                    امروز
+                </span>
 
             </div>
 
 
-            <div class="header-left">
+            <div class="topbar-actions">
 
                 <button
-                    class="notification-button"
+                    class="top-icon-btn"
                     type="button"
-                    aria-label="اعلان‌ها"
-                    onclick="
-                        document
-                        .querySelector('[data-page=notifications]')
-                        ?.click()
-                    "
+                    data-page="notifications"
+                    onclick="document.querySelector('[data-page=notifications]').click()"
                 >
 
                     🔔
@@ -312,21 +213,20 @@
         </header>
 
 
+        <!-- ======================================
+             CONTENT
+        ======================================= -->
 
-        <!-- ==================================================
-             PAGE CONTAINER
-        ================================================== -->
-
-        <div class="pages-container">
+        <section class="content">
 
 
-            <!-- ==================================================
+            <!-- ==================================
                  DASHBOARD
-            ================================================== -->
+            =================================== -->
 
             <section
-                class="page active-page"
                 id="dashboardPage"
+                class="page active-page"
             >
 
                 <div class="page-heading">
@@ -343,13 +243,12 @@
 
                     </div>
 
-
                     <button
-                        class="primary-btn"
                         id="dashboardAddEmployee"
+                        class="primary-btn"
                         type="button"
                     >
-                        + افزودن کارمند
+                        ＋ افزودن کارمند
                     </button>
 
                 </div>
@@ -359,15 +258,13 @@
 
                 <div class="stats-grid">
 
+                    <div class="stat-card">
 
-                    <article class="stat-card">
-
-                        <div class="stat-icon">
+                        <div class="stat-icon blue">
                             👥
                         </div>
 
-                        <div class="stat-content">
-
+                        <div>
                             <span>
                                 کل کارکنان
                             </span>
@@ -375,24 +272,18 @@
                             <strong id="dashboardTotal">
                                 0
                             </strong>
-
-                            <small>
-                                نفر
-                            </small>
-
                         </div>
 
-                    </article>
+                    </div>
 
 
-                    <article class="stat-card">
+                    <div class="stat-card">
 
-                        <div class="stat-icon">
-                            🟢
+                        <div class="stat-icon green">
+                            ✓
                         </div>
 
-                        <div class="stat-content">
-
+                        <div>
                             <span>
                                 کارکنان فعال
                             </span>
@@ -400,24 +291,18 @@
                             <strong id="dashboardActive">
                                 0
                             </strong>
-
-                            <small>
-                                نفر
-                            </small>
-
                         </div>
 
-                    </article>
+                    </div>
 
 
-                    <article class="stat-card">
+                    <div class="stat-card">
 
-                        <div class="stat-icon">
-                            🔴
+                        <div class="stat-icon red">
+                            ×
                         </div>
 
-                        <div class="stat-content">
-
+                        <div>
                             <span>
                                 کارکنان غیرفعال
                             </span>
@@ -425,175 +310,143 @@
                             <strong id="dashboardInactive">
                                 0
                             </strong>
-
-                            <small>
-                                نفر
-                            </small>
-
                         </div>
 
-                    </article>
+                    </div>
 
 
-                    <article class="stat-card">
+                    <div class="stat-card">
 
-                        <div class="stat-icon">
+                        <div class="stat-icon purple">
                             🏢
                         </div>
 
-                        <div class="stat-content">
-
+                        <div>
                             <span>
-                                واحدها
+                                واحدهای سازمانی
                             </span>
 
                             <strong id="dashboardDepartments">
                                 0
                             </strong>
-
-                            <small>
-                                واحد
-                            </small>
-
                         </div>
-
-                    </article>
-
-                </div>
-
-
-
-                <!-- ATTENDANCE DASHBOARD -->
-
-                <div class="section-title">
-
-                    <div>
-
-                        <h3>
-                            وضعیت امروز حضور و غیاب
-                        </h3>
-
-                        <p>
-                            آمار حضور کارکنان فعال
-                        </p>
 
                     </div>
 
                 </div>
 
 
-                <div class="dashboard-attendance-grid">
+                <!-- ATTENDANCE -->
 
+                <div class="dashboard-grid">
 
-                    <article class="mini-stat">
+                    <div class="dashboard-card">
 
-                        <span>
-                            حاضر
-                        </span>
+                        <div class="card-header">
 
-                        <strong id="dashboardPresent">
-                            0
-                        </strong>
+                            <div>
 
-                    </article>
+                                <h3>
+                                    وضعیت حضور امروز
+                                </h3>
 
+                                <span>
+                                    آمار کارکنان فعال
+                                </span>
 
-                    <article class="mini-stat">
+                            </div>
 
-                        <span>
-                            تأخیر
-                        </span>
-
-                        <strong id="dashboardLate">
-                            0
-                        </strong>
-
-                    </article>
-
-
-                    <article class="mini-stat">
-
-                        <span>
-                            غایب
-                        </span>
-
-                        <strong id="dashboardAbsent">
-                            0
-                        </strong>
-
-                    </article>
-
-
-                    <article class="mini-stat">
-
-                        <span>
-                            مرخصی
-                        </span>
-
-                        <strong id="dashboardLeave">
-                            0
-                        </strong>
-
-                    </article>
-
-
-                    <article class="mini-stat progress-card">
-
-                        <div class="progress-header">
-
-                            <span>
-                                نرخ حضور
-                            </span>
-
-                            <strong id="dashboardAttendanceRate">
+                            <strong
+                                id="dashboardAttendanceRate"
+                                class="big-number"
+                            >
                                 0%
                             </strong>
 
                         </div>
 
-                        <div class="progress">
 
-                            <div
-                                class="progress-bar"
-                                data-dashboard-progress="attendance"
-                            ></div>
+                        <div class="attendance-overview">
 
-                        </div>
+                            <div class="overview-item">
+                                <span class="dot green"></span>
+                                حاضر
+                                <strong id="dashboardPresent">
+                                    0
+                                </strong>
+                            </div>
 
-                    </article>
+                            <div class="overview-item">
+                                <span class="dot orange"></span>
+                                تأخیر
+                                <strong id="dashboardLate">
+                                    0
+                                </strong>
+                            </div>
 
-                </div>
+                            <div class="overview-item">
+                                <span class="dot red"></span>
+                                غایب
+                                <strong id="dashboardAbsent">
+                                    0
+                                </strong>
+                            </div>
 
-
-
-                <!-- LEAVE + NOTIFICATIONS -->
-
-                <div class="dashboard-columns">
-
-
-                    <section class="dashboard-box">
-
-                        <div class="box-header">
-
-                            <div>
-
-                                <h3>
-                                    وضعیت مرخصی
-                                </h3>
-
-                                <p>
-                                    درخواست‌های ثبت شده
-                                </p>
-
+                            <div class="overview-item">
+                                <span class="dot purple"></span>
+                                مرخصی
+                                <strong id="dashboardLeave">
+                                    0
+                                </strong>
                             </div>
 
                         </div>
 
 
-                        <div class="leave-dashboard-stats">
+                        <div class="progress-container">
+
+                            <div class="progress">
+
+                                <div
+                                    class="progress-bar"
+                                    data-dashboard-progress="attendance"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LEAVE -->
+
+                    <div class="dashboard-card">
+
+                        <div class="card-header">
 
                             <div>
 
+                                <h3>
+                                    مرخصی و مأموریت
+                                </h3>
+
+                                <span>
+                                    وضعیت درخواست‌ها
+                                </span>
+
+                            </div>
+
+                            <span class="card-icon">
+                                🏖️
+                            </span>
+
+                        </div>
+
+
+                        <div class="mini-stat-list">
+
+                            <div>
                                 <span>
                                     در انتظار بررسی
                                 </span>
@@ -601,12 +454,9 @@
                                 <strong id="dashboardPendingLeave">
                                     0
                                 </strong>
-
                             </div>
 
-
                             <div>
-
                                 <span>
                                     تأیید شده
                                 </span>
@@ -614,82 +464,39 @@
                                 <strong id="dashboardApprovedLeave">
                                     0
                                 </strong>
-
                             </div>
 
                         </div>
 
-                    </section>
-
-
-
-                    <section class="dashboard-box">
-
-                        <div class="box-header">
-
-                            <div>
-
-                                <h3>
-                                    اعلان‌ها
-                                </h3>
-
-                                <p>
-                                    اعلان‌های خوانده نشده
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="dashboard-notification-count">
-
-                            <strong id="dashboardNotifications">
-                                0
-                            </strong>
-
-                            <span>
-                                اعلان خوانده نشده
-                            </span>
-
-                        </div>
-
-                    </section>
+                    </div>
 
                 </div>
 
 
-
                 <!-- RECENT ACTIVITY -->
 
-                <section class="dashboard-box activity-box">
+                <div class="dashboard-card">
 
-                    <div class="box-header">
+                    <div class="card-header">
 
                         <div>
 
                             <h3>
-                                آخرین فعالیت‌ها
+                                فعالیت‌های اخیر
                             </h3>
 
-                            <p>
+                            <span>
                                 آخرین رویدادهای سامانه
-                            </p>
+                            </span>
 
                         </div>
 
-
-                        <button
-                            class="secondary-btn"
-                            type="button"
-                            onclick="
-                                document
-                                .querySelector('[data-page=notifications]')
-                                ?.click()
-                            "
+                        <span
+                            id="dashboardNotifications"
+                            class="counter-badge"
                         >
-                            مشاهده همه
-                        </button>
+                            0
+                        </span>
 
                     </div>
 
@@ -699,19 +506,18 @@
                         class="dashboard-activity"
                     ></div>
 
-                </section>
+                </div>
 
             </section>
 
 
-
-            <!-- ==================================================
+            <!-- ==================================
                  EMPLOYEES
-            ================================================== -->
+            =================================== -->
 
             <section
-                class="page"
                 id="employeesPage"
+                class="page"
             >
 
                 <div class="page-heading">
@@ -723,139 +529,106 @@
                         </h2>
 
                         <p>
-                            ثبت، ویرایش و مدیریت اطلاعات کارکنان
+                            ثبت، ویرایش و مدیریت اطلاعات پرسنلی
                         </p>
 
                     </div>
 
-
                     <button
-                        class="primary-btn"
                         id="addEmployeeBtn"
+                        class="primary-btn"
                         type="button"
                     >
-                        + افزودن کارمند
+                        ＋ افزودن کارمند
                     </button>
 
                 </div>
 
 
+                <div class="stats-grid compact">
 
-                <!-- EMPLOYEE SUMMARY -->
-
-                <div class="summary-grid">
-
-                    <div class="summary-card">
-
-                        <span>
-                            کل کارکنان
-                        </span>
-
-                        <strong id="totalEmployees">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon blue">👥</div>
+                        <div>
+                            <span>کل کارکنان</span>
+                            <strong id="totalEmployees">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="summary-card">
-
-                        <span>
-                            فعال
-                        </span>
-
-                        <strong id="activeEmployees">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon green">✓</div>
+                        <div>
+                            <span>فعال</span>
+                            <strong id="activeEmployees">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="summary-card">
-
-                        <span>
-                            غیرفعال
-                        </span>
-
-                        <strong id="inactiveEmployees">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon red">×</div>
+                        <div>
+                            <span>غیرفعال</span>
+                            <strong id="inactiveEmployees">0</strong>
+                        </div>
                     </div>
 
                 </div>
 
-
-
-                <!-- FILTERS -->
-
-                <div class="filter-box">
-
-                    <div class="search-wrapper">
-
-                        <span>
-                            🔎
-                        </span>
-
-                        <input
-                            type="search"
-                            id="employeeSearch"
-                            placeholder="جستجو بر اساس نام، کد یا شماره تماس..."
-                        >
-
-                    </div>
-
-
-                    <select id="departmentFilter">
-
-                        <option value="all">
-                            همه واحدها
-                        </option>
-
-                        <option value="تولید">
-                            تولید
-                        </option>
-
-                        <option value="مالی">
-                            مالی
-                        </option>
-
-                        <option value="منابع انسانی">
-                            منابع انسانی
-                        </option>
-
-                        <option value="فنی">
-                            فنی
-                        </option>
-
-                    </select>
-
-
-                    <select id="statusFilter">
-
-                        <option value="all">
-                            همه وضعیت‌ها
-                        </option>
-
-                        <option value="active">
-                            فعال
-                        </option>
-
-                        <option value="inactive">
-                            غیرفعال
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-
-                <!-- EMPLOYEE TABLE -->
 
                 <div class="table-card">
 
-                    <div class="table-responsive">
+                    <div class="filters">
+
+                        <input
+                            id="employeeSearch"
+                            type="search"
+                            placeholder="جستجوی نام، کد یا شماره..."
+                        >
+
+                        <select id="departmentFilter">
+
+                            <option value="all">
+                                همه واحدها
+                            </option>
+
+                            <option value="تولید">
+                                تولید
+                            </option>
+
+                            <option value="مالی">
+                                مالی
+                            </option>
+
+                            <option value="منابع انسانی">
+                                منابع انسانی
+                            </option>
+
+                            <option value="فنی">
+                                فنی
+                            </option>
+
+                        </select>
+
+
+                        <select id="statusFilter">
+
+                            <option value="all">
+                                همه وضعیت‌ها
+                            </option>
+
+                            <option value="active">
+                                فعال
+                            </option>
+
+                            <option value="inactive">
+                                غیرفعال
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
 
                         <table>
 
@@ -876,7 +649,7 @@
                                     </th>
 
                                     <th>
-                                        شماره تماس
+                                        تلفن
                                     </th>
 
                                     <th>
@@ -890,7 +663,6 @@
                                 </tr>
 
                             </thead>
-
 
                             <tbody
                                 id="employeesTableBody"
@@ -905,14 +677,13 @@
             </section>
 
 
-
-            <!-- ==================================================
+            <!-- ==================================
                  ATTENDANCE
-            ================================================== -->
+            =================================== -->
 
             <section
-                class="page"
                 id="attendancePage"
+                class="page"
             >
 
                 <div class="page-heading">
@@ -924,100 +695,40 @@
                         </h2>
 
                         <p>
-                            ثبت و مدیریت حضور روزانه کارکنان
+                            مدیریت ورود، خروج و وضعیت روزانه کارکنان
                         </p>
 
                     </div>
 
-
                     <button
-                        class="primary-btn"
                         id="openAttendanceModal"
+                        class="primary-btn"
                         type="button"
                     >
-                        📋 ثبت وضعیت
+                        🔄 بروزرسانی
                     </button>
 
                 </div>
 
 
-                <div class="attendance-toolbar">
-
-                    <div>
-
-                        <label for="attendanceDate">
-                            تاریخ
-                        </label>
-
-                        <input
-                            type="date"
-                            id="attendanceDate"
-                        >
-
-                    </div>
-
-
-                    <div class="search-wrapper">
-
-                        <span>
-                            🔎
-                        </span>
-
-                        <input
-                            type="search"
-                            id="attendanceSearch"
-                            placeholder="جستجوی کارمند..."
-                        >
-
-                    </div>
-
-
-                    <select id="attendanceStatusFilter">
-
-                        <option value="all">
-                            همه وضعیت‌ها
-                        </option>
-
-                        <option value="present">
-                            حاضر
-                        </option>
-
-                        <option value="late">
-                            تأخیر
-                        </option>
-
-                        <option value="absent">
-                            غایب
-                        </option>
-
-                        <option value="leave">
-                            مرخصی
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-
                 <div class="attendance-stats">
 
-                    <div>
+                    <div class="attendance-stat green">
                         <span>حاضر</span>
                         <strong id="presentCount">0</strong>
                     </div>
 
-                    <div>
+                    <div class="attendance-stat orange">
                         <span>تأخیر</span>
                         <strong id="lateCount">0</strong>
                     </div>
 
-                    <div>
+                    <div class="attendance-stat red">
                         <span>غایب</span>
                         <strong id="absentCount">0</strong>
                     </div>
 
-                    <div>
+                    <div class="attendance-stat purple">
                         <span>مرخصی</span>
                         <strong id="leaveCount">0</strong>
                     </div>
@@ -1025,10 +736,49 @@
                 </div>
 
 
-
                 <div class="table-card">
 
-                    <div class="table-responsive">
+                    <div class="filters">
+
+                        <input
+                            id="attendanceDate"
+                            type="date"
+                        >
+
+                        <input
+                            id="attendanceSearch"
+                            type="search"
+                            placeholder="جستجوی کارمند..."
+                        >
+
+                        <select id="attendanceStatusFilter">
+
+                            <option value="all">
+                                همه وضعیت‌ها
+                            </option>
+
+                            <option value="present">
+                                حاضر
+                            </option>
+
+                            <option value="late">
+                                تأخیر
+                            </option>
+
+                            <option value="absent">
+                                غایب
+                            </option>
+
+                            <option value="leave">
+                                مرخصی
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
 
                         <table>
 
@@ -1036,42 +786,18 @@
 
                                 <tr>
 
-                                    <th>
-                                        کارمند
-                                    </th>
-
-                                    <th>
-                                        وضعیت
-                                    </th>
-
-                                    <th>
-                                        ورود
-                                    </th>
-
-                                    <th>
-                                        خروج
-                                    </th>
-
-                                    <th>
-                                        ساعات کار
-                                    </th>
-
-                                    <th>
-                                        تأخیر
-                                    </th>
-
-                                    <th>
-                                        توضیحات
-                                    </th>
-
-                                    <th>
-                                        عملیات
-                                    </th>
+                                    <th>کارمند</th>
+                                    <th>وضعیت</th>
+                                    <th>ورود</th>
+                                    <th>خروج</th>
+                                    <th>ساعت کار</th>
+                                    <th>تأخیر</th>
+                                    <th>یادداشت</th>
+                                    <th>عملیات</th>
 
                                 </tr>
 
                             </thead>
-
 
                             <tbody
                                 id="attendanceTableBody"
@@ -1086,14 +812,13 @@
             </section>
 
 
-
-            <!-- ==================================================
+            <!-- ==================================
                  LEAVE
-            ================================================== -->
+            =================================== -->
 
             <section
-                class="page"
                 id="leavePage"
+                class="page"
             >
 
                 <div class="page-heading">
@@ -1110,151 +835,118 @@
 
                     </div>
 
-
                     <button
-                        class="primary-btn"
                         id="addLeaveBtn"
+                        class="primary-btn"
                         type="button"
                     >
-                        + ثبت درخواست
+                        ＋ درخواست جدید
                     </button>
 
                 </div>
 
 
+                <div class="stats-grid compact">
 
-                <div class="summary-grid">
-
-                    <div class="summary-card">
-
-                        <span>
-                            کل درخواست‌ها
-                        </span>
-
-                        <strong id="totalLeave">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon blue">📋</div>
+                        <div>
+                            <span>کل درخواست‌ها</span>
+                            <strong id="totalLeave">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="summary-card">
-
-                        <span>
-                            در انتظار بررسی
-                        </span>
-
-                        <strong id="pendingLeave">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon orange">⏳</div>
+                        <div>
+                            <span>در انتظار</span>
+                            <strong id="pendingLeave">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="summary-card">
-
-                        <span>
-                            تأیید شده
-                        </span>
-
-                        <strong id="approvedLeave">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon green">✓</div>
+                        <div>
+                            <span>تأیید شده</span>
+                            <strong id="approvedLeave">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="summary-card">
-
-                        <span>
-                            رد شده
-                        </span>
-
-                        <strong id="rejectedLeave">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon red">×</div>
+                        <div>
+                            <span>رد شده</span>
+                            <strong id="rejectedLeave">0</strong>
+                        </div>
                     </div>
 
                 </div>
 
 
+                <div class="table-card">
 
-                <div class="filter-box">
-
-                    <div class="search-wrapper">
-
-                        <span>
-                            🔎
-                        </span>
+                    <div class="filters">
 
                         <input
-                            type="search"
                             id="leaveSearch"
+                            type="search"
                             placeholder="جستجوی کارمند..."
+                        >
+
+                        <select id="leaveTypeFilter">
+
+                            <option value="all">
+                                همه انواع
+                            </option>
+
+                            <option value="annual">
+                                مرخصی استحقاقی
+                            </option>
+
+                            <option value="sick">
+                                استعلاجی
+                            </option>
+
+                            <option value="unpaid">
+                                بدون حقوق
+                            </option>
+
+                            <option value="mission">
+                                مأموریت
+                            </option>
+
+                        </select>
+
+
+                        <select id="leaveStatusFilter">
+
+                            <option value="all">
+                                همه وضعیت‌ها
+                            </option>
+
+                            <option value="pending">
+                                در انتظار بررسی
+                            </option>
+
+                            <option value="approved">
+                                تأیید شده
+                            </option>
+
+                            <option value="rejected">
+                                رد شده
+                            </option>
+
+                        </select>
+
+                        <input
+                            id="leaveDateFilter"
+                            type="date"
                         >
 
                     </div>
 
 
-                    <select id="leaveTypeFilter">
-
-                        <option value="all">
-                            همه انواع
-                        </option>
-
-                        <option value="annual">
-                            مرخصی استحقاقی
-                        </option>
-
-                        <option value="sick">
-                            مرخصی استعلاجی
-                        </option>
-
-                        <option value="unpaid">
-                            مرخصی بدون حقوق
-                        </option>
-
-                        <option value="mission">
-                            مأموریت
-                        </option>
-
-                    </select>
-
-
-                    <select id="leaveStatusFilter">
-
-                        <option value="all">
-                            همه وضعیت‌ها
-                        </option>
-
-                        <option value="pending">
-                            در انتظار بررسی
-                        </option>
-
-                        <option value="approved">
-                            تأیید شده
-                        </option>
-
-                        <option value="rejected">
-                            رد شده
-                        </option>
-
-                    </select>
-
-
-                    <input
-                        type="date"
-                        id="leaveDateFilter"
-                    >
-
-                </div>
-
-
-
-                <div class="table-card">
-
-                    <div class="table-responsive">
+                    <div class="table-wrapper">
 
                         <table>
 
@@ -1262,42 +954,18 @@
 
                                 <tr>
 
-                                    <th>
-                                        کارمند
-                                    </th>
-
-                                    <th>
-                                        نوع درخواست
-                                    </th>
-
-                                    <th>
-                                        شروع
-                                    </th>
-
-                                    <th>
-                                        پایان
-                                    </th>
-
-                                    <th>
-                                        مدت
-                                    </th>
-
-                                    <th>
-                                        توضیحات
-                                    </th>
-
-                                    <th>
-                                        وضعیت
-                                    </th>
-
-                                    <th>
-                                        عملیات
-                                    </th>
+                                    <th>کارمند</th>
+                                    <th>نوع</th>
+                                    <th>شروع</th>
+                                    <th>پایان</th>
+                                    <th>مدت</th>
+                                    <th>توضیحات</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
 
                                 </tr>
 
                             </thead>
-
 
                             <tbody
                                 id="leaveTableBody"
@@ -1312,14 +980,13 @@
             </section>
 
 
-
-            <!-- ==================================================
+            <!-- ==================================
                  REPORTS
-            ================================================== -->
+            =================================== -->
 
             <section
-                class="page"
                 id="reportsPage"
+                class="page"
             >
 
                 <div class="page-heading">
@@ -1331,15 +998,14 @@
                         </h2>
 
                         <p>
-                            گزارش آماری منابع انسانی
+                            گزارش آماری سامانه منابع انسانی
                         </p>
 
                     </div>
 
-
                     <button
-                        class="primary-btn"
                         id="exportReportsBtn"
+                        class="primary-btn"
                         type="button"
                     >
                         📥 خروجی گزارش
@@ -1348,106 +1014,75 @@
                 </div>
 
 
+                <div class="stats-grid">
 
-                <div class="report-grid">
-
-                    <div class="report-card">
-
-                        <span>
-                            کل کارکنان
-                        </span>
-
-                        <strong id="reportTotalEmployees">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon blue">👥</div>
+                        <div>
+                            <span>کل کارکنان</span>
+                            <strong id="reportTotalEmployees">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="report-card">
-
-                        <span>
-                            کارکنان فعال
-                        </span>
-
-                        <strong id="reportActiveEmployees">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon green">✓</div>
+                        <div>
+                            <span>کارکنان فعال</span>
+                            <strong id="reportActiveEmployees">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="report-card">
-
-                        <span>
-                            کل درخواست‌ها
-                        </span>
-
-                        <strong id="reportTotalLeaves">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon purple">🏖️</div>
+                        <div>
+                            <span>کل درخواست‌ها</span>
+                            <strong id="reportTotalLeaves">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="report-card">
-
-                        <span>
-                            در انتظار
-                        </span>
-
-                        <strong id="reportPendingLeaves">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon orange">⏳</div>
+                        <div>
+                            <span>در انتظار</span>
+                            <strong id="reportPendingLeaves">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="report-card">
-
-                        <span>
-                            تأیید شده
-                        </span>
-
-                        <strong id="reportApprovedLeaves">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon green">✅</div>
+                        <div>
+                            <span>تأیید شده</span>
+                            <strong id="reportApprovedLeaves">0</strong>
+                        </div>
                     </div>
 
-
-                    <div class="report-card">
-
-                        <span>
-                            رد شده
-                        </span>
-
-                        <strong id="reportRejectedLeaves">
-                            0
-                        </strong>
-
+                    <div class="stat-card">
+                        <div class="stat-icon red">❌</div>
+                        <div>
+                            <span>رد شده</span>
+                            <strong id="reportRejectedLeaves">0</strong>
+                        </div>
                     </div>
 
                 </div>
 
 
+                <div class="report-card">
 
-                <div class="report-actions">
+                    <h3>
+                        خروجی سریع
+                    </h3>
+
+                    <p>
+                        برای دریافت گزارش آماری سامانه روی دکمه زیر کلیک کنید.
+                    </p>
 
                     <button
-                        class="secondary-btn"
-                        id="exportReportBtn"
-                        type="button"
-                    >
-                        📊 ساخت گزارش
-                    </button>
-
-                    <button
-                        class="secondary-btn"
                         id="downloadReportBtn"
+                        class="secondary-btn"
                         type="button"
                     >
-                        💾 دریافت گزارش
+                        📊 دریافت گزارش JSON
                     </button>
 
                 </div>
@@ -1455,14 +1090,13 @@
             </section>
 
 
-
-            <!-- ==================================================
+            <!-- ==================================
                  NOTIFICATIONS
-            ================================================== -->
+            =================================== -->
 
             <section
-                class="page"
                 id="notificationsPage"
+                class="page"
             >
 
                 <div class="page-heading">
@@ -1474,25 +1108,24 @@
                         </h2>
 
                         <p>
-                            رویدادها و پیام‌های سامانه
+                            رویدادها و اطلاعیه‌های سامانه
                         </p>
 
                     </div>
 
-
-                    <div class="page-actions">
+                    <div class="heading-actions">
 
                         <button
-                            class="secondary-btn"
                             id="markAllNotifications"
+                            class="secondary-btn"
                             type="button"
                         >
                             ✓ خواندن همه
                         </button>
 
                         <button
-                            class="danger-btn"
                             id="clearAllNotifications"
+                            class="danger-btn"
                             type="button"
                         >
                             🗑️ حذف همه
@@ -1503,55 +1136,43 @@
                 </div>
 
 
-                <div class="notification-summary">
+                <div class="notification-page-card">
 
-                    <span>
-                        اعلان‌های خوانده نشده:
-                    </span>
+                    <div
+                        id="notificationsContainer"
+                        class="notifications-container"
+                    ></div>
 
-                    <strong id="notificationCount">
-                        0
-                    </strong>
+                    <div
+                        id="notificationsEmpty"
+                        class="notifications-empty"
+                    >
+                        <div>
+                            🔔
+                        </div>
 
-                </div>
+                        <h3>
+                            اعلانی وجود ندارد
+                        </h3>
 
+                        <p>
+                            در حال حاضر اعلان جدیدی ثبت نشده است.
+                        </p>
 
-                <div
-                    id="notificationsContainer"
-                    class="notifications-container"
-                ></div>
-
-
-                <div
-                    id="notificationsEmpty"
-                    class="empty-notifications"
-                >
-
-                    <div>
-                        🔔
                     </div>
-
-                    <h3>
-                        اعلانی وجود ندارد
-                    </h3>
-
-                    <p>
-                        در حال حاضر هیچ اعلان جدیدی ثبت نشده است.
-                    </p>
 
                 </div>
 
             </section>
 
 
-
-            <!-- ==================================================
+            <!-- ==================================
                  SETTINGS
-            ================================================== -->
+            =================================== -->
 
             <section
-                class="page"
                 id="settingsPage"
+                class="page"
             >
 
                 <div class="page-heading">
@@ -1563,7 +1184,7 @@
                         </h2>
 
                         <p>
-                            تنظیمات سامانه منابع انسانی
+                            تنظیمات عمومی سامانه
                         </p>
 
                     </div>
@@ -1573,21 +1194,20 @@
 
                 <div class="settings-grid">
 
+                    <div class="setting-card">
 
-                    <div class="settings-card">
-
-                        <div class="settings-icon">
-                            ⚙️
+                        <div class="setting-icon">
+                            🏢
                         </div>
 
                         <div>
 
                             <h3>
-                                تنظیمات عمومی
+                                اطلاعات سازمان
                             </h3>
 
                             <p>
-                                تنظیمات عمومی سامانه در نسخه‌های بعدی فعال خواهد شد.
+                                کشت و صنعت میرزا کوچک خان
                             </p>
 
                         </div>
@@ -1595,30 +1215,9 @@
                     </div>
 
 
-                    <div class="settings-card">
+                    <div class="setting-card">
 
-                        <div class="settings-icon">
-                            🔐
-                        </div>
-
-                        <div>
-
-                            <h3>
-                                امنیت
-                            </h3>
-
-                            <p>
-                                مدیریت کاربران و سطح دسترسی در نسخه‌های آینده اضافه می‌شود.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="settings-card">
-
-                        <div class="settings-icon">
+                        <div class="setting-icon">
                             💾
                         </div>
 
@@ -1629,7 +1228,28 @@
                             </h3>
 
                             <p>
-                                اطلاعات فعلی سامانه در مرورگر ذخیره می‌شود.
+                                اطلاعات این نسخه در مرورگر ذخیره می‌شود.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="setting-card">
+
+                        <div class="setting-icon">
+                            🚀
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                نسخه سامانه
+                            </h3>
+
+                            <p>
+                                MIRZA KHAN HR — Version 1.8
                             </p>
 
                         </div>
@@ -1640,48 +1260,23 @@
 
             </section>
 
-
-        </div>
-
-
-
-        <!-- ==================================================
-             FOOTER
-        ================================================== -->
-
-        <footer class="main-footer">
-
-            <span>
-                سامانه جامع منابع انسانی و حضور و غیاب
-            </span>
-
-            <strong>
-                کشت و صنعت میرزا کوچک خان
-            </strong>
-
-            <small>
-                نسخه 1.8
-            </small>
-
-        </footer>
-
+        </section>
 
     </main>
 
 </div>
 
 
-
-<!-- ==================================================
+<!-- ==============================================
      EMPLOYEE MODAL
-================================================== -->
+================================================ -->
 
 <div
-    class="modal"
     id="employeeModal"
+    class="modal"
 >
 
-    <div class="modal-content">
+    <div class="modal-box">
 
         <div class="modal-header">
 
@@ -1690,9 +1285,9 @@
             </h3>
 
             <button
-                type="button"
                 id="closeModal"
                 class="modal-close"
+                type="button"
             >
                 ×
             </button>
@@ -1700,151 +1295,147 @@
         </div>
 
 
-        <form
-            id="employeeForm"
-            class="employee-form"
-        >
+        <form id="employeeForm">
 
-            <div class="form-group">
+            <div class="form-grid">
 
-                <label for="fullName">
-                    نام و نام خانوادگی *
-                </label>
+                <div class="form-group">
 
-                <input
-                    id="fullName"
-                    type="text"
-                    required
-                    placeholder="مثلاً علی رضایی"
-                >
+                    <label>
+                        نام و نام خانوادگی *
+                    </label>
 
-            </div>
+                    <input
+                        id="fullName"
+                        type="text"
+                        required
+                    >
+
+                </div>
 
 
-            <div class="form-group">
+                <div class="form-group">
 
-                <label for="personnelCode">
-                    کد پرسنلی *
-                </label>
+                    <label>
+                        کد پرسنلی *
+                    </label>
 
-                <input
-                    id="personnelCode"
-                    type="text"
-                    required
-                    placeholder="مثلاً PR-1060"
-                >
+                    <input
+                        id="personnelCode"
+                        type="text"
+                        required
+                    >
 
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="phone">
-                    شماره تماس
-                </label>
-
-                <input
-                    id="phone"
-                    type="tel"
-                    placeholder="0912..."
-                >
-
-            </div>
+                </div>
 
 
-            <div class="form-group">
+                <div class="form-group">
 
-                <label for="department">
-                    واحد *
-                </label>
+                    <label>
+                        شماره تماس
+                    </label>
 
-                <select
-                    id="department"
-                    required
-                >
+                    <input
+                        id="phone"
+                        type="tel"
+                    >
 
-                    <option value="">
-                        انتخاب واحد
-                    </option>
-
-                    <option value="تولید">
-                        تولید
-                    </option>
-
-                    <option value="مالی">
-                        مالی
-                    </option>
-
-                    <option value="منابع انسانی">
-                        منابع انسانی
-                    </option>
-
-                    <option value="فنی">
-                        فنی
-                    </option>
-
-                </select>
-
-            </div>
+                </div>
 
 
-            <div class="form-group">
+                <div class="form-group">
 
-                <label for="position">
-                    سمت
-                </label>
+                    <label>
+                        واحد *
+                    </label>
 
-                <input
-                    id="position"
-                    type="text"
-                    placeholder="مثلاً کارشناس تولید"
-                >
+                    <select
+                        id="department"
+                        required
+                    >
 
-            </div>
+                        <option value="">
+                            انتخاب واحد
+                        </option>
+
+                        <option value="تولید">
+                            تولید
+                        </option>
+
+                        <option value="مالی">
+                            مالی
+                        </option>
+
+                        <option value="منابع انسانی">
+                            منابع انسانی
+                        </option>
+
+                        <option value="فنی">
+                            فنی
+                        </option>
+
+                    </select>
+
+                </div>
 
 
-            <div class="form-group">
+                <div class="form-group">
 
-                <label for="status">
-                    وضعیت
-                </label>
+                    <label>
+                        سمت
+                    </label>
 
-                <select id="status">
+                    <input
+                        id="position"
+                        type="text"
+                    >
 
-                    <option value="active">
-                        فعال
-                    </option>
-
-                    <option value="inactive">
-                        غیرفعال
-                    </option>
-
-                </select>
-
-            </div>
+                </div>
 
 
-            <div class="form-group full">
+                <div class="form-group">
 
-                <label for="address">
-                    آدرس
-                </label>
+                    <label>
+                        وضعیت
+                    </label>
 
-                <textarea
-                    id="address"
-                    rows="3"
-                    placeholder="آدرس محل سکونت"
-                ></textarea>
+                    <select id="status">
+
+                        <option value="active">
+                            فعال
+                        </option>
+
+                        <option value="inactive">
+                            غیرفعال
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        آدرس
+                    </label>
+
+                    <textarea
+                        id="address"
+                        rows="3"
+                    ></textarea>
+
+                </div>
 
             </div>
 
 
-            <div class="modal-actions">
+            <div class="modal-footer">
 
                 <button
                     type="button"
-                    class="secondary-btn"
                     id="cancelModal"
+                    class="secondary-btn"
                 >
                     انصراف
                 </button>
@@ -1853,13 +1444,12 @@
                     type="submit"
                     class="primary-btn"
                 >
-                    💾 ذخیره کارمند
+                    ذخیره اطلاعات
                 </button>
 
             </div>
 
         </form>
-
 
 
         <!-- PROFILE -->
@@ -1869,7 +1459,7 @@
             class="profile-view"
         >
 
-            <div class="profile-header">
+            <div class="profile-top">
 
                 <div
                     id="profileAvatar"
@@ -1893,7 +1483,7 @@
             </div>
 
 
-            <div class="profile-grid">
+            <div class="profile-details">
 
                 <div>
                     <span>کد پرسنلی</span>
@@ -1929,17 +1519,16 @@
 </div>
 
 
-
-<!-- ==================================================
+<!-- ==============================================
      LEAVE MODAL
-================================================== -->
+================================================ -->
 
 <div
-    class="modal"
     id="leaveModal"
+    class="modal"
 >
 
-    <div class="modal-content">
+    <div class="modal-box">
 
         <div class="modal-header">
 
@@ -1948,9 +1537,9 @@
             </h3>
 
             <button
-                type="button"
                 id="closeLeaveModal"
                 class="modal-close"
+                type="button"
             >
                 ×
             </button>
@@ -1960,69 +1549,77 @@
 
         <form id="leaveForm">
 
+            <div class="form-grid">
 
-            <div class="form-group">
+                <div class="form-group full">
 
-                <label for="leaveEmployee">
-                    کارمند *
-                </label>
+                    <label>
+                        کارمند *
+                    </label>
 
-                <select
-                    id="leaveEmployee"
-                    required
-                >
+                    <select
+                        id="leaveEmployee"
+                        required
+                    ></select>
 
-                    <option value="">
-                        انتخاب کارمند
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="leaveType">
-                    نوع درخواست *
-                </label>
-
-                <select
-                    id="leaveType"
-                    required
-                >
-
-                    <option value="">
-                        انتخاب نوع
-                    </option>
-
-                    <option value="annual">
-                        مرخصی استحقاقی
-                    </option>
-
-                    <option value="sick">
-                        مرخصی استعلاجی
-                    </option>
-
-                    <option value="unpaid">
-                        مرخصی بدون حقوق
-                    </option>
-
-                    <option value="mission">
-                        مأموریت
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-row">
+                </div>
 
 
                 <div class="form-group">
 
-                    <label for="leaveStart">
+                    <label>
+                        نوع درخواست *
+                    </label>
+
+                    <select
+                        id="leaveType"
+                        required
+                    >
+
+                        <option value="">
+                            انتخاب نوع
+                        </option>
+
+                        <option value="annual">
+                            مرخصی استحقاقی
+                        </option>
+
+                        <option value="sick">
+                            مرخصی استعلاجی
+                        </option>
+
+                        <option value="unpaid">
+                            مرخصی بدون حقوق
+                        </option>
+
+                        <option value="mission">
+                            مأموریت
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        تعداد روز
+                    </label>
+
+                    <input
+                        id="leaveDays"
+                        type="number"
+                        min="1"
+                        value="1"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
                         تاریخ شروع *
                     </label>
 
@@ -2037,7 +1634,7 @@
 
                 <div class="form-group">
 
-                    <label for="leaveEnd">
+                    <label>
                         تاریخ پایان *
                     </label>
 
@@ -2050,47 +1647,29 @@
                 </div>
 
 
-            </div>
+                <div class="form-group full">
 
+                    <label>
+                        توضیحات
+                    </label>
 
-            <div class="form-group">
+                    <textarea
+                        id="leaveDescription"
+                        rows="4"
+                        placeholder="توضیحات درخواست..."
+                    ></textarea>
 
-                <label for="leaveDays">
-                    تعداد روز
-                </label>
-
-                <input
-                    id="leaveDays"
-                    type="number"
-                    min="1"
-                    value="1"
-                    required
-                >
+                </div>
 
             </div>
 
 
-            <div class="form-group">
-
-                <label for="leaveDescription">
-                    توضیحات
-                </label>
-
-                <textarea
-                    id="leaveDescription"
-                    rows="4"
-                    placeholder="توضیحات درخواست..."
-                ></textarea>
-
-            </div>
-
-
-            <div class="modal-actions">
+            <div class="modal-footer">
 
                 <button
                     type="button"
-                    class="secondary-btn"
                     id="cancelLeaveModal"
+                    class="secondary-btn"
                 >
                     انصراف
                 </button>
@@ -2099,7 +1678,7 @@
                     type="submit"
                     class="primary-btn"
                 >
-                    📤 ثبت درخواست
+                    ثبت درخواست
                 </button>
 
             </div>
@@ -2111,14 +1690,7 @@
 </div>
 
 
-
-<!-- ==================================================
-     JAVASCRIPT
-================================================== -->
-
 <script src="app.js"></script>
 
-
 </body>
-
                             </html>
