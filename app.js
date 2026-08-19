@@ -1,8 +1,13 @@
 /* ==================================================
    MIRZA KHAN HR
    APP.JS - VERSION 1.7
-   کارکنان + حضور و غیاب + مرخصی و مأموریت
-   گزارش‌ها + اعلان‌ها + گزارش‌گیری پیشرفته
+
+   کارکنان
+   حضور و غیاب
+   مرخصی و مأموریت
+   گزارش‌ها
+   نمودارهای آماری
+   اعلان‌ها
 ================================================== */
 
 
@@ -48,6 +53,7 @@ const defaultEmployees = [
         status: "active",
         address: "اهواز"
     },
+
     {
         id: 2,
         name: "محمد احمدی",
@@ -58,6 +64,7 @@ const defaultEmployees = [
         status: "active",
         address: "اهواز"
     },
+
     {
         id: 3,
         name: "سارا کریمی",
@@ -68,6 +75,7 @@ const defaultEmployees = [
         status: "active",
         address: "اهواز"
     },
+
     {
         id: 4,
         name: "حسین مرادی",
@@ -79,6 +87,7 @@ const defaultEmployees = [
         address: "آبادان"
     }
 ];
+
 
 let employees = loadJSON(
     "mirzaKhanEmployees",
@@ -121,7 +130,9 @@ let notifications = loadJSON(
 ================================================== */
 
 function loadJSON(key, fallback) {
+
     try {
+
         const data = localStorage.getItem(key);
 
         if (!data) {
@@ -129,9 +140,9 @@ function loadJSON(key, fallback) {
         }
 
         return JSON.parse(data);
-    }
 
-    catch (error) {
+    } catch (error) {
+
         console.error(
             `خطا در خواندن ${key}:`,
             error
@@ -143,6 +154,7 @@ function loadJSON(key, fallback) {
 
 
 function saveJSON(key, data) {
+
     localStorage.setItem(
         key,
         JSON.stringify(data)
@@ -155,28 +167,29 @@ function saveJSON(key, data) {
 ================================================== */
 
 function getTodayISO() {
+
     const now = new Date();
 
-    const year = now.getFullYear();
+    const year =
+        now.getFullYear();
 
-    const month = String(
-        now.getMonth() + 1
-    ).padStart(2, "0");
+    const month =
+        String(now.getMonth() + 1)
+            .padStart(2, "0");
 
-    const day = String(
-        now.getDate()
-    ).padStart(2, "0");
+    const day =
+        String(now.getDate())
+            .padStart(2, "0");
 
     return `${year}-${month}-${day}`;
 }
 
 
 function setDate() {
+
     if (!todayDate) {
         return;
     }
-
-    const now = new Date();
 
     const formatter =
         new Intl.DateTimeFormat(
@@ -190,8 +203,9 @@ function setDate() {
         );
 
     todayDate.textContent =
-        formatter.format(now);
+        formatter.format(new Date());
 }
+
 
 setDate();
 
@@ -208,18 +222,23 @@ menuItems.forEach(item => {
 
             event.preventDefault();
 
-            const page = this.dataset.page;
+            const page =
+                this.dataset.page;
 
             menuItems.forEach(menu => {
+
                 menu.classList.remove("active");
+
             });
 
             this.classList.add("active");
 
             pages.forEach(pageElement => {
+
                 pageElement.classList.remove(
                     "active-page"
                 );
+
             });
 
             const selectedPage =
@@ -228,19 +247,25 @@ menuItems.forEach(item => {
                 );
 
             if (selectedPage) {
+
                 selectedPage.classList.add(
                     "active-page"
                 );
+
             }
 
             if (pageTitle) {
+
                 pageTitle.textContent =
                     pageNames[page] ||
                     "داشبورد";
+
             }
 
             if (sidebar) {
+
                 sidebar.classList.remove("open");
+
             }
 
             if (page === "employees") {
@@ -280,7 +305,9 @@ if (mobileMenu) {
         () => {
 
             if (sidebar) {
+
                 sidebar.classList.toggle("open");
+
             }
 
         }
@@ -290,7 +317,7 @@ if (mobileMenu) {
 
 
 /* ==================================================
-   HELPERS
+   SET TEXT
 ================================================== */
 
 function setText(id, value) {
@@ -299,11 +326,17 @@ function setText(id, value) {
         document.getElementById(id);
 
     if (element) {
-        element.textContent = value;
-    }
 
+        element.textContent =
+            value;
+
+    }
 }
 
+
+/* ==================================================
+   ESCAPE HTML
+================================================== */
 
 function escapeHTML(value) {
 
@@ -313,12 +346,11 @@ function escapeHTML(value) {
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
-
 }
 
 
 /* ==================================================
-   EMPLOYEES
+   EMPLOYEE ELEMENTS
 ================================================== */
 
 const employeesTableBody =
@@ -376,8 +408,13 @@ const cancelModal =
         "cancelModal"
     );
 
+
 let editingEmployeeId = null;
 
+
+/* ==================================================
+   SAVE EMPLOYEES
+================================================== */
 
 function saveEmployees() {
 
@@ -388,6 +425,10 @@ function saveEmployees() {
 
 }
 
+
+/* ==================================================
+   EMPLOYEE FILTER
+================================================== */
 
 function getFilteredEmployees() {
 
@@ -447,9 +488,12 @@ function getFilteredEmployees() {
         );
 
     });
-
 }
 
+
+/* ==================================================
+   RENDER EMPLOYEES
+================================================== */
 
 function renderEmployees() {
 
@@ -493,13 +537,17 @@ function renderEmployees() {
             document.createElement("tr");
 
         row.innerHTML = `
+
             <td>
+
                 <div class="employee-info">
+
                     <div class="employee-avatar">
                         ${escapeHTML(firstLetter)}
                     </div>
 
                     <div>
+
                         <strong>
                             ${escapeHTML(employee.name)}
                         </strong>
@@ -507,8 +555,11 @@ function renderEmployees() {
                         <span>
                             ${escapeHTML(employee.code)}
                         </span>
+
                     </div>
+
                 </div>
+
             </td>
 
             <td>
@@ -524,12 +575,15 @@ function renderEmployees() {
             </td>
 
             <td>
+
                 <span class="employee-status ${employee.status}">
                     ${statusText}
                 </span>
+
             </td>
 
             <td>
+
                 <div class="action-buttons">
 
                     <button
@@ -557,7 +611,9 @@ function renderEmployees() {
                     </button>
 
                 </div>
+
             </td>
+
         `;
 
         employeesTableBody.appendChild(row);
@@ -565,9 +621,12 @@ function renderEmployees() {
     });
 
     updateSummary();
-
 }
 
+
+/* ==================================================
+   EMPLOYEE SUMMARY
+================================================== */
 
 function updateSummary() {
 
@@ -602,7 +661,6 @@ function updateSummary() {
     setText("dashboardActive", active);
     setText("dashboardInactive", inactive);
     setText("dashboardDepartments", departments);
-
 }
 
 
@@ -622,52 +680,49 @@ function openEmployeeModal(employee = null) {
 
     if (employee) {
 
-        modalTitle.textContent =
-            "ویرایش کارمند";
+        if (modalTitle) {
+            modalTitle.textContent =
+                "ویرایش کارمند";
+        }
 
-        document.getElementById(
-            "fullName"
-        ).value = employee.name || "";
+        document.getElementById("fullName").value =
+            employee.name || "";
 
-        document.getElementById(
-            "personnelCode"
-        ).value = employee.code || "";
+        document.getElementById("personnelCode").value =
+            employee.code || "";
 
-        document.getElementById(
-            "phone"
-        ).value = employee.phone || "";
+        document.getElementById("phone").value =
+            employee.phone || "";
 
-        document.getElementById(
-            "department"
-        ).value = employee.department || "";
+        document.getElementById("department").value =
+            employee.department || "";
 
-        document.getElementById(
-            "position"
-        ).value = employee.position || "";
+        document.getElementById("position").value =
+            employee.position || "";
 
-        document.getElementById(
-            "status"
-        ).value = employee.status || "active";
+        document.getElementById("status").value =
+            employee.status || "active";
 
-        document.getElementById(
-            "address"
-        ).value = employee.address || "";
+        document.getElementById("address").value =
+            employee.address || "";
 
         editingEmployeeId =
             employee.id;
 
-    }
+    } else {
 
-    else {
+        if (modalTitle) {
+            modalTitle.textContent =
+                "افزودن کارمند";
+        }
 
-        modalTitle.textContent =
-            "افزودن کارمند";
-
-        employeeForm.reset();
+        if (employeeForm) {
+            employeeForm.reset();
+        }
 
         editingEmployeeId = null;
-    }
 
+    }
 }
 
 
@@ -713,12 +768,11 @@ function restoreProfileView() {
         header.textContent =
             "افزودن کارمند";
     }
-
 }
 
 
 /* ==================================================
-   ADD / EDIT / DELETE EMPLOYEE
+   ADD EMPLOYEE
 ================================================== */
 
 if (addEmployeeBtn) {
@@ -757,21 +811,32 @@ if (dashboardAddEmployee) {
 }
 
 
+/* ==================================================
+   MODAL BUTTONS
+================================================== */
+
 if (closeModal) {
+
     closeModal.addEventListener(
         "click",
         closeEmployeeModal
     );
+
 }
 
-
 if (cancelModal) {
+
     cancelModal.addEventListener(
         "click",
         closeEmployeeModal
     );
+
 }
 
+
+/* ==================================================
+   SAVE EMPLOYEE
+================================================== */
 
 if (employeeForm) {
 
@@ -816,11 +881,7 @@ if (employeeForm) {
                     "address"
                 ).value.trim();
 
-            if (
-                !name ||
-                !code ||
-                !department
-            ) {
+            if (!name || !code || !department) {
 
                 alert(
                     "لطفاً اطلاعات الزامی را وارد کنید."
@@ -830,10 +891,9 @@ if (employeeForm) {
             }
 
             const duplicate =
-                employees.find(
-                    employee =>
-                        employee.code === code &&
-                        employee.id !== editingEmployeeId
+                employees.find(employee =>
+                    employee.code === code &&
+                    employee.id !== editingEmployeeId
                 );
 
             if (duplicate) {
@@ -879,9 +939,7 @@ if (employeeForm) {
 
                     });
 
-            }
-
-            else {
+            } else {
 
                 employees.push({
                     id: Date.now(),
@@ -891,21 +949,25 @@ if (employeeForm) {
             }
 
             saveEmployees();
-
             renderEmployees();
             updateSummary();
+            renderReports();
+
             closeEmployeeModal();
 
             addNotification({
                 type: "employee",
+
                 title:
                     wasEditing
                         ? "ویرایش اطلاعات کارمند"
                         : "ثبت کارمند جدید",
+
                 message:
                     wasEditing
                         ? `اطلاعات ${name} ویرایش شد.`
                         : `کارمند ${name} با موفقیت ثبت شد.`,
+
                 icon:
                     wasEditing
                         ? "✏️"
@@ -924,6 +986,10 @@ if (employeeForm) {
 }
 
 
+/* ==================================================
+   EDIT EMPLOYEE
+================================================== */
+
 function editEmployee(id) {
 
     const employee =
@@ -937,9 +1003,12 @@ function editEmployee(id) {
     }
 
     openEmployeeModal(employee);
-
 }
 
+
+/* ==================================================
+   DELETE EMPLOYEE
+================================================== */
 
 function deleteEmployee(id) {
 
@@ -972,17 +1041,26 @@ function deleteEmployee(id) {
 
     renderEmployees();
     updateSummary();
+    renderReports();
 
     addNotification({
+
         type: "employee",
+
         title: "حذف کارمند",
+
         message:
             `کارمند ${employee.name} حذف شد.`,
-        icon: "🗑️"
-    });
 
+        icon: "🗑️"
+
+    });
 }
 
+
+/* ==================================================
+   VIEW EMPLOYEE
+================================================== */
 
 function viewEmployee(id) {
 
@@ -992,10 +1070,7 @@ function viewEmployee(id) {
                 employee.id === id
         );
 
-    if (
-        !employee ||
-        !employeeModal
-    ) {
+    if (!employee || !employeeModal) {
         return;
     }
 
@@ -1036,52 +1111,61 @@ function viewEmployee(id) {
         "profilePosition",
         employee.position || "-"
     );
+
     setText("profileCode", employee.code);
     setText(
         "profileDepartment",
         employee.department
     );
+
     setText(
         "profilePhone",
         employee.phone || "-"
     );
+
     setText(
         "profileStatus",
         employee.status === "active"
             ? "فعال"
             : "غیرفعال"
     );
+
     setText(
         "profileAddress",
         employee.address || "-"
     );
-
 }
 
 
 /* ==================================================
-   EMPLOYEE FILTERS
+   EMPLOYEE SEARCH
 ================================================== */
 
 if (employeeSearch) {
+
     employeeSearch.addEventListener(
         "input",
         renderEmployees
     );
+
 }
 
 if (departmentFilter) {
+
     departmentFilter.addEventListener(
         "change",
         renderEmployees
     );
+
 }
 
 if (statusFilter) {
+
     statusFilter.addEventListener(
         "change",
         renderEmployees
     );
+
 }
 
 if (employeeModal) {
@@ -1091,10 +1175,11 @@ if (employeeModal) {
         event => {
 
             if (
-                event.target ===
-                employeeModal
+                event.target === employeeModal
             ) {
+
                 closeEmployeeModal();
+
             }
 
         }
@@ -1170,23 +1255,23 @@ function getAttendanceRecord(
         attendanceData[date] = {};
     }
 
-    if (
-        !attendanceData[date][employeeId]
-    ) {
+    if (!attendanceData[date][employeeId]) {
 
         attendanceData[date][employeeId] = {
+
             status: "absent",
+
             entry: "",
+
             exit: "",
+
             note: ""
+
         };
 
     }
 
-    return attendanceData[
-        date
-    ][employeeId];
-
+    return attendanceData[date][employeeId];
 }
 
 
@@ -1231,7 +1316,7 @@ function calculateMinutes(start, end) {
         endMinutes - startMinutes;
 
     if (difference < 0) {
-        difference += 1440;
+        difference += 24 * 60;
     }
 
     return difference;
@@ -1285,7 +1370,6 @@ function updateAttendanceStats(records) {
     setText("lateCount", late);
     setText("absentCount", absent);
     setText("leaveCount", leave);
-
 }
 
 
@@ -1305,7 +1389,7 @@ function renderAttendance() {
                 .toLowerCase()
             : "";
 
-    const statusFilter =
+    const statusFilterValue =
         attendanceStatusFilter
             ? attendanceStatusFilter.value
             : "all";
@@ -1356,8 +1440,8 @@ function renderAttendance() {
                     .includes(search);
 
             const matchesStatus =
-                statusFilter === "all" ||
-                record.status === statusFilter;
+                statusFilterValue === "all" ||
+                record.status === statusFilterValue;
 
             return (
                 matchesSearch &&
@@ -1386,7 +1470,9 @@ function renderAttendance() {
             document.createElement("tr");
 
         row.innerHTML = `
+
             <td>
+
                 <div class="employee-info">
 
                     <div class="employee-avatar">
@@ -1396,6 +1482,7 @@ function renderAttendance() {
                     </div>
 
                     <div>
+
                         <strong>
                             ${escapeHTML(employee.name)}
                         </strong>
@@ -1403,12 +1490,15 @@ function renderAttendance() {
                         <span>
                             ${escapeHTML(employee.code)}
                         </span>
+
                     </div>
 
                 </div>
+
             </td>
 
             <td>
+
                 <select
                     class="attendance-status-select"
                     onchange="changeAttendanceStatus(
@@ -1416,6 +1506,7 @@ function renderAttendance() {
                         this.value
                     )"
                 >
+
                     <option value="present"
                         ${record.status === "present"
                             ? "selected"
@@ -1443,10 +1534,13 @@ function renderAttendance() {
                             : ""}>
                         مرخصی
                     </option>
+
                 </select>
+
             </td>
 
             <td>
+
                 <input
                     type="time"
                     value="${record.entry || ""}"
@@ -1456,9 +1550,11 @@ function renderAttendance() {
                         this.value
                     )"
                 >
+
             </td>
 
             <td>
+
                 <input
                     type="time"
                     value="${record.exit || ""}"
@@ -1468,6 +1564,7 @@ function renderAttendance() {
                         this.value
                     )"
                 >
+
             </td>
 
             <td>
@@ -1483,12 +1580,11 @@ function renderAttendance() {
             </td>
 
             <td>
-                ${escapeHTML(
-                    record.note || "-"
-                )}
+                ${escapeHTML(record.note || "-")}
             </td>
 
             <td>
+
                 <div class="action-buttons">
 
                     <button
@@ -1516,13 +1612,14 @@ function renderAttendance() {
                     </button>
 
                 </div>
+
             </td>
+
         `;
 
         attendanceTableBody.appendChild(row);
 
     });
-
 }
 
 
@@ -1538,12 +1635,17 @@ function changeAttendanceStatus(
 
     saveAttendance();
     renderAttendance();
+    renderReports();
 
     addNotification({
+
         type: "attendance",
+
         title: "تغییر وضعیت حضور",
+
         message:
             "وضعیت حضور کارمند تغییر کرد.",
+
         icon:
             status === "present"
                 ? "🟢"
@@ -1552,8 +1654,8 @@ function changeAttendanceStatus(
                     : status === "leave"
                         ? "🏖️"
                         : "🔴"
-    });
 
+    });
 }
 
 
@@ -1570,7 +1672,7 @@ function changeAttendanceTime(
 
     saveAttendance();
     renderAttendance();
-
+    renderReports();
 }
 
 
@@ -1580,12 +1682,13 @@ function getCurrentTime() {
 
     return (
         String(now.getHours())
-            .padStart(2, "0") +
-        ":" +
+            .padStart(2, "0")
+        +
+        ":"
+        +
         String(now.getMinutes())
             .padStart(2, "0")
     );
-
 }
 
 
@@ -1602,8 +1705,9 @@ function setCurrentEntry(employeeId) {
     }
 
     saveAttendance();
-    renderAttendance();
 
+    renderAttendance();
+    renderReports();
 }
 
 
@@ -1620,8 +1724,9 @@ function setCurrentExit(employeeId) {
     }
 
     saveAttendance();
-    renderAttendance();
 
+    renderAttendance();
+    renderReports();
 }
 
 
@@ -1650,30 +1755,37 @@ function clearAttendance(employeeId) {
     }
 
     saveAttendance();
-    renderAttendance();
 
+    renderAttendance();
+    renderReports();
 }
 
 
 if (attendanceSearch) {
+
     attendanceSearch.addEventListener(
         "input",
         renderAttendance
     );
+
 }
 
 if (attendanceStatusFilter) {
+
     attendanceStatusFilter.addEventListener(
         "change",
         renderAttendance
     );
+
 }
 
 if (attendanceDate) {
+
     attendanceDate.addEventListener(
         "change",
         renderAttendance
     );
+
 }
 
 if (openAttendanceModal) {
@@ -1785,17 +1897,21 @@ function saveLeaveRequests() {
         "mirzaKhanLeaveRequests",
         leaveRequests
     );
-
 }
 
 
 function getLeaveTypeText(type) {
 
     const types = {
+
         annual: "مرخصی استحقاقی",
+
         sick: "مرخصی استعلاجی",
+
         unpaid: "مرخصی بدون حقوق",
+
         mission: "مأموریت"
+
     };
 
     return types[type] || "-";
@@ -1805,9 +1921,13 @@ function getLeaveTypeText(type) {
 function getLeaveStatusText(status) {
 
     const statuses = {
+
         pending: "در انتظار بررسی",
+
         approved: "تأیید شده",
+
         rejected: "رد شده"
+
     };
 
     return statuses[status] || "-";
@@ -1873,15 +1993,14 @@ function fillLeaveEmployees() {
             leaveEmployee.appendChild(option);
 
         });
-
 }
 
 
 function initLeave() {
 
     fillLeaveEmployees();
-    renderLeave();
 
+    renderLeave();
 }
 
 
@@ -1912,7 +2031,6 @@ function openLeaveModal() {
     if (leaveDays) {
         leaveDays.value = "1";
     }
-
 }
 
 
@@ -1927,7 +2045,6 @@ function closeLeaveRequestModal() {
     if (leaveForm) {
         leaveForm.reset();
     }
-
 }
 
 
@@ -1944,12 +2061,12 @@ function renderLeave() {
                 .toLowerCase()
             : "";
 
-    const typeFilter =
+    const typeFilterValue =
         leaveTypeFilter
             ? leaveTypeFilter.value
             : "all";
 
-    const statusFilter =
+    const statusFilterValue =
         leaveStatusFilter
             ? leaveStatusFilter.value
             : "all";
@@ -1982,12 +2099,12 @@ function renderLeave() {
                     .includes(search);
 
             const matchesType =
-                typeFilter === "all" ||
-                request.type === typeFilter;
+                typeFilterValue === "all" ||
+                request.type === typeFilterValue;
 
             const matchesStatus =
-                statusFilter === "all" ||
-                request.status === statusFilter;
+                statusFilterValue === "all" ||
+                request.status === statusFilterValue;
 
             const matchesDate =
                 !dateFilter ||
@@ -2039,7 +2156,9 @@ function renderLeave() {
             document.createElement("tr");
 
         row.innerHTML = `
+
             <td>
+
                 <div class="employee-info">
 
                     <div class="employee-avatar">
@@ -2049,6 +2168,7 @@ function renderLeave() {
                     </div>
 
                     <div>
+
                         <strong>
                             ${escapeHTML(employee.name)}
                         </strong>
@@ -2056,9 +2176,11 @@ function renderLeave() {
                         <span>
                             ${escapeHTML(employee.code)}
                         </span>
+
                     </div>
 
                 </div>
+
             </td>
 
             <td>
@@ -2074,7 +2196,9 @@ function renderLeave() {
             </td>
 
             <td>
-                ${escapeHTML(String(request.days))} روز
+                ${escapeHTML(
+                    String(request.days)
+                )} روز
             </td>
 
             <td>
@@ -2084,9 +2208,11 @@ function renderLeave() {
             </td>
 
             <td>
+
                 <span class="employee-status ${request.status}">
                     ${getLeaveStatusText(request.status)}
                 </span>
+
             </td>
 
             <td>
@@ -2126,12 +2252,12 @@ function renderLeave() {
                 </div>
 
             </td>
+
         `;
 
         leaveTableBody.appendChild(row);
 
     });
-
 }
 
 
@@ -2162,29 +2288,38 @@ function updateLeaveStats() {
     setText("pendingLeave", pending);
     setText("approvedLeave", approved);
     setText("rejectedLeave", rejected);
-
 }
 
 
+/* ==================================================
+   ADD LEAVE
+================================================== */
+
 if (addLeaveBtn) {
+
     addLeaveBtn.addEventListener(
         "click",
         openLeaveModal
     );
+
 }
 
 if (closeLeaveModal) {
+
     closeLeaveModal.addEventListener(
         "click",
         closeLeaveRequestModal
     );
+
 }
 
 if (cancelLeaveModal) {
+
     cancelLeaveModal.addEventListener(
         "click",
         closeLeaveRequestModal
     );
+
 }
 
 if (leaveModal) {
@@ -2194,10 +2329,11 @@ if (leaveModal) {
         event => {
 
             if (
-                event.target ===
-                leaveModal
+                event.target === leaveModal
             ) {
+
                 closeLeaveRequestModal();
+
             }
 
         }
@@ -2205,6 +2341,10 @@ if (leaveModal) {
 
 }
 
+
+/* ==================================================
+   AUTO CALCULATE LEAVE DAYS
+================================================== */
 
 function updateLeaveDays() {
 
@@ -2225,24 +2365,31 @@ function updateLeaveDays() {
     if (days > 0) {
         leaveDays.value = days;
     }
-
 }
 
 
 if (leaveStart) {
+
     leaveStart.addEventListener(
         "change",
         updateLeaveDays
     );
+
 }
 
 if (leaveEnd) {
+
     leaveEnd.addEventListener(
         "change",
         updateLeaveDays
     );
+
 }
 
+
+/* ==================================================
+   SAVE LEAVE
+================================================== */
 
 if (leaveForm) {
 
@@ -2336,6 +2483,7 @@ if (leaveForm) {
             saveLeaveRequests();
 
             renderLeave();
+            renderReports();
 
             closeLeaveRequestModal();
 
@@ -2365,6 +2513,10 @@ if (leaveForm) {
 }
 
 
+/* ==================================================
+   APPROVE LEAVE
+================================================== */
+
 function approveLeave(id) {
 
     const request =
@@ -2384,12 +2536,12 @@ function approveLeave(id) {
                 request.employeeId
         );
 
-    request.status =
-        "approved";
+    request.status = "approved";
 
     saveLeaveRequests();
 
     renderLeave();
+    renderReports();
 
     addNotification({
 
@@ -2407,9 +2559,12 @@ function approveLeave(id) {
     alert(
         "درخواست با موفقیت تأیید شد."
     );
-
 }
 
+
+/* ==================================================
+   REJECT LEAVE
+================================================== */
 
 function rejectLeave(id) {
 
@@ -2430,12 +2585,12 @@ function rejectLeave(id) {
                 request.employeeId
         );
 
-    request.status =
-        "rejected";
+    request.status = "rejected";
 
     saveLeaveRequests();
 
     renderLeave();
+    renderReports();
 
     addNotification({
 
@@ -2453,9 +2608,12 @@ function rejectLeave(id) {
     alert(
         "درخواست رد شد."
     );
-
 }
 
+
+/* ==================================================
+   DELETE LEAVE
+================================================== */
 
 function deleteLeave(id) {
 
@@ -2486,36 +2644,48 @@ function deleteLeave(id) {
     saveLeaveRequests();
 
     renderLeave();
-
+    renderReports();
 }
 
 
+/* ==================================================
+   LEAVE FILTERS
+================================================== */
+
 if (leaveSearch) {
+
     leaveSearch.addEventListener(
         "input",
         renderLeave
     );
+
 }
 
 if (leaveTypeFilter) {
+
     leaveTypeFilter.addEventListener(
         "change",
         renderLeave
     );
+
 }
 
 if (leaveStatusFilter) {
+
     leaveStatusFilter.addEventListener(
         "change",
         renderLeave
     );
+
 }
 
 if (leaveDateFilter) {
+
     leaveDateFilter.addEventListener(
         "change",
         renderLeave
     );
+
 }
 
 
@@ -2529,7 +2699,6 @@ function saveNotifications() {
         "mirzaKhanNotifications",
         notifications
     );
-
 }
 
 
@@ -2574,7 +2743,6 @@ function addNotification(data) {
     saveNotifications();
 
     updateNotificationBadge();
-
 }
 
 
@@ -2600,21 +2768,24 @@ function getNotificationTime(date) {
     }
 
     if (difference < 3600) {
+
         return `${Math.floor(
             difference / 60
         )} دقیقه پیش`;
+
     }
 
     if (difference < 86400) {
+
         return `${Math.floor(
             difference / 3600
         )} ساعت پیش`;
+
     }
 
     return created.toLocaleDateString(
         "fa-IR"
     );
-
 }
 
 
@@ -2633,8 +2804,7 @@ function updateNotificationBadge() {
 
     if (badge) {
 
-        badge.textContent =
-            unread;
+        badge.textContent = unread;
 
         badge.style.display =
             unread > 0
@@ -2670,7 +2840,9 @@ function renderNotifications() {
     );
 
     if (!container) {
+
         updateNotificationBadge();
+
         return;
     }
 
@@ -2702,6 +2874,7 @@ function renderNotifications() {
             }`;
 
         item.innerHTML = `
+
             <div class="notification-icon">
                 ${escapeHTML(notification.icon)}
             </div>
@@ -2749,6 +2922,7 @@ function renderNotifications() {
                 </button>
 
             </div>
+
         `;
 
         container.appendChild(item);
@@ -2756,7 +2930,6 @@ function renderNotifications() {
     });
 
     updateNotificationBadge();
-
 }
 
 
@@ -2777,7 +2950,6 @@ function markNotificationRead(id) {
     saveNotifications();
 
     renderNotifications();
-
 }
 
 
@@ -2792,7 +2964,6 @@ function markAllNotificationsRead() {
     saveNotifications();
 
     renderNotifications();
-
 }
 
 
@@ -2807,7 +2978,6 @@ function deleteNotification(id) {
     saveNotifications();
 
     renderNotifications();
-
 }
 
 
@@ -2830,7 +3000,6 @@ function clearAllNotifications() {
     saveNotifications();
 
     renderNotifications();
-
 }
 
 
@@ -2864,13 +3033,17 @@ if (clearAllNotificationsBtn) {
 
 
 /* ==================================================
-   REPORT ENGINE - VERSION 1.7
+   REPORTS - VERSION 1.7
 ================================================== */
 
+let employeeChart = null;
+let attendanceChart = null;
+let leaveChart = null;
 
-/*
-   ساخت گزارش کلی
-*/
+
+/* ==================================================
+   REPORT DATA
+================================================== */
 
 function getReportData() {
 
@@ -2891,92 +3064,75 @@ function getReportData() {
 
     const departments =
         new Set(
-            employees
-                .map(
-                    employee =>
-                        employee.department
-                )
-                .filter(Boolean)
+            employees.map(
+                employee =>
+                    employee.department
+            )
         ).size;
 
-    const totalRequests =
-        leaveRequests.length;
-
-    const pendingRequests =
-        leaveRequests.filter(
-            request =>
-                request.status === "pending"
-        ).length;
-
-    const approvedRequests =
-        leaveRequests.filter(
-            request =>
-                request.status === "approved"
-        ).length;
-
-    const rejectedRequests =
-        leaveRequests.filter(
-            request =>
-                request.status === "rejected"
-        ).length;
 
     let present = 0;
     let late = 0;
     let absent = 0;
     let attendanceLeave = 0;
 
-    Object.values(attendanceData)
-        .forEach(day => {
+    Object.values(
+        attendanceData
+    ).forEach(day => {
 
-            Object.values(day)
-                .forEach(record => {
+        Object.values(day).forEach(record => {
 
-                    if (
-                        record.status ===
-                        "present"
-                    ) {
-                        present++;
-                    }
+            if (record.status === "present") {
+                present++;
+            }
 
-                    else if (
-                        record.status ===
-                        "late"
-                    ) {
-                        late++;
-                    }
+            else if (record.status === "late") {
+                late++;
+            }
 
-                    else if (
-                        record.status ===
-                        "leave"
-                    ) {
-                        attendanceLeave++;
-                    }
+            else if (record.status === "leave") {
+                attendanceLeave++;
+            }
 
-                    else {
-                        absent++;
-                    }
-
-                });
+            else {
+                absent++;
+            }
 
         });
 
-    let totalWorkMinutes = 0;
+    });
 
-    Object.values(attendanceData)
-        .forEach(day => {
 
-            Object.values(day)
-                .forEach(record => {
+    const totalLeaveRequests =
+        leaveRequests.length;
 
-                    totalWorkMinutes +=
-                        calculateMinutes(
-                            record.entry,
-                            record.exit
-                        );
+    const pendingLeaves =
+        leaveRequests.filter(
+            request =>
+                request.status === "pending"
+        ).length;
 
-                });
+    const approvedLeaves =
+        leaveRequests.filter(
+            request =>
+                request.status === "approved"
+        ).length;
 
-        });
+    const rejectedLeaves =
+        leaveRequests.filter(
+            request =>
+                request.status === "rejected"
+        ).length;
+
+
+    const totalLeaveDays =
+        leaveRequests.reduce(
+            (sum, request) =>
+                sum +
+                Number(request.days || 0),
+            0
+        );
+
 
     return {
 
@@ -2988,14 +3144,6 @@ function getReportData() {
 
         departments,
 
-        totalRequests,
-
-        pendingRequests,
-
-        approvedRequests,
-
-        rejectedRequests,
-
         present,
 
         late,
@@ -3004,21 +3152,33 @@ function getReportData() {
 
         attendanceLeave,
 
-        totalWorkMinutes
+        totalLeaveRequests,
+
+        pendingLeaves,
+
+        approvedLeaves,
+
+        rejectedLeaves,
+
+        totalLeaveDays
 
     };
-
 }
 
 
-/*
-   نمایش گزارش
-*/
+/* ==================================================
+   RENDER REPORTS
+================================================== */
 
 function renderReports() {
 
     const data =
         getReportData();
+
+
+    /* ------------------------------
+       EMPLOYEE CARDS
+    ------------------------------ */
 
     setText(
         "reportTotalEmployees",
@@ -3031,31 +3191,6 @@ function renderReports() {
     );
 
     setText(
-        "reportTotalLeaves",
-        data.totalRequests
-    );
-
-    setText(
-        "reportPendingLeaves",
-        data.pendingRequests
-    );
-
-    setText(
-        "reportApprovedLeaves",
-        data.approvedRequests
-    );
-
-    setText(
-        "reportRejectedLeaves",
-        data.rejectedRequests
-    );
-
-    /*
-       اگر کارت‌های جدید در HTML وجود داشته باشند،
-       خودکار مقداردهی می‌شوند.
-    */
-
-    setText(
         "reportInactiveEmployees",
         data.inactiveEmployees
     );
@@ -3064,6 +3199,11 @@ function renderReports() {
         "reportDepartments",
         data.departments
     );
+
+
+    /* ------------------------------
+       ATTENDANCE CARDS
+    ------------------------------ */
 
     setText(
         "reportPresent",
@@ -3085,577 +3225,274 @@ function renderReports() {
         data.attendanceLeave
     );
 
+
+    /* ------------------------------
+       LEAVE CARDS
+    ------------------------------ */
+
     setText(
-        "reportTotalWorkMinutes",
-        formatMinutes(
-            data.totalWorkMinutes
-        )
+        "reportTotalLeaves",
+        data.totalLeaveRequests
     );
 
-}
+    setText(
+        "reportPendingLeaves",
+        data.pendingLeaves
+    );
+
+    setText(
+        "reportApprovedLeaves",
+        data.approvedLeaves
+    );
+
+    setText(
+        "reportRejectedLeaves",
+        data.rejectedLeaves
+    );
+
+    setText(
+        "reportTotalLeaveDays",
+        data.totalLeaveDays
+    );
 
 
-/* ==================================================
-   REPORT SUMMARY
-================================================== */
-
-function generateReportSummary() {
-
-    const data =
-        getReportData();
-
-    const attendanceTotal =
-        data.present +
-        data.late +
-        data.absent +
-        data.attendanceLeave;
-
-    const attendanceRate =
-        attendanceTotal > 0
-            ? Math.round(
-                (
-                    (
-                        data.present +
-                        data.late
-                    ) /
-                    attendanceTotal
-                ) * 100
-            )
-            : 0;
-
-    const approvalRate =
-        data.totalRequests > 0
-            ? Math.round(
-                (
-                    data.approvedRequests /
-                    data.totalRequests
-                ) * 100
-            )
-            : 0;
-
-    return {
-
-        ...data,
-
-        attendanceTotal,
-
-        attendanceRate,
-
-        approvalRate
-
-    };
+    renderReportCharts(data);
 
 }
 
 
 /* ==================================================
-   REPORT EXPORT - CSV
+   REPORT CHARTS
 ================================================== */
 
-function downloadFile(
-    content,
-    filename,
-    type = "text/plain;charset=utf-8"
-) {
+function renderReportCharts(data) {
 
-    const blob =
-        new Blob(
-            [content],
-            { type }
+    if (
+        typeof Chart ===
+        "undefined"
+    ) {
+
+        console.warn(
+            "Chart.js در صفحه بارگذاری نشده است."
         );
 
-    const url =
-        URL.createObjectURL(blob);
-
-    const link =
-        document.createElement("a");
-
-    link.href = url;
-
-    link.download =
-        filename;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-    URL.revokeObjectURL(url);
-
-}
+        return;
+    }
 
 
-function convertToCSV(rows) {
+    const employeeCanvas =
+        document.getElementById(
+            "employeeChart"
+        );
 
-    return rows
-        .map(row =>
-            row
-                .map(value => {
+    const attendanceCanvas =
+        document.getElementById(
+            "attendanceChart"
+        );
 
-                    const text =
-                        String(
-                            value ?? ""
-                        );
-
-                    return `"${text.replaceAll(
-                        '"',
-                        '""'
-                    )}"`;
-
-                })
-                .join(",")
-        )
-        .join("\n");
-
-}
+    const leaveCanvas =
+        document.getElementById(
+            "leaveChart"
+        );
 
 
-function exportEmployeesReport() {
+    /* ==================================================
+       EMPLOYEE CHART
+    ================================================== */
 
-    const rows = [
+    if (employeeCanvas) {
 
-        [
-            "نام کارمند",
-            "کد پرسنلی",
-            "واحد",
-            "سمت",
-            "شماره تماس",
-            "وضعیت"
-        ]
-
-    ];
-
-    employees.forEach(employee => {
-
-        rows.push([
-
-            employee.name,
-
-            employee.code,
-
-            employee.department,
-
-            employee.position,
-
-            employee.phone,
-
-            employee.status === "active"
-                ? "فعال"
-                : "غیرفعال"
-
-        ]);
-
-    });
-
-    const csv =
-        "\uFEFF" +
-        convertToCSV(rows);
-
-    downloadFile(
-        csv,
-        `گزارش-کارکنان-${getTodayISO()}.csv`,
-        "text/csv;charset=utf-8"
-    );
-
-}
-
-
-function exportLeaveReport() {
-
-    const rows = [
-
-        [
-            "کارمند",
-            "کد پرسنلی",
-            "نوع درخواست",
-            "شروع",
-            "پایان",
-            "تعداد روز",
-            "وضعیت",
-            "توضیحات"
-        ]
-
-    ];
-
-    leaveRequests.forEach(request => {
-
-        const employee =
-            employees.find(
-                employee =>
-                    employee.id ===
-                    request.employeeId
-            );
-
-        if (!employee) {
-            return;
+        if (employeeChart) {
+            employeeChart.destroy();
         }
 
-        rows.push([
+        employeeChart =
+            new Chart(
+                employeeCanvas,
+                {
+                    type: "doughnut",
 
-            employee.name,
+                    data: {
 
-            employee.code,
+                        labels: [
+                            "فعال",
+                            "غیرفعال"
+                        ],
 
-            getLeaveTypeText(
-                request.type
-            ),
+                        datasets: [
+                            {
+                                data: [
+                                    data.activeEmployees,
+                                    data.inactiveEmployees
+                                ],
 
-            request.start,
+                                borderWidth: 0
+                            }
+                        ]
 
-            request.end,
+                    },
 
-            request.days,
+                    options: {
 
-            getLeaveStatusText(
-                request.status
-            ),
+                        responsive: true,
 
-            request.description || ""
+                        maintainAspectRatio: false,
 
-        ]);
+                        plugins: {
 
-    });
+                            legend: {
 
-    const csv =
-        "\uFEFF" +
-        convertToCSV(rows);
+                                position: "bottom"
 
-    downloadFile(
-        csv,
-        `گزارش-مرخصی-${getTodayISO()}.csv`,
-        "text/csv;charset=utf-8"
-    );
+                            }
 
-}
+                        }
 
+                    }
 
-function exportAttendanceReport() {
-
-    const rows = [
-
-        [
-            "تاریخ",
-            "کارمند",
-            "کد پرسنلی",
-            "وضعیت",
-            "ورود",
-            "خروج",
-            "مدت کار"
-        ]
-
-    ];
-
-    Object.keys(attendanceData)
-        .sort()
-        .forEach(date => {
-
-            Object.keys(
-                attendanceData[date]
-            ).forEach(employeeId => {
-
-                const record =
-                    attendanceData[
-                        date
-                    ][employeeId];
-
-                const employee =
-                    employees.find(
-                        employee =>
-                            employee.id ===
-                            Number(employeeId)
-                    );
-
-                if (!employee) {
-                    return;
                 }
-
-                rows.push([
-
-                    date,
-
-                    employee.name,
-
-                    employee.code,
-
-                    record.status === "present"
-                        ? "حاضر"
-                        : record.status === "late"
-                            ? "تأخیر"
-                            : record.status === "leave"
-                                ? "مرخصی"
-                                : "غایب",
-
-                    record.entry || "",
-
-                    record.exit || "",
-
-                    formatMinutes(
-                        calculateMinutes(
-                            record.entry,
-                            record.exit
-                        )
-                    )
-
-                ]);
-
-            });
-
-        });
-
-    const csv =
-        "\uFEFF" +
-        convertToCSV(rows);
-
-    downloadFile(
-        csv,
-        `گزارش-حضور-و-غیاب-${getTodayISO()}.csv`,
-        "text/csv;charset=utf-8"
-    );
-
-}
-
-
-/* ==================================================
-   FULL REPORT EXPORT
-================================================== */
-
-function exportFullReport() {
-
-    const data =
-        generateReportSummary();
-
-    const rows = [
-
-        [
-            "گزارش جامع منابع انسانی",
-            ""
-        ],
-
-        [
-            "تاریخ گزارش",
-            new Date().toLocaleDateString(
-                "fa-IR"
-            )
-        ],
-
-        [],
-
-        [
-            "شاخص",
-            "مقدار"
-        ],
-
-        [
-            "کل کارکنان",
-            data.totalEmployees
-        ],
-
-        [
-            "کارکنان فعال",
-            data.activeEmployees
-        ],
-
-        [
-            "کارکنان غیرفعال",
-            data.inactiveEmployees
-        ],
-
-        [
-            "تعداد واحدها",
-            data.departments
-        ],
-
-        [
-            "کل درخواست‌های مرخصی/مأموریت",
-            data.totalRequests
-        ],
-
-        [
-            "در انتظار بررسی",
-            data.pendingRequests
-        ],
-
-        [
-            "تأیید شده",
-            data.approvedRequests
-        ],
-
-        [
-            "رد شده",
-            data.rejectedRequests
-        ],
-
-        [
-            "حاضر",
-            data.present
-        ],
-
-        [
-            "تأخیر",
-            data.late
-        ],
-
-        [
-            "غایب",
-            data.absent
-        ],
-
-        [
-            "مرخصی ثبت‌شده در حضور و غیاب",
-            data.attendanceLeave
-        ],
-
-        [
-            "نرخ حضور",
-            `${data.attendanceRate}%`
-        ],
-
-        [
-            "نرخ تأیید درخواست‌ها",
-            `${data.approvalRate}%`
-        ],
-
-        [
-            "مجموع زمان کار",
-            formatMinutes(
-                data.totalWorkMinutes
-            )
-        ]
-
-    ];
-
-    const csv =
-        "\uFEFF" +
-        convertToCSV(rows);
-
-    downloadFile(
-        csv,
-        `گزارش-جامع-میرزا-کوچک-خان-${getTodayISO()}.csv`,
-        "text/csv;charset=utf-8"
-    );
-
-}
-
-
-/* ==================================================
-   PRINT REPORT
-================================================== */
-
-function printReport() {
-
-    renderReports();
-
-    window.print();
-
-}
-
-
-/* ==================================================
-   AUTO-DETECT REPORT BUTTONS
-================================================== */
-
-function setupReportButtons() {
-
-    const exportFull =
-        document.getElementById(
-            "exportReportBtn"
-        );
-
-    const exportEmployees =
-        document.getElementById(
-            "exportEmployeesReport"
-        );
-
-    const exportAttendance =
-        document.getElementById(
-            "exportAttendanceReport"
-        );
-
-    const exportLeave =
-        document.getElementById(
-            "exportLeaveReport"
-        );
-
-    const printBtn =
-        document.getElementById(
-            "printReportBtn"
-        );
-
-    if (exportFull) {
-
-        exportFull.addEventListener(
-            "click",
-            exportFullReport
-        );
+            );
 
     }
 
-    if (exportEmployees) {
 
-        exportEmployees.addEventListener(
-            "click",
-            exportEmployeesReport
-        );
+    /* ==================================================
+       ATTENDANCE CHART
+    ================================================== */
+
+    if (attendanceCanvas) {
+
+        if (attendanceChart) {
+            attendanceChart.destroy();
+        }
+
+        attendanceChart =
+            new Chart(
+                attendanceCanvas,
+                {
+                    type: "bar",
+
+                    data: {
+
+                        labels: [
+                            "حاضر",
+                            "تأخیر",
+                            "غایب",
+                            "مرخصی"
+                        ],
+
+                        datasets: [
+                            {
+                                label:
+                                    "وضعیت حضور",
+
+                                data: [
+                                    data.present,
+                                    data.late,
+                                    data.absent,
+                                    data.attendanceLeave
+                                ],
+
+                                borderWidth: 1
+                            }
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        scales: {
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+                                    precision: 0
+                                }
+
+                            }
+
+                        },
+
+                        plugins: {
+
+                            legend: {
+                                display: false
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
 
     }
 
-    if (exportAttendance) {
 
-        exportAttendance.addEventListener(
-            "click",
-            exportAttendanceReport
-        );
+    /* ==================================================
+       LEAVE CHART
+    ================================================== */
+
+    if (leaveCanvas) {
+
+        if (leaveChart) {
+            leaveChart.destroy();
+        }
+
+        leaveChart =
+            new Chart(
+                leaveCanvas,
+                {
+                    type: "pie",
+
+                    data: {
+
+                        labels: [
+                            "در انتظار",
+                            "تأیید شده",
+                            "رد شده"
+                        ],
+
+                        datasets: [
+                            {
+                                data: [
+                                    data.pendingLeaves,
+                                    data.approvedLeaves,
+                                    data.rejectedLeaves
+                                ],
+
+                                borderWidth: 0
+                            }
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+                                position: "bottom"
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
 
     }
-
-    if (exportLeave) {
-
-        exportLeave.addEventListener(
-            "click",
-            exportLeaveReport
-        );
-
-    }
-
-    if (printBtn) {
-
-        printBtn.addEventListener(
-            "click",
-            printReport
-        );
-
-    }
-
-}
-
-
-/* ==================================================
-   REFRESH REPORT
-================================================== */
-
-function refreshReports() {
-
-    renderReports();
-
-    alert(
-        "گزارش‌ها با موفقیت بروزرسانی شدند."
-    );
-
-}
-
-
-const refreshReportBtn =
-    document.getElementById(
-        "refreshReportBtn"
-    );
-
-if (refreshReportBtn) {
-
-    refreshReportBtn.addEventListener(
-        "click",
-        refreshReports
-    );
 
 }
 
@@ -3680,8 +3517,8 @@ function updateClock() {
 
     document.title =
         `میرزا کوچک خان | ${time}`;
-
 }
+
 
 setInterval(
     updateClock,
@@ -3705,8 +3542,6 @@ initLeave();
 
 renderReports();
 
-setupReportButtons();
-
 updateNotificationBadge();
 
 renderNotifications();
@@ -3716,7 +3551,9 @@ renderNotifications();
    DEFAULT SYSTEM NOTIFICATION
 ================================================== */
 
-if (notifications.length === 0) {
+if (
+    notifications.length === 0
+) {
 
     addNotification({
 
