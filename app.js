@@ -1,6 +1,6 @@
 /* ==================================================
    MIRZA KHAN HR
-   APP.JS - VERSION 1.2
+   APP.JS - VERSION 1.3
    کارکنان + حضور و غیاب
 ================================================== */
 
@@ -93,22 +93,26 @@ let employees = loadJSON(
 
 /* ==================================================
    ATTENDANCE DATA
-================================================== */
 
-/*
-ساختار:
+   ساختار:
 
-attendance = {
-   "1405-05-28": {
-       "employeeId": {
-           status: "present",
-           entry: "08:00",
-           exit: "16:00",
-           note: ""
+   attendanceData = {
+
+       "2026-08-19": {
+
+           "1": {
+
+               status: "present",
+               entry: "08:00",
+               exit: "16:00",
+               note: ""
+
+           }
+
        }
+
    }
-}
-*/
+================================================== */
 
 let attendanceData = loadJSON(
     "mirzaKhanAttendance",
@@ -141,15 +145,27 @@ function loadJSON(key, fallback) {
 
         return fallback;
     }
+
 }
 
 
 function saveJSON(key, data) {
 
-    localStorage.setItem(
-        key,
-        JSON.stringify(data)
-    );
+    try {
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(data)
+        );
+
+    } catch (error) {
+
+        console.error(
+            `خطا در ذخیره ${key}:`,
+            error
+        );
+
+    }
 
 }
 
@@ -163,21 +179,27 @@ function getTodayISO() {
     const now = new Date();
 
     const year = now.getFullYear();
-    const month = String(
-        now.getMonth() + 1
-    ).padStart(2, "0");
 
-    const day = String(
-        now.getDate()
-    ).padStart(2, "0");
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
+
 }
 
 
 function setDate() {
 
-    if (!todayDate) return;
+    if (!todayDate) {
+        return;
+    }
 
     const now = new Date();
 
@@ -197,6 +219,7 @@ function setDate() {
 
 }
 
+
 setDate();
 
 
@@ -215,6 +238,7 @@ menuItems.forEach(item => {
             const page =
                 this.dataset.page;
 
+
             menuItems.forEach(menu => {
 
                 menu.classList.remove(
@@ -223,7 +247,10 @@ menuItems.forEach(item => {
 
             });
 
-            this.classList.add("active");
+
+            this.classList.add(
+                "active"
+            );
 
 
             pages.forEach(pageElement => {
@@ -259,9 +286,11 @@ menuItems.forEach(item => {
             if (page === "employees") {
 
                 if (employeesPage) {
+
                     employeesPage.classList.add(
                         "active"
                     );
+
                 }
 
                 renderEmployees();
@@ -269,22 +298,32 @@ menuItems.forEach(item => {
             } else {
 
                 if (employeesPage) {
+
                     employeesPage.classList.remove(
                         "active"
                     );
+
                 }
 
             }
 
 
-            pageTitle.textContent =
-                pageNames[page] ||
-                "داشبورد";
+            if (pageTitle) {
+
+                pageTitle.textContent =
+                    pageNames[page] ||
+                    "داشبورد";
+
+            }
 
 
-            sidebar.classList.remove(
-                "open"
-            );
+            if (sidebar) {
+
+                sidebar.classList.remove(
+                    "open"
+                );
+
+            }
 
 
             if (page === "attendance") {
@@ -294,7 +333,6 @@ menuItems.forEach(item => {
             }
 
         }
-
     );
 
 });
@@ -304,7 +342,7 @@ menuItems.forEach(item => {
    MOBILE MENU
 ================================================== */
 
-if (mobileMenu) {
+if (mobileMenu && sidebar) {
 
     mobileMenu.addEventListener(
         "click",
@@ -407,6 +445,7 @@ function getFilteredEmployees() {
         return employees;
     }
 
+
     const search =
         employeeSearch.value
             .trim()
@@ -432,10 +471,12 @@ function getFilteredEmployees() {
                 employee.name || ""
             ).toLowerCase();
 
+
         const code =
             String(
                 employee.code || ""
             ).toLowerCase();
+
 
         const phone =
             String(
@@ -471,9 +512,7 @@ function getFilteredEmployees() {
         return (
 
             matchesSearch &&
-
             matchesDepartment &&
-
             matchesStatus
 
         );
@@ -512,8 +551,7 @@ function renderEmployees() {
                     class="empty-employees"
                 >
 
-                    کارمندی با این مشخصات
-                    پیدا نشد.
+                    کارمندی با این مشخصات پیدا نشد.
 
                 </td>
 
@@ -542,7 +580,9 @@ function renderEmployees() {
 
 
         const row =
-            document.createElement("tr");
+            document.createElement(
+                "tr"
+            );
 
 
         row.innerHTML = `
@@ -553,7 +593,9 @@ function renderEmployees() {
 
                     <div class="employee-avatar">
 
-                        ${escapeHTML(firstLetter)}
+                        ${escapeHTML(
+                            firstLetter
+                        )}
 
                     </div>
 
@@ -716,30 +758,36 @@ function updateSummary() {
         total
     );
 
+
     setText(
         "activeEmployees",
         active
     );
+
 
     setText(
         "inactiveEmployees",
         inactive
     );
 
+
     setText(
         "dashboardTotal",
         total
     );
+
 
     setText(
         "dashboardActive",
         active
     );
 
+
     setText(
         "dashboardInactive",
         inactive
     );
+
 
     setText(
         "dashboardDepartments",
@@ -758,8 +806,12 @@ function setText(id, value) {
     const element =
         document.getElementById(id);
 
+
     if (element) {
-        element.textContent = value;
+
+        element.textContent =
+            value;
+
     }
 
 }
@@ -773,7 +825,9 @@ function openEmployeeModal(
     employee = null
 ) {
 
-    if (!employeeModal) return;
+    if (!employeeModal) {
+        return;
+    }
 
 
     employeeModal.classList.add(
@@ -786,8 +840,12 @@ function openEmployeeModal(
 
     if (employee) {
 
-        modalTitle.textContent =
-            "ویرایش کارمند";
+        if (modalTitle) {
+
+            modalTitle.textContent =
+                "ویرایش کارمند";
+
+        }
 
 
         document.getElementById(
@@ -837,11 +895,19 @@ function openEmployeeModal(
 
     } else {
 
-        modalTitle.textContent =
-            "افزودن کارمند";
+        if (modalTitle) {
+
+            modalTitle.textContent =
+                "افزودن کارمند";
+
+        }
 
 
-        employeeForm.reset();
+        if (employeeForm) {
+
+            employeeForm.reset();
+
+        }
 
 
         editingEmployeeId = null;
@@ -857,17 +923,25 @@ function openEmployeeModal(
 
 function closeEmployeeModal() {
 
-    if (!employeeModal) return;
+    if (!employeeModal) {
+        return;
+    }
+
 
     employeeModal.classList.remove(
         "show"
     );
 
+
     restoreProfileView();
 
+
     if (employeeForm) {
+
         employeeForm.reset();
+
     }
+
 
     editingEmployeeId = null;
 
@@ -1178,7 +1252,9 @@ function editEmployee(id) {
         );
 
 
-    if (!employee) return;
+    if (!employee) {
+        return;
+    }
 
 
     openEmployeeModal(
@@ -1201,7 +1277,9 @@ function deleteEmployee(id) {
         );
 
 
-    if (!employee) return;
+    if (!employee) {
+        return;
+    }
 
 
     const confirmed =
@@ -1210,7 +1288,9 @@ function deleteEmployee(id) {
         );
 
 
-    if (!confirmed) return;
+    if (!confirmed) {
+        return;
+    }
 
 
     employees =
@@ -1242,8 +1322,13 @@ function viewEmployee(id) {
         );
 
 
-    if (!employee || !employeeModal) {
+    if (
+        !employee ||
+        !employeeModal
+    ) {
+
         return;
+
     }
 
 
@@ -1344,7 +1429,7 @@ function viewEmployee(id) {
 
 
 /* ==================================================
-   SEARCH EVENTS
+   EMPLOYEE SEARCH
 ================================================== */
 
 if (employeeSearch) {
@@ -1403,6 +1488,11 @@ if (employeeModal) {
 
 
 /* ==================================================
+   ================= ATTENDANCE ====================
+================================================== */
+
+
+/* ==================================================
    ATTENDANCE ELEMENTS
 ================================================== */
 
@@ -1411,20 +1501,24 @@ const attendanceDate =
         "attendanceDate"
     );
 
+
 const attendanceSearch =
     document.getElementById(
         "attendanceSearch"
     );
+
 
 const attendanceStatusFilter =
     document.getElementById(
         "attendanceStatusFilter"
     );
 
+
 const attendanceTableBody =
     document.getElementById(
         "attendanceTableBody"
     );
+
 
 const openAttendanceModal =
     document.getElementById(
@@ -1433,7 +1527,7 @@ const openAttendanceModal =
 
 
 /* ==================================================
-   ATTENDANCE DATE
+   SELECTED DATE
 ================================================== */
 
 function getSelectedAttendanceDate() {
@@ -1447,10 +1541,15 @@ function getSelectedAttendanceDate() {
 
     }
 
+
     return getTodayISO();
 
 }
 
+
+/* ==================================================
+   INIT ATTENDANCE
+================================================== */
 
 function initAttendance() {
 
@@ -1473,7 +1572,7 @@ function initAttendance() {
 
 
 /* ==================================================
-   ATTENDANCE RECORD
+   GET ATTENDANCE RECORD
 ================================================== */
 
 function getAttendanceRecord(
@@ -1488,11 +1587,15 @@ function getAttendanceRecord(
     }
 
 
+    const id =
+        String(employeeId);
+
+
     if (
-        !attendanceData[date][employeeId]
+        !attendanceData[date][id]
     ) {
 
-        attendanceData[date][employeeId] = {
+        attendanceData[date][id] = {
 
             status: "absent",
 
@@ -1504,10 +1607,12 @@ function getAttendanceRecord(
 
         };
 
+        saveAttendance();
+
     }
 
 
-    return attendanceData[date][employeeId];
+    return attendanceData[date][id];
 
 }
 
@@ -1547,8 +1652,10 @@ function getAttendanceStatusText(
     };
 
 
-    return statuses[status] ||
-        "غایب";
+    return (
+        statuses[status] ||
+        "غایب"
+    );
 
 }
 
@@ -1562,22 +1669,33 @@ function calculateMinutes(
     end
 ) {
 
-    if (!start || !end) {
+    if (
+        !start ||
+        !end
+    ) {
+
         return 0;
+
     }
 
 
     const startParts =
-        start.split(":").map(Number);
+        start
+            .split(":")
+            .map(Number);
 
 
     const endParts =
-        end.split(":").map(Number);
+        end
+            .split(":")
+            .map(Number);
 
 
     if (
         startParts.length !== 2 ||
-        endParts.length !== 2
+        endParts.length !== 2 ||
+        startParts.some(isNaN) ||
+        endParts.some(isNaN)
     ) {
 
         return 0;
@@ -1602,7 +1720,8 @@ function calculateMinutes(
 
     if (difference < 0) {
 
-        difference += 24 * 60;
+        difference +=
+            24 * 60;
 
     }
 
@@ -1612,19 +1731,34 @@ function calculateMinutes(
 }
 
 
+/* ==================================================
+   FORMAT WORK HOURS
+================================================== */
+
 function formatMinutes(minutes) {
 
     if (!minutes) {
+
         return "-";
+
     }
 
 
     const hours =
-        Math.floor(minutes / 60);
+        Math.floor(
+            minutes / 60
+        );
 
 
     const mins =
         minutes % 60;
+
+
+    if (mins === 0) {
+
+        return `${hours} ساعت`;
+
+    }
 
 
     return `${hours} ساعت و ${mins} دقیقه`;
@@ -1648,24 +1782,37 @@ function updateAttendanceStats(
 
     records.forEach(record => {
 
-        const status =
-            record.status;
+        if (
+            record.status ===
+            "present"
+        ) {
 
-
-        if (status === "present") {
             present++;
+
         }
 
-        else if (status === "late") {
+        else if (
+            record.status ===
+            "late"
+        ) {
+
             late++;
+
         }
 
-        else if (status === "leave") {
+        else if (
+            record.status ===
+            "leave"
+        ) {
+
             leave++;
+
         }
 
         else {
+
             absent++;
+
         }
 
     });
@@ -1676,15 +1823,18 @@ function updateAttendanceStats(
         present
     );
 
+
     setText(
         "lateCount",
         late
     );
 
+
     setText(
         "absentCount",
         absent
     );
+
 
     setText(
         "leaveCount",
@@ -1729,7 +1879,8 @@ function renderAttendance() {
     employees
         .filter(
             employee =>
-                employee.status === "active"
+                employee.status ===
+                "active"
         )
         .forEach(employee => {
 
@@ -1743,7 +1894,6 @@ function renderAttendance() {
             records.push({
 
                 employee,
-
                 record
 
             });
@@ -1752,9 +1902,12 @@ function renderAttendance() {
 
 
     updateAttendanceStats(
+
         records.map(
-            item => item.record
+            item =>
+                item.record
         )
+
     );
 
 
@@ -1769,22 +1922,35 @@ function renderAttendance() {
                 item.record;
 
 
+            const employeeName =
+                String(
+                    employee.name || ""
+                ).toLowerCase();
+
+
+            const employeeCode =
+                String(
+                    employee.code || ""
+                ).toLowerCase();
+
+
             const matchesSearch =
 
-                employee.name
-                    .toLowerCase()
-                    .includes(search)
+                employeeName.includes(
+                    search
+                )
 
                 ||
 
-                employee.code
-                    .toLowerCase()
-                    .includes(search);
+                employeeCode.includes(
+                    search
+                );
 
 
             const matchesStatus =
 
-                statusFilter === "all"
+                statusFilter ===
+                "all"
 
                 ||
 
@@ -1793,16 +1959,15 @@ function renderAttendance() {
 
 
             return (
-
                 matchesSearch &&
                 matchesStatus
-
             );
 
         });
 
 
-    attendanceTableBody.innerHTML = "";
+    attendanceTableBody.innerHTML =
+        "";
 
 
     if (filtered.length === 0) {
@@ -1853,7 +2018,9 @@ function renderAttendance() {
 
 
         const row =
-            document.createElement("tr");
+            document.createElement(
+                "tr"
+            );
 
 
         row.innerHTML = `
@@ -1865,7 +2032,9 @@ function renderAttendance() {
                     <div class="employee-avatar">
 
                         ${escapeHTML(
-                            employee.name.charAt(0)
+                            employee.name
+                                ? employee.name.charAt(0)
+                                : "م"
                         )}
 
                     </div>
@@ -1895,10 +2064,13 @@ function renderAttendance() {
 
                 <select
                     class="attendance-status-select"
-                    onchange="changeAttendanceStatus(
-                        ${employee.id},
-                        this.value
-                    )"
+                    data-employee-id="${employee.id}"
+                    onchange="
+                        changeAttendanceStatus(
+                            ${employee.id},
+                            this.value
+                        )
+                    "
                 >
 
                     <option
@@ -1910,6 +2082,7 @@ function renderAttendance() {
                         حاضر
                     </option>
 
+
                     <option
                         value="late"
                         ${record.status === "late"
@@ -1919,6 +2092,7 @@ function renderAttendance() {
                         تأخیر
                     </option>
 
+
                     <option
                         value="absent"
                         ${record.status === "absent"
@@ -1927,6 +2101,7 @@ function renderAttendance() {
                     >
                         غایب
                     </option>
+
 
                     <option
                         value="leave"
@@ -1946,12 +2121,16 @@ function renderAttendance() {
 
                 <input
                     type="time"
-                    value="${record.entry || ""}"
-                    onchange="changeAttendanceTime(
-                        ${employee.id},
-                        'entry',
-                        this.value
-                    )"
+                    value="${escapeHTML(
+                        record.entry || ""
+                    )}"
+                    onchange="
+                        changeAttendanceTime(
+                            ${employee.id},
+                            'entry',
+                            this.value
+                        )
+                    "
                 >
 
             </td>
@@ -1961,12 +2140,16 @@ function renderAttendance() {
 
                 <input
                     type="time"
-                    value="${record.exit || ""}"
-                    onchange="changeAttendanceTime(
-                        ${employee.id},
-                        'exit',
-                        this.value
-                    )"
+                    value="${escapeHTML(
+                        record.exit || ""
+                    )}"
+                    onchange="
+                        changeAttendanceTime(
+                            ${employee.id},
+                            'exit',
+                            this.value
+                        )
+                    "
                 >
 
             </td>
@@ -1975,9 +2158,11 @@ function renderAttendance() {
             <td>
 
                 <span>
+
                     ${formatMinutes(
                         workMinutes
                     )}
+
                 </span>
 
             </td>
@@ -1987,10 +2172,19 @@ function renderAttendance() {
 
                 ${
                     record.status === "late"
-                        ? `<span class="attendance-late-text">
-                            تأخیر
-                           </span>`
+
+                        ? `
+
+                            <span
+                                class="attendance-late-text"
+                            >
+                                تأخیر
+                            </span>
+
+                          `
+
                         : "-"
+
                 }
 
             </td>
@@ -1998,7 +2192,9 @@ function renderAttendance() {
 
             <td>
 
-                -
+                <span>
+                    ${statusText}
+                </span>
 
             </td>
 
@@ -2008,27 +2204,42 @@ function renderAttendance() {
                 <div class="action-buttons">
 
                     <button
+                        type="button"
                         class="action-btn"
                         title="ثبت ورود"
-                        onclick="setCurrentEntry(${employee.id})"
+                        onclick="
+                            setCurrentEntry(
+                                ${employee.id}
+                            )
+                        "
                     >
                         🟢
                     </button>
 
 
                     <button
+                        type="button"
                         class="action-btn"
                         title="ثبت خروج"
-                        onclick="setCurrentExit(${employee.id})"
+                        onclick="
+                            setCurrentExit(
+                                ${employee.id}
+                            )
+                        "
                     >
                         🔴
                     </button>
 
 
                     <button
+                        type="button"
                         class="action-btn"
                         title="پاک کردن"
-                        onclick="clearAttendance(${employee.id})"
+                        onclick="
+                            clearAttendance(
+                                ${employee.id}
+                            )
+                        "
                     >
                         ↺
                     </button>
@@ -2050,7 +2261,7 @@ function renderAttendance() {
 
 
 /* ==================================================
-   CHANGE STATUS
+   CHANGE ATTENDANCE STATUS
 ================================================== */
 
 function changeAttendanceStatus(
@@ -2058,9 +2269,35 @@ function changeAttendanceStatus(
     status
 ) {
 
+    const validStatuses = [
+
+        "present",
+        "late",
+        "absent",
+        "leave"
+
+    ];
+
+
+    if (
+        !validStatuses.includes(
+            status
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const date =
+        getSelectedAttendanceDate();
+
+
     const record =
         getAttendanceRecord(
-            employeeId
+            employeeId,
+            date
         );
 
 
@@ -2068,7 +2305,32 @@ function changeAttendanceStatus(
         status;
 
 
+    /*
+       اگر وضعیت غیبت یا مرخصی شد،
+       ساعت‌ها را حذف نمی‌کنیم تا سابقه
+       ورود و خروج از بین نرود.
+    */
+
+
     saveAttendance();
+
+
+    updateAttendanceStats(
+        employees
+            .filter(
+                employee =>
+                    employee.status ===
+                    "active"
+            )
+            .map(
+                employee =>
+                    getAttendanceRecord(
+                        employee.id,
+                        date
+                    )
+            )
+    );
+
 
     renderAttendance();
 
@@ -2076,7 +2338,7 @@ function changeAttendanceStatus(
 
 
 /* ==================================================
-   CHANGE TIME
+   CHANGE ATTENDANCE TIME
 ================================================== */
 
 function changeAttendanceTime(
@@ -2085,14 +2347,63 @@ function changeAttendanceTime(
     value
 ) {
 
+    if (
+        type !== "entry" &&
+        type !== "exit"
+    ) {
+
+        return;
+
+    }
+
+
+    const date =
+        getSelectedAttendanceDate();
+
+
     const record =
         getAttendanceRecord(
-            employeeId
+            employeeId,
+            date
         );
 
 
     record[type] =
-        value;
+        value || "";
+
+
+    /*
+       اگر ورود ثبت شود و کارمند غایب باشد،
+       خودکار حاضر می‌شود.
+    */
+
+    if (
+        type === "entry" &&
+        value &&
+        record.status === "absent"
+    ) {
+
+        record.status =
+            "present";
+
+    }
+
+
+    /*
+       اگر خروج ثبت شود و وضعیت غایب باشد،
+       خودکار حاضر می‌شود.
+    */
+
+    if (
+        type === "exit" &&
+        value &&
+        record.status === "absent"
+    ) {
+
+        record.status =
+            "present";
+
+    }
 
 
     saveAttendance();
@@ -2134,16 +2445,21 @@ function getCurrentTime() {
 
 
 /* ==================================================
-   SET ENTRY
+   SET CURRENT ENTRY
 ================================================== */
 
 function setCurrentEntry(
     employeeId
 ) {
 
+    const date =
+        getSelectedAttendanceDate();
+
+
     const record =
         getAttendanceRecord(
-            employeeId
+            employeeId,
+            date
         );
 
 
@@ -2152,7 +2468,8 @@ function setCurrentEntry(
 
 
     if (
-        record.status === "absent"
+        record.status ===
+        "absent"
     ) {
 
         record.status =
@@ -2163,22 +2480,33 @@ function setCurrentEntry(
 
     saveAttendance();
 
+
     renderAttendance();
+
+
+    showAttendanceMessage(
+        "ورود با موفقیت ثبت شد."
+    );
 
 }
 
 
 /* ==================================================
-   SET EXIT
+   SET CURRENT EXIT
 ================================================== */
 
 function setCurrentExit(
     employeeId
 ) {
 
+    const date =
+        getSelectedAttendanceDate();
+
+
     const record =
         getAttendanceRecord(
-            employeeId
+            employeeId,
+            date
         );
 
 
@@ -2187,7 +2515,8 @@ function setCurrentExit(
 
 
     if (
-        record.status === "absent"
+        record.status ===
+        "absent"
     ) {
 
         record.status =
@@ -2198,7 +2527,13 @@ function setCurrentExit(
 
     saveAttendance();
 
+
     renderAttendance();
+
+
+    showAttendanceMessage(
+        "خروج با موفقیت ثبت شد."
+    );
 
 }
 
@@ -2226,21 +2561,91 @@ function clearAttendance(
         getSelectedAttendanceDate();
 
 
+    const id =
+        String(employeeId);
+
+
     if (
         attendanceData[date] &&
-        attendanceData[date][employeeId]
+        attendanceData[date][id]
     ) {
 
         delete attendanceData[
             date
-        ][employeeId];
+        ][id];
 
     }
 
 
     saveAttendance();
 
+
     renderAttendance();
+
+
+    showAttendanceMessage(
+        "اطلاعات حضور پاک شد."
+    );
+
+}
+
+
+/* ==================================================
+   ATTENDANCE MESSAGE
+================================================== */
+
+function showAttendanceMessage(
+    message
+) {
+
+    /*
+       اگر Toast در HTML وجود داشته باشد
+       از آن استفاده می‌کنیم.
+    */
+
+    const toast =
+        document.getElementById(
+            "attendanceToast"
+        );
+
+
+    if (toast) {
+
+        toast.textContent =
+            message;
+
+
+        toast.classList.add(
+            "show"
+        );
+
+
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+       اگر Toast وجود نداشت،
+       پیام ساده نمایش داده می‌شود.
+    */
+
+    console.log(
+        "Attendance:",
+        message
+    );
 
 }
 
@@ -2291,8 +2696,8 @@ if (openAttendanceModal) {
 
             renderAttendance();
 
-            alert(
-                "وضعیت کارکنان از جدول حضور و غیاب قابل ثبت و ویرایش است."
+            showAttendanceMessage(
+                "وضعیت کارکنان را از جدول ثبت کنید."
             );
 
         }
@@ -2345,10 +2750,11 @@ renderEmployees();
 updateSummary();
 
 
-// اگر بخش حضور و غیاب در صفحه فعال باشد
 if (
     document
-        .getElementById("attendancePage")
+        .getElementById(
+            "attendancePage"
+        )
         ?.classList.contains(
             "active-page"
         )
