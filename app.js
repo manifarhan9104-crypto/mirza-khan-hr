@@ -1,32 +1,40 @@
 /* ==================================================
    MIRZA KHAN HR
-   EMPLOYEE MANAGEMENT - VERSION 1.1
+   APP.JS - VERSION 1.2
+   کارکنان + حضور و غیاب
 ================================================== */
 
 
-const menuItems =
-    document.querySelectorAll(".menu-item");
+/* ==================================================
+   GLOBAL ELEMENTS
+================================================== */
 
-const pages =
-    document.querySelectorAll(".page");
+const menuItems = document.querySelectorAll(".menu-item");
+const pages = document.querySelectorAll(".page");
+const pageTitle = document.getElementById("pageTitle");
+const mobileMenu = document.getElementById("mobileMenu");
+const sidebar = document.getElementById("sidebar");
+const todayDate = document.getElementById("todayDate");
 
-const pageTitle =
-    document.getElementById("pageTitle");
 
-const mobileMenu =
-    document.getElementById("mobileMenu");
+/* ==================================================
+   PAGE NAMES
+================================================== */
 
-const sidebar =
-    document.getElementById("sidebar");
-
-const todayDate =
-    document.getElementById("todayDate");
+const pageNames = {
+    dashboard: "داشبورد",
+    employees: "کارکنان",
+    attendance: "حضور و غیاب",
+    leave: "مرخصی و مأموریت",
+    reports: "گزارش‌ها",
+    notifications: "اعلان‌ها",
+    settings: "تنظیمات"
+};
 
 
 /* ==================================================
    EMPLOYEE DATA
 ================================================== */
-
 
 const defaultEmployees = [
 
@@ -77,64 +85,70 @@ const defaultEmployees = [
 ];
 
 
-let employees =
-    JSON.parse(
-        localStorage.getItem("mirzaKhanEmployees")
-    ) || defaultEmployees;
+let employees = loadJSON(
+    "mirzaKhanEmployees",
+    defaultEmployees
+);
 
 
 /* ==================================================
-   ELEMENTS
+   ATTENDANCE DATA
 ================================================== */
 
+/*
+ساختار:
 
-const employeesTableBody =
-    document.getElementById("employeesTableBody");
+attendance = {
+   "1405-05-28": {
+       "employeeId": {
+           status: "present",
+           entry: "08:00",
+           exit: "16:00",
+           note: ""
+       }
+   }
+}
+*/
 
-const employeeSearch =
-    document.getElementById("employeeSearch");
-
-const departmentFilter =
-    document.getElementById("departmentFilter");
-
-const statusFilter =
-    document.getElementById("statusFilter");
-
-const employeeModal =
-    document.getElementById("employeeModal");
-
-const employeeForm =
-    document.getElementById("employeeForm");
-
-const modalTitle =
-    document.getElementById("modalTitle");
-
-const addEmployeeBtn =
-    document.getElementById("addEmployeeBtn");
-
-const dashboardAddEmployee =
-    document.getElementById("dashboardAddEmployee");
-
-const closeModal =
-    document.getElementById("closeModal");
-
-const cancelModal =
-    document.getElementById("cancelModal");
-
-
-let editingEmployeeId = null;
+let attendanceData = loadJSON(
+    "mirzaKhanAttendance",
+    {}
+);
 
 
 /* ==================================================
-   SAVE DATA
+   GENERAL FUNCTIONS
 ================================================== */
 
+function loadJSON(key, fallback) {
 
-function saveEmployees() {
+    try {
+
+        const data = localStorage.getItem(key);
+
+        if (!data) {
+            return fallback;
+        }
+
+        return JSON.parse(data);
+
+    } catch (error) {
+
+        console.error(
+            `خطا در خواندن ${key}:`,
+            error
+        );
+
+        return fallback;
+    }
+}
+
+
+function saveJSON(key, data) {
 
     localStorage.setItem(
-        "mirzaKhanEmployees",
-        JSON.stringify(employees)
+        key,
+        JSON.stringify(data)
     );
 
 }
@@ -144,11 +158,28 @@ function saveEmployees() {
    DATE
 ================================================== */
 
+function getTodayISO() {
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(
+        now.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        now.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
 
 function setDate() {
 
-    const now =
-        new Date();
+    if (!todayDate) return;
+
+    const now = new Date();
 
     const formatter =
         new Intl.DateTimeFormat(
@@ -173,26 +204,6 @@ setDate();
    PAGE NAVIGATION
 ================================================== */
 
-
-const pageNames = {
-
-    dashboard: "داشبورد",
-
-    employees: "کارکنان",
-
-    attendance: "حضور و غیاب",
-
-    leave: "مرخصی و مأموریت",
-
-    reports: "گزارش‌ها",
-
-    notifications: "اعلان‌ها",
-
-    settings: "تنظیمات"
-
-};
-
-
 menuItems.forEach(item => {
 
     item.addEventListener(
@@ -204,7 +215,6 @@ menuItems.forEach(item => {
             const page =
                 this.dataset.page;
 
-
             menuItems.forEach(menu => {
 
                 menu.classList.remove(
@@ -213,21 +223,16 @@ menuItems.forEach(item => {
 
             });
 
-
-            this.classList.add(
-                "active"
-            );
+            this.classList.add("active");
 
 
-            pages.forEach(
-                pageElement => {
+            pages.forEach(pageElement => {
 
-                    pageElement.classList.remove(
-                        "active-page"
-                    );
+                pageElement.classList.remove(
+                    "active-page"
+                );
 
-                }
-            );
+            });
 
 
             const selectedPage =
@@ -253,16 +258,21 @@ menuItems.forEach(item => {
 
             if (page === "employees") {
 
-                employeesPage.classList.add(
-                    "active"
-                );
+                if (employeesPage) {
+                    employeesPage.classList.add(
+                        "active"
+                    );
+                }
 
-            }
-            else {
+                renderEmployees();
 
-                employeesPage.classList.remove(
-                    "active"
-                );
+            } else {
+
+                if (employeesPage) {
+                    employeesPage.classList.remove(
+                        "active"
+                    );
+                }
 
             }
 
@@ -277,13 +287,14 @@ menuItems.forEach(item => {
             );
 
 
-            if (page === "employees") {
+            if (page === "attendance") {
 
-                renderEmployees();
+                initAttendance();
 
             }
 
         }
+
     );
 
 });
@@ -293,25 +304,108 @@ menuItems.forEach(item => {
    MOBILE MENU
 ================================================== */
 
+if (mobileMenu) {
 
-mobileMenu.addEventListener(
-    "click",
-    () => {
+    mobileMenu.addEventListener(
+        "click",
+        () => {
 
-        sidebar.classList.toggle(
-            "open"
-        );
+            sidebar.classList.toggle(
+                "open"
+            );
 
-    }
-);
+        }
+    );
+
+}
+
+
+/* ==================================================
+   EMPLOYEE ELEMENTS
+================================================== */
+
+const employeesTableBody =
+    document.getElementById(
+        "employeesTableBody"
+    );
+
+const employeeSearch =
+    document.getElementById(
+        "employeeSearch"
+    );
+
+const departmentFilter =
+    document.getElementById(
+        "departmentFilter"
+    );
+
+const statusFilter =
+    document.getElementById(
+        "statusFilter"
+    );
+
+const employeeModal =
+    document.getElementById(
+        "employeeModal"
+    );
+
+const employeeForm =
+    document.getElementById(
+        "employeeForm"
+    );
+
+const modalTitle =
+    document.getElementById(
+        "modalTitle"
+    );
+
+const addEmployeeBtn =
+    document.getElementById(
+        "addEmployeeBtn"
+    );
+
+const dashboardAddEmployee =
+    document.getElementById(
+        "dashboardAddEmployee"
+    );
+
+const closeModal =
+    document.getElementById(
+        "closeModal"
+    );
+
+const cancelModal =
+    document.getElementById(
+        "cancelModal"
+    );
+
+
+let editingEmployeeId = null;
+
+
+/* ==================================================
+   SAVE EMPLOYEES
+================================================== */
+
+function saveEmployees() {
+
+    saveJSON(
+        "mirzaKhanEmployees",
+        employees
+    );
+
+}
 
 
 /* ==================================================
    EMPLOYEE FILTER
 ================================================== */
 
-
 function getFilteredEmployees() {
+
+    if (!employeeSearch) {
+        return employees;
+    }
 
     const search =
         employeeSearch.value
@@ -320,31 +414,42 @@ function getFilteredEmployees() {
 
 
     const department =
-        departmentFilter.value;
+        departmentFilter
+            ? departmentFilter.value
+            : "all";
 
 
     const status =
-        statusFilter.value;
+        statusFilter
+            ? statusFilter.value
+            : "all";
 
 
     return employees.filter(employee => {
 
+        const name =
+            String(
+                employee.name || ""
+            ).toLowerCase();
+
+        const code =
+            String(
+                employee.code || ""
+            ).toLowerCase();
+
+        const phone =
+            String(
+                employee.phone || ""
+            );
+
+
         const matchesSearch =
 
-            employee.name
-                .toLowerCase()
-                .includes(search)
+            name.includes(search) ||
 
-            ||
+            code.includes(search) ||
 
-            employee.code
-                .toLowerCase()
-                .includes(search)
-
-            ||
-
-            employee.phone
-                .includes(search);
+            phone.includes(search);
 
 
         const matchesDepartment =
@@ -382,15 +487,18 @@ function getFilteredEmployees() {
    RENDER EMPLOYEES
 ================================================== */
 
-
 function renderEmployees() {
+
+    if (!employeesTableBody) {
+        return;
+    }
+
 
     const filtered =
         getFilteredEmployees();
 
 
-    employeesTableBody.innerHTML =
-        "";
+    employeesTableBody.innerHTML = "";
 
 
     if (filtered.length === 0) {
@@ -404,7 +512,8 @@ function renderEmployees() {
                     class="empty-employees"
                 >
 
-                    کارمندی با این مشخصات پیدا نشد.
+                    کارمندی با این مشخصات
+                    پیدا نشد.
 
                 </td>
 
@@ -415,14 +524,15 @@ function renderEmployees() {
         updateSummary();
 
         return;
-
     }
 
 
     filtered.forEach(employee => {
 
         const firstLetter =
-            employee.name.charAt(0);
+            employee.name
+                ? employee.name.charAt(0)
+                : "م";
 
 
         const statusText =
@@ -442,17 +552,23 @@ function renderEmployees() {
                 <div class="employee-info">
 
                     <div class="employee-avatar">
-                        ${firstLetter}
+
+                        ${escapeHTML(firstLetter)}
+
                     </div>
 
                     <div>
 
                         <strong>
-                            ${employee.name}
+                            ${escapeHTML(
+                                employee.name
+                            )}
                         </strong>
 
                         <span>
-                            ${employee.code}
+                            ${escapeHTML(
+                                employee.code
+                            )}
                         </span>
 
                     </div>
@@ -463,17 +579,23 @@ function renderEmployees() {
 
 
             <td>
-                ${employee.department}
+                ${escapeHTML(
+                    employee.department || "-"
+                )}
             </td>
 
 
             <td>
-                ${employee.position || "-"}
+                ${escapeHTML(
+                    employee.position || "-"
+                )}
             </td>
 
 
             <td>
-                ${employee.phone || "-"}
+                ${escapeHTML(
+                    employee.phone || "-"
+                )}
             </td>
 
 
@@ -541,9 +663,24 @@ function renderEmployees() {
 
 
 /* ==================================================
-   SUMMARY
+   ESCAPE HTML
 ================================================== */
 
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* ==================================================
+   EMPLOYEE SUMMARY
+================================================== */
 
 function updateSummary() {
 
@@ -553,71 +690,98 @@ function updateSummary() {
 
     const active =
         employees.filter(
-            e => e.status === "active"
+            employee =>
+                employee.status === "active"
         ).length;
 
 
     const inactive =
         employees.filter(
-            e => e.status === "inactive"
+            employee =>
+                employee.status === "inactive"
         ).length;
 
 
     const departments =
         new Set(
             employees.map(
-                e => e.department
+                employee =>
+                    employee.department
             )
         ).size;
 
 
-    document.getElementById(
-        "totalEmployees"
-    ).textContent = total;
+    setText(
+        "totalEmployees",
+        total
+    );
 
+    setText(
+        "activeEmployees",
+        active
+    );
 
-    document.getElementById(
-        "activeEmployees"
-    ).textContent = active;
+    setText(
+        "inactiveEmployees",
+        inactive
+    );
 
+    setText(
+        "dashboardTotal",
+        total
+    );
 
-    document.getElementById(
-        "inactiveEmployees"
-    ).textContent = inactive;
+    setText(
+        "dashboardActive",
+        active
+    );
 
+    setText(
+        "dashboardInactive",
+        inactive
+    );
 
-    document.getElementById(
-        "dashboardTotal"
-    ).textContent = total;
-
-
-    document.getElementById(
-        "dashboardActive"
-    ).textContent = active;
-
-
-    document.getElementById(
-        "dashboardInactive"
-    ).textContent = inactive;
-
-
-    document.getElementById(
-        "dashboardDepartments"
-    ).textContent = departments;
+    setText(
+        "dashboardDepartments",
+        departments
+    );
 
 }
 
 
 /* ==================================================
-   OPEN MODAL
+   SET TEXT
 ================================================== */
 
+function setText(id, value) {
 
-function openEmployeeModal(employee = null) {
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+        element.textContent = value;
+    }
+
+}
+
+
+/* ==================================================
+   OPEN EMPLOYEE MODAL
+================================================== */
+
+function openEmployeeModal(
+    employee = null
+) {
+
+    if (!employeeModal) return;
+
 
     employeeModal.classList.add(
         "show"
     );
+
+
+    restoreProfileView();
 
 
     if (employee) {
@@ -628,45 +792,50 @@ function openEmployeeModal(employee = null) {
 
         document.getElementById(
             "fullName"
-        ).value = employee.name;
+        ).value =
+            employee.name || "";
 
 
         document.getElementById(
             "personnelCode"
-        ).value = employee.code;
+        ).value =
+            employee.code || "";
 
 
         document.getElementById(
             "phone"
-        ).value = employee.phone;
+        ).value =
+            employee.phone || "";
 
 
         document.getElementById(
             "department"
-        ).value = employee.department;
+        ).value =
+            employee.department || "";
 
 
         document.getElementById(
             "position"
-        ).value = employee.position;
+        ).value =
+            employee.position || "";
 
 
         document.getElementById(
             "status"
-        ).value = employee.status;
+        ).value =
+            employee.status || "active";
 
 
         document.getElementById(
             "address"
-        ).value = employee.address;
+        ).value =
+            employee.address || "";
 
 
         editingEmployeeId =
             employee.id;
 
-    }
-
-    else {
+    } else {
 
         modalTitle.textContent =
             "افزودن کارمند";
@@ -675,8 +844,7 @@ function openEmployeeModal(employee = null) {
         employeeForm.reset();
 
 
-        editingEmployeeId =
-            null;
+        editingEmployeeId = null;
 
     }
 
@@ -684,20 +852,69 @@ function openEmployeeModal(employee = null) {
 
 
 /* ==================================================
-   CLOSE MODAL
+   CLOSE EMPLOYEE MODAL
 ================================================== */
 
-
 function closeEmployeeModal() {
+
+    if (!employeeModal) return;
 
     employeeModal.classList.remove(
         "show"
     );
 
-    employeeForm.reset();
+    restoreProfileView();
 
-    editingEmployeeId =
-        null;
+    if (employeeForm) {
+        employeeForm.reset();
+    }
+
+    editingEmployeeId = null;
+
+}
+
+
+/* ==================================================
+   RESTORE PROFILE VIEW
+================================================== */
+
+function restoreProfileView() {
+
+    if (employeeForm) {
+
+        employeeForm.style.display =
+            "grid";
+
+    }
+
+
+    const profileView =
+        document.getElementById(
+            "profileView"
+        );
+
+
+    if (profileView) {
+
+        profileView.classList.remove(
+            "show"
+        );
+
+    }
+
+
+    const header =
+        document.querySelector(
+            ".modal-header h3"
+        );
+
+
+    if (header) {
+
+        header.textContent =
+            "افزودن کارمند";
+
+    }
 
 }
 
@@ -706,221 +923,258 @@ function closeEmployeeModal() {
    ADD EMPLOYEE
 ================================================== */
 
+if (addEmployeeBtn) {
 
-addEmployeeBtn.addEventListener(
-    "click",
-    () => {
+    addEmployeeBtn.addEventListener(
+        "click",
+        () => {
 
-        openEmployeeModal();
+            openEmployeeModal();
 
-    }
-);
+        }
+    );
 
-
-dashboardAddEmployee.addEventListener(
-    "click",
-    () => {
-
-        document.querySelector(
-            '[data-page="employees"]'
-        ).click();
+}
 
 
-        setTimeout(
-            () => openEmployeeModal(),
-            100
-        );
+if (dashboardAddEmployee) {
 
-    }
-);
+    dashboardAddEmployee.addEventListener(
+        "click",
+        () => {
 
-
-closeModal.addEventListener(
-    "click",
-    closeEmployeeModal
-);
+            const employeesMenu =
+                document.querySelector(
+                    '[data-page="employees"]'
+                );
 
 
-cancelModal.addEventListener(
-    "click",
-    closeEmployeeModal
-);
+            if (employeesMenu) {
+
+                employeesMenu.click();
+
+            }
+
+
+            setTimeout(
+                () => {
+
+                    openEmployeeModal();
+
+                },
+                100
+            );
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   MODAL BUTTONS
+================================================== */
+
+if (closeModal) {
+
+    closeModal.addEventListener(
+        "click",
+        closeEmployeeModal
+    );
+
+}
+
+
+if (cancelModal) {
+
+    cancelModal.addEventListener(
+        "click",
+        closeEmployeeModal
+    );
+
+}
 
 
 /* ==================================================
    SAVE EMPLOYEE
 ================================================== */
 
+if (employeeForm) {
 
-employeeForm.addEventListener(
-    "submit",
-    function(event) {
+    employeeForm.addEventListener(
+        "submit",
+        function(event) {
 
-        event.preventDefault();
-
-
-        const name =
-            document.getElementById(
-                "fullName"
-            ).value.trim();
+            event.preventDefault();
 
 
-        const code =
-            document.getElementById(
-                "personnelCode"
-            ).value.trim();
+            const name =
+                document.getElementById(
+                    "fullName"
+                ).value.trim();
 
 
-        const phone =
-            document.getElementById(
-                "phone"
-            ).value.trim();
+            const code =
+                document.getElementById(
+                    "personnelCode"
+                ).value.trim();
 
 
-        const department =
-            document.getElementById(
-                "department"
-            ).value;
+            const phone =
+                document.getElementById(
+                    "phone"
+                ).value.trim();
 
 
-        const position =
-            document.getElementById(
-                "position"
-            ).value.trim();
+            const department =
+                document.getElementById(
+                    "department"
+                ).value;
 
 
-        const status =
-            document.getElementById(
-                "status"
-            ).value;
+            const position =
+                document.getElementById(
+                    "position"
+                ).value.trim();
 
 
-        const address =
-            document.getElementById(
-                "address"
-            ).value.trim();
+            const status =
+                document.getElementById(
+                    "status"
+                ).value;
 
 
-        if (!name || !code || !department) {
-
-            alert(
-                "لطفاً اطلاعات الزامی را وارد کنید."
-            );
-
-            return;
-
-        }
+            const address =
+                document.getElementById(
+                    "address"
+                ).value.trim();
 
 
-        const duplicate =
-            employees.find(
-                employee =>
-                    employee.code === code &&
-                    employee.id !== editingEmployeeId
-            );
+            if (
+                !name ||
+                !code ||
+                !department
+            ) {
 
-
-        if (duplicate) {
-
-            alert(
-                "این کد پرسنلی قبلاً ثبت شده است."
-            );
-
-            return;
-
-        }
-
-
-        const employeeData = {
-
-            name,
-
-            code,
-
-            phone,
-
-            department,
-
-            position,
-
-            status,
-
-            address
-
-        };
-
-
-        if (editingEmployeeId) {
-
-            employees =
-                employees.map(
-                    employee => {
-
-                        if (
-                            employee.id ===
-                            editingEmployeeId
-                        ) {
-
-                            return {
-
-                                ...employee,
-
-                                ...employeeData
-
-                            };
-
-                        }
-
-
-                        return employee;
-
-                    }
+                alert(
+                    "لطفاً اطلاعات الزامی را وارد کنید."
                 );
 
+                return;
+
+            }
+
+
+            const duplicate =
+                employees.find(
+                    employee =>
+
+                        employee.code === code &&
+
+                        employee.id !==
+                        editingEmployeeId
+                );
+
+
+            if (duplicate) {
+
+                alert(
+                    "این کد پرسنلی قبلاً ثبت شده است."
+                );
+
+                return;
+
+            }
+
+
+            const employeeData = {
+
+                name,
+                code,
+                phone,
+                department,
+                position,
+                status,
+                address
+
+            };
+
+
+            const wasEditing =
+                editingEmployeeId !== null;
+
+
+            if (wasEditing) {
+
+                employees =
+                    employees.map(
+                        employee => {
+
+                            if (
+                                employee.id ===
+                                editingEmployeeId
+                            ) {
+
+                                return {
+
+                                    ...employee,
+
+                                    ...employeeData
+
+                                };
+
+                            }
+
+
+                            return employee;
+
+                        }
+                    );
+
+            } else {
+
+                employees.push({
+
+                    id: Date.now(),
+
+                    ...employeeData
+
+                });
+
+            }
+
+
+            saveEmployees();
+
+            renderEmployees();
+
+            updateSummary();
+
+            closeEmployeeModal();
+
+
+            alert(
+                wasEditing
+                    ? "اطلاعات کارمند با موفقیت ویرایش شد."
+                    : "کارمند جدید با موفقیت ثبت شد."
+            );
+
         }
+    );
 
-        else {
-
-            employees.push({
-
-                id:
-                    Date.now(),
-
-                ...employeeData
-
-            });
-
-        }
-
-
-        saveEmployees();
-
-        renderEmployees();
-
-        updateSummary();
-
-        closeEmployeeModal();
-
-        alert(
-            editingEmployeeId
-                ? "اطلاعات کارمند با موفقیت ویرایش شد."
-                : "کارمند جدید با موفقیت ثبت شد."
-        );
-
-    }
-);
+}
 
 
 /* ==================================================
-   EDIT
+   EDIT EMPLOYEE
 ================================================== */
-
 
 function editEmployee(id) {
 
     const employee =
         employees.find(
-            e => e.id === id
+            employee =>
+                employee.id === id
         );
 
 
@@ -935,15 +1189,15 @@ function editEmployee(id) {
 
 
 /* ==================================================
-   DELETE
+   DELETE EMPLOYEE
 ================================================== */
-
 
 function deleteEmployee(id) {
 
     const employee =
         employees.find(
-            e => e.id === id
+            employee =>
+                employee.id === id
         );
 
 
@@ -961,7 +1215,8 @@ function deleteEmployee(id) {
 
     employees =
         employees.filter(
-            e => e.id !== id
+            employee =>
+                employee.id !== id
         );
 
 
@@ -975,19 +1230,21 @@ function deleteEmployee(id) {
 
 
 /* ==================================================
-   VIEW PROFILE
+   VIEW EMPLOYEE PROFILE
 ================================================== */
-
 
 function viewEmployee(id) {
 
     const employee =
         employees.find(
-            e => e.id === id
+            employee =>
+                employee.id === id
         );
 
 
-    if (!employee) return;
+    if (!employee || !employeeModal) {
+        return;
+    }
 
 
     employeeModal.classList.add(
@@ -995,173 +1252,1058 @@ function viewEmployee(id) {
     );
 
 
-    employeeForm.style.display =
-        "none";
+    if (employeeForm) {
 
-
-    document.querySelector(
-        ".modal-header h3"
-    ).textContent =
-        "پرونده پرسنلی";
-
-
-    document.getElementById(
-        "profileView"
-    ).classList.add(
-        "show"
-    );
-
-
-    document.getElementById(
-        "profileAvatar"
-    ).textContent =
-        employee.name.charAt(0);
-
-
-    document.getElementById(
-        "profileName"
-    ).textContent =
-        employee.name;
-
-
-    document.getElementById(
-        "profilePosition"
-    ).textContent =
-        employee.position || "-";
-
-
-    document.getElementById(
-        "profileCode"
-    ).textContent =
-        employee.code;
-
-
-    document.getElementById(
-        "profileDepartment"
-    ).textContent =
-        employee.department;
-
-
-    document.getElementById(
-        "profilePhone"
-    ).textContent =
-        employee.phone || "-";
-
-
-    document.getElementById(
-        "profileStatus"
-    ).textContent =
-        employee.status === "active"
-            ? "فعال"
-            : "غیرفعال";
-
-
-    document.getElementById(
-        "profileAddress"
-    ).textContent =
-        employee.address || "-";
-
-}
-
-
-/* ==================================================
-   RESTORE FORM WHEN MODAL CLOSES
-================================================== */
-
-
-function restoreModal() {
-
-    employeeForm.style.display =
-        "grid";
-
-
-    document.getElementById(
-        "profileView"
-    ).classList.remove(
-        "show"
-    );
-
-
-    document.querySelector(
-        ".modal-header h3"
-    ).textContent =
-        "افزودن کارمند";
-
-}
-
-
-closeModal.addEventListener(
-    "click",
-    restoreModal
-);
-
-cancelModal.addEventListener(
-    "click",
-    restoreModal
-);
-
-
-/* ==================================================
-   SEARCH / FILTER EVENTS
-================================================== */
-
-
-employeeSearch.addEventListener(
-    "input",
-    renderEmployees
-);
-
-
-departmentFilter.addEventListener(
-    "change",
-    renderEmployees
-);
-
-
-statusFilter.addEventListener(
-    "change",
-    renderEmployees
-);
-
-
-/* ==================================================
-   CLOSE MODAL WITH BACKDROP
-================================================== */
-
-
-employeeModal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            employeeModal
-        ) {
-
-            closeEmployeeModal();
-
-            restoreModal();
-
-        }
+        employeeForm.style.display =
+            "none";
 
     }
-);
+
+
+    const header =
+        document.querySelector(
+            ".modal-header h3"
+        );
+
+
+    if (header) {
+
+        header.textContent =
+            "پرونده پرسنلی";
+
+    }
+
+
+    const profileView =
+        document.getElementById(
+            "profileView"
+        );
+
+
+    if (profileView) {
+
+        profileView.classList.add(
+            "show"
+        );
+
+    }
+
+
+    setText(
+        "profileAvatar",
+        employee.name
+            ? employee.name.charAt(0)
+            : "م"
+    );
+
+
+    setText(
+        "profileName",
+        employee.name
+    );
+
+
+    setText(
+        "profilePosition",
+        employee.position || "-"
+    );
+
+
+    setText(
+        "profileCode",
+        employee.code
+    );
+
+
+    setText(
+        "profileDepartment",
+        employee.department
+    );
+
+
+    setText(
+        "profilePhone",
+        employee.phone || "-"
+    );
+
+
+    setText(
+        "profileStatus",
+        employee.status === "active"
+            ? "فعال"
+            : "غیرفعال"
+    );
+
+
+    setText(
+        "profileAddress",
+        employee.address || "-"
+    );
+
+}
 
 
 /* ==================================================
-   INITIALIZE
+   SEARCH EVENTS
 ================================================== */
 
+if (employeeSearch) {
 
-renderEmployees();
+    employeeSearch.addEventListener(
+        "input",
+        renderEmployees
+    );
 
-updateSummary();
+}
+
+
+if (departmentFilter) {
+
+    departmentFilter.addEventListener(
+        "change",
+        renderEmployees
+    );
+
+}
+
+
+if (statusFilter) {
+
+    statusFilter.addEventListener(
+        "change",
+        renderEmployees
+    );
+
+}
+
+
+/* ==================================================
+   EMPLOYEE MODAL BACKDROP
+================================================== */
+
+if (employeeModal) {
+
+    employeeModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                employeeModal
+            ) {
+
+                closeEmployeeModal();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   ATTENDANCE ELEMENTS
+================================================== */
+
+const attendanceDate =
+    document.getElementById(
+        "attendanceDate"
+    );
+
+const attendanceSearch =
+    document.getElementById(
+        "attendanceSearch"
+    );
+
+const attendanceStatusFilter =
+    document.getElementById(
+        "attendanceStatusFilter"
+    );
+
+const attendanceTableBody =
+    document.getElementById(
+        "attendanceTableBody"
+    );
+
+const openAttendanceModal =
+    document.getElementById(
+        "openAttendanceModal"
+    );
+
+
+/* ==================================================
+   ATTENDANCE DATE
+================================================== */
+
+function getSelectedAttendanceDate() {
+
+    if (
+        attendanceDate &&
+        attendanceDate.value
+    ) {
+
+        return attendanceDate.value;
+
+    }
+
+    return getTodayISO();
+
+}
+
+
+function initAttendance() {
+
+    if (!attendanceDate) {
+        return;
+    }
+
+
+    if (!attendanceDate.value) {
+
+        attendanceDate.value =
+            getTodayISO();
+
+    }
+
+
+    renderAttendance();
+
+}
+
+
+/* ==================================================
+   ATTENDANCE RECORD
+================================================== */
+
+function getAttendanceRecord(
+    employeeId,
+    date = getSelectedAttendanceDate()
+) {
+
+    if (!attendanceData[date]) {
+
+        attendanceData[date] = {};
+
+    }
+
+
+    if (
+        !attendanceData[date][employeeId]
+    ) {
+
+        attendanceData[date][employeeId] = {
+
+            status: "absent",
+
+            entry: "",
+
+            exit: "",
+
+            note: ""
+
+        };
+
+    }
+
+
+    return attendanceData[date][employeeId];
+
+}
+
+
+/* ==================================================
+   SAVE ATTENDANCE
+================================================== */
+
+function saveAttendance() {
+
+    saveJSON(
+        "mirzaKhanAttendance",
+        attendanceData
+    );
+
+}
+
+
+/* ==================================================
+   STATUS TEXT
+================================================== */
+
+function getAttendanceStatusText(
+    status
+) {
+
+    const statuses = {
+
+        present: "حاضر",
+
+        late: "تأخیر",
+
+        absent: "غایب",
+
+        leave: "مرخصی"
+
+    };
+
+
+    return statuses[status] ||
+        "غایب";
+
+}
+
+
+/* ==================================================
+   WORK HOURS
+================================================== */
+
+function calculateMinutes(
+    start,
+    end
+) {
+
+    if (!start || !end) {
+        return 0;
+    }
+
+
+    const startParts =
+        start.split(":").map(Number);
+
+
+    const endParts =
+        end.split(":").map(Number);
+
+
+    if (
+        startParts.length !== 2 ||
+        endParts.length !== 2
+    ) {
+
+        return 0;
+
+    }
+
+
+    const startMinutes =
+        startParts[0] * 60 +
+        startParts[1];
+
+
+    const endMinutes =
+        endParts[0] * 60 +
+        endParts[1];
+
+
+    let difference =
+        endMinutes -
+        startMinutes;
+
+
+    if (difference < 0) {
+
+        difference += 24 * 60;
+
+    }
+
+
+    return difference;
+
+}
+
+
+function formatMinutes(minutes) {
+
+    if (!minutes) {
+        return "-";
+    }
+
+
+    const hours =
+        Math.floor(minutes / 60);
+
+
+    const mins =
+        minutes % 60;
+
+
+    return `${hours} ساعت و ${mins} دقیقه`;
+
+}
+
+
+/* ==================================================
+   ATTENDANCE STATS
+================================================== */
+
+function updateAttendanceStats(
+    records
+) {
+
+    let present = 0;
+    let late = 0;
+    let absent = 0;
+    let leave = 0;
+
+
+    records.forEach(record => {
+
+        const status =
+            record.status;
+
+
+        if (status === "present") {
+            present++;
+        }
+
+        else if (status === "late") {
+            late++;
+        }
+
+        else if (status === "leave") {
+            leave++;
+        }
+
+        else {
+            absent++;
+        }
+
+    });
+
+
+    setText(
+        "presentCount",
+        present
+    );
+
+    setText(
+        "lateCount",
+        late
+    );
+
+    setText(
+        "absentCount",
+        absent
+    );
+
+    setText(
+        "leaveCount",
+        leave
+    );
+
+}
+
+
+/* ==================================================
+   RENDER ATTENDANCE
+================================================== */
+
+function renderAttendance() {
+
+    if (!attendanceTableBody) {
+        return;
+    }
+
+
+    const date =
+        getSelectedAttendanceDate();
+
+
+    const search =
+        attendanceSearch
+            ? attendanceSearch.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const statusFilter =
+        attendanceStatusFilter
+            ? attendanceStatusFilter.value
+            : "all";
+
+
+    const records = [];
+
+
+    employees
+        .filter(
+            employee =>
+                employee.status === "active"
+        )
+        .forEach(employee => {
+
+            const record =
+                getAttendanceRecord(
+                    employee.id,
+                    date
+                );
+
+
+            records.push({
+
+                employee,
+
+                record
+
+            });
+
+        });
+
+
+    updateAttendanceStats(
+        records.map(
+            item => item.record
+        )
+    );
+
+
+    const filtered =
+        records.filter(item => {
+
+            const employee =
+                item.employee;
+
+
+            const record =
+                item.record;
+
+
+            const matchesSearch =
+
+                employee.name
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                employee.code
+                    .toLowerCase()
+                    .includes(search);
+
+
+            const matchesStatus =
+
+                statusFilter === "all"
+
+                ||
+
+                record.status ===
+                statusFilter;
+
+
+            return (
+
+                matchesSearch &&
+                matchesStatus
+
+            );
+
+        });
+
+
+    attendanceTableBody.innerHTML = "";
+
+
+    if (filtered.length === 0) {
+
+        attendanceTableBody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="empty-employees"
+                >
+
+                    موردی برای نمایش وجود ندارد.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(item => {
+
+        const employee =
+            item.employee;
+
+
+        const record =
+            item.record;
+
+
+        const statusText =
+            getAttendanceStatusText(
+                record.status
+            );
+
+
+        const workMinutes =
+            calculateMinutes(
+                record.entry,
+                record.exit
+            );
+
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>
+
+                <div class="employee-info">
+
+                    <div class="employee-avatar">
+
+                        ${escapeHTML(
+                            employee.name.charAt(0)
+                        )}
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            ${escapeHTML(
+                                employee.name
+                            )}
+                        </strong>
+
+                        <span>
+                            ${escapeHTML(
+                                employee.code
+                            )}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <select
+                    class="attendance-status-select"
+                    onchange="changeAttendanceStatus(
+                        ${employee.id},
+                        this.value
+                    )"
+                >
+
+                    <option
+                        value="present"
+                        ${record.status === "present"
+                            ? "selected"
+                            : ""}
+                    >
+                        حاضر
+                    </option>
+
+                    <option
+                        value="late"
+                        ${record.status === "late"
+                            ? "selected"
+                            : ""}
+                    >
+                        تأخیر
+                    </option>
+
+                    <option
+                        value="absent"
+                        ${record.status === "absent"
+                            ? "selected"
+                            : ""}
+                    >
+                        غایب
+                    </option>
+
+                    <option
+                        value="leave"
+                        ${record.status === "leave"
+                            ? "selected"
+                            : ""}
+                    >
+                        مرخصی
+                    </option>
+
+                </select>
+
+            </td>
+
+
+            <td>
+
+                <input
+                    type="time"
+                    value="${record.entry || ""}"
+                    onchange="changeAttendanceTime(
+                        ${employee.id},
+                        'entry',
+                        this.value
+                    )"
+                >
+
+            </td>
+
+
+            <td>
+
+                <input
+                    type="time"
+                    value="${record.exit || ""}"
+                    onchange="changeAttendanceTime(
+                        ${employee.id},
+                        'exit',
+                        this.value
+                    )"
+                >
+
+            </td>
+
+
+            <td>
+
+                <span>
+                    ${formatMinutes(
+                        workMinutes
+                    )}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                ${
+                    record.status === "late"
+                        ? `<span class="attendance-late-text">
+                            تأخیر
+                           </span>`
+                        : "-"
+                }
+
+            </td>
+
+
+            <td>
+
+                -
+
+            </td>
+
+
+            <td>
+
+                <div class="action-buttons">
+
+                    <button
+                        class="action-btn"
+                        title="ثبت ورود"
+                        onclick="setCurrentEntry(${employee.id})"
+                    >
+                        🟢
+                    </button>
+
+
+                    <button
+                        class="action-btn"
+                        title="ثبت خروج"
+                        onclick="setCurrentExit(${employee.id})"
+                    >
+                        🔴
+                    </button>
+
+
+                    <button
+                        class="action-btn"
+                        title="پاک کردن"
+                        onclick="clearAttendance(${employee.id})"
+                    >
+                        ↺
+                    </button>
+
+                </div>
+
+            </td>
+
+        `;
+
+
+        attendanceTableBody.appendChild(
+            row
+        );
+
+    });
+
+}
+
+
+/* ==================================================
+   CHANGE STATUS
+================================================== */
+
+function changeAttendanceStatus(
+    employeeId,
+    status
+) {
+
+    const record =
+        getAttendanceRecord(
+            employeeId
+        );
+
+
+    record.status =
+        status;
+
+
+    saveAttendance();
+
+    renderAttendance();
+
+}
+
+
+/* ==================================================
+   CHANGE TIME
+================================================== */
+
+function changeAttendanceTime(
+    employeeId,
+    type,
+    value
+) {
+
+    const record =
+        getAttendanceRecord(
+            employeeId
+        );
+
+
+    record[type] =
+        value;
+
+
+    saveAttendance();
+
+    renderAttendance();
+
+}
+
+
+/* ==================================================
+   CURRENT TIME
+================================================== */
+
+function getCurrentTime() {
+
+    const now =
+        new Date();
+
+
+    return (
+
+        String(
+            now.getHours()
+        ).padStart(2, "0")
+
+        +
+
+        ":"
+
+        +
+
+        String(
+            now.getMinutes()
+        ).padStart(2, "0")
+
+    );
+
+}
+
+
+/* ==================================================
+   SET ENTRY
+================================================== */
+
+function setCurrentEntry(
+    employeeId
+) {
+
+    const record =
+        getAttendanceRecord(
+            employeeId
+        );
+
+
+    record.entry =
+        getCurrentTime();
+
+
+    if (
+        record.status === "absent"
+    ) {
+
+        record.status =
+            "present";
+
+    }
+
+
+    saveAttendance();
+
+    renderAttendance();
+
+}
+
+
+/* ==================================================
+   SET EXIT
+================================================== */
+
+function setCurrentExit(
+    employeeId
+) {
+
+    const record =
+        getAttendanceRecord(
+            employeeId
+        );
+
+
+    record.exit =
+        getCurrentTime();
+
+
+    if (
+        record.status === "absent"
+    ) {
+
+        record.status =
+            "present";
+
+    }
+
+
+    saveAttendance();
+
+    renderAttendance();
+
+}
+
+
+/* ==================================================
+   CLEAR ATTENDANCE
+================================================== */
+
+function clearAttendance(
+    employeeId
+) {
+
+    const confirmed =
+        confirm(
+            "اطلاعات حضور این کارمند برای این روز پاک شود؟"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const date =
+        getSelectedAttendanceDate();
+
+
+    if (
+        attendanceData[date] &&
+        attendanceData[date][employeeId]
+    ) {
+
+        delete attendanceData[
+            date
+        ][employeeId];
+
+    }
+
+
+    saveAttendance();
+
+    renderAttendance();
+
+}
+
+
+/* ==================================================
+   ATTENDANCE SEARCH
+================================================== */
+
+if (attendanceSearch) {
+
+    attendanceSearch.addEventListener(
+        "input",
+        renderAttendance
+    );
+
+}
+
+
+if (attendanceStatusFilter) {
+
+    attendanceStatusFilter.addEventListener(
+        "change",
+        renderAttendance
+    );
+
+}
+
+
+if (attendanceDate) {
+
+    attendanceDate.addEventListener(
+        "change",
+        renderAttendance
+    );
+
+}
+
+
+/* ==================================================
+   REGISTER ATTENDANCE BUTTON
+================================================== */
+
+if (openAttendanceModal) {
+
+    openAttendanceModal.addEventListener(
+        "click",
+        () => {
+
+            renderAttendance();
+
+            alert(
+                "وضعیت کارکنان از جدول حضور و غیاب قابل ثبت و ویرایش است."
+            );
+
+        }
+    );
+
+}
 
 
 /* ==================================================
    CLOCK
 ================================================== */
-
 
 function updateClock() {
 
@@ -1192,3 +2334,26 @@ setInterval(
 
 
 updateClock();
+
+
+/* ==================================================
+   INITIALIZE
+================================================== */
+
+renderEmployees();
+
+updateSummary();
+
+
+// اگر بخش حضور و غیاب در صفحه فعال باشد
+if (
+    document
+        .getElementById("attendancePage")
+        ?.classList.contains(
+            "active-page"
+        )
+) {
+
+    initAttendance();
+
+}
