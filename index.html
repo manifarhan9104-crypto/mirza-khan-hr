@@ -2149,7 +2149,186 @@
 <!-- =========================================================
      JAVASCRIPT
 ========================================================== -->
+<!-- =========================
+     ATTENDANCE MODAL
+========================= -->
 
+<div class="modal-overlay" id="attendanceModal">
+
+    <div class="attendance-modal">
+
+        <div class="attendance-modal-header">
+
+            <div>
+                <h3>ثبت وضعیت حضور و غیاب</h3>
+                <p>وضعیت حضور کارمند را ثبت کنید.</p>
+            </div>
+
+            <button
+                type="button"
+                class="close-attendance-modal"
+                id="closeAttendanceModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="attendanceForm">
+
+            <div class="attendance-form-grid">
+
+                <!-- کارمند -->
+
+                <div class="attendance-form-group full">
+
+                    <label>
+                        کارمند *
+                    </label>
+
+                    <select
+                        id="attendanceEmployee"
+                        required
+                    >
+
+                        <option value="">
+                            انتخاب کارمند
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- تاریخ -->
+
+                <div class="attendance-form-group">
+
+                    <label>
+                        تاریخ *
+                    </label>
+
+                    <input
+                        type="date"
+                        id="attendanceFormDate"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- وضعیت -->
+
+                <div class="attendance-form-group">
+
+                    <label>
+                        وضعیت *
+                    </label>
+
+                    <select
+                        id="attendanceFormStatus"
+                        required
+                    >
+
+                        <option value="present">
+                            حاضر
+                        </option>
+
+                        <option value="late">
+                            تأخیر
+                        </option>
+
+                        <option value="absent">
+                            غایب
+                        </option>
+
+                        <option value="leave">
+                            مرخصی
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ورود -->
+
+                <div class="attendance-form-group">
+
+                    <label>
+                        ساعت ورود
+                    </label>
+
+                    <input
+                        type="time"
+                        id="attendanceFormEntry"
+                    >
+
+                </div>
+
+
+                <!-- خروج -->
+
+                <div class="attendance-form-group">
+
+                    <label>
+                        ساعت خروج
+                    </label>
+
+                    <input
+                        type="time"
+                        id="attendanceFormExit"
+                    >
+
+                </div>
+
+
+                <!-- توضیحات -->
+
+                <div class="attendance-form-group full">
+
+                    <label>
+                        توضیحات
+                    </label>
+
+                    <textarea
+                        id="attendanceFormNote"
+                        rows="3"
+                        placeholder="توضیحات مربوط به حضور و غیاب..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- دکمه‌ها -->
+
+                <div class="attendance-form-actions">
+
+                    <button
+                        type="button"
+                        class="attendance-cancel-btn"
+                        id="cancelAttendanceModal"
+                    >
+                        انصراف
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="attendance-save-btn"
+                    >
+                        ثبت وضعیت
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 <script src="app.js"></script>
 
 </body>
