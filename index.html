@@ -1026,10 +1026,167 @@
 
             <!-- OTHER PAGES -->
 
-            <div
-                id="attendancePage"
-                class="page"
-            >
+            <div id="attendancePage" class="page">
+
+    <div class="attendance-header">
+
+        <div>
+            <h2>حضور و غیاب کارکنان</h2>
+            <p>ثبت و مدیریت ورود، خروج و وضعیت روزانه کارکنان</p>
+        </div>
+
+        <div class="attendance-date-box">
+            <label>تاریخ</label>
+            <input type="date" id="attendanceDate">
+        </div>
+
+    </div>
+
+
+    <!-- آمار -->
+
+    <div class="attendance-stats">
+
+        <div class="attendance-stat">
+            <div class="attendance-stat-icon present">
+                ✓
+            </div>
+
+            <div>
+                <span>حاضر</span>
+                <strong id="presentCount">0</strong>
+            </div>
+        </div>
+
+
+        <div class="attendance-stat">
+            <div class="attendance-stat-icon late">
+                !
+            </div>
+
+            <div>
+                <span>تأخیر</span>
+                <strong id="lateCount">0</strong>
+            </div>
+        </div>
+
+
+        <div class="attendance-stat">
+            <div class="attendance-stat-icon absent">
+                ×
+            </div>
+
+            <div>
+                <span>غایب</span>
+                <strong id="absentCount">0</strong>
+            </div>
+        </div>
+
+
+        <div class="attendance-stat">
+            <div class="attendance-stat-icon leave">
+                ◷
+            </div>
+
+            <div>
+                <span>مرخصی</span>
+                <strong id="leaveCount">0</strong>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ابزارها -->
+
+    <div class="attendance-toolbar">
+
+        <input
+            type="search"
+            id="attendanceSearch"
+            placeholder="جستجوی نام یا کد پرسنلی..."
+        >
+
+
+        <select id="attendanceStatusFilter">
+
+            <option value="all">
+                همه وضعیت‌ها
+            </option>
+
+            <option value="present">
+                حاضر
+            </option>
+
+            <option value="late">
+                تأخیر
+            </option>
+
+            <option value="absent">
+                غایب
+            </option>
+
+            <option value="leave">
+                مرخصی
+            </option>
+
+        </select>
+
+
+        <button
+            class="attendance-add-btn"
+            id="openAttendanceModal"
+        >
+            + ثبت وضعیت
+        </button>
+
+    </div>
+
+
+    <!-- جدول -->
+
+    <div class="attendance-table-panel">
+
+        <div class="attendance-table-wrapper">
+
+            <table class="attendance-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>کارمند</th>
+
+                        <th>وضعیت</th>
+
+                        <th>ورود</th>
+
+                        <th>خروج</th>
+
+                        <th>کارکرد</th>
+
+                        <th>تأخیر</th>
+
+                        <th>اضافه‌کاری</th>
+
+                        <th>عملیات</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="attendanceTableBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
                 <div class="empty-page">
 
