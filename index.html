@@ -1,1 +1,606 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>سامانه جامع منابع انسانی | میرزا کوچک خان</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">م</div>
+
+            <div>
+                <h2>میرزا کوچک خان</h2>
+                <span>سامانه منابع انسانی</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+
+            <div class="menu-title">منوی اصلی</div>
+
+            <a href="#" class="menu-item active" data-page="dashboard">
+                <span class="icon">⌂</span>
+                <span>داشبورد</span>
+            </a>
+
+            <a href="#" class="menu-item" data-page="employees">
+                <span class="icon">♙</span>
+                <span>کارکنان</span>
+            </a>
+
+            <a href="#" class="menu-item" data-page="attendance">
+                <span class="icon">◷</span>
+                <span>حضور و غیاب</span>
+            </a>
+
+            <a href="#" class="menu-item" data-page="leave">
+                <span class="icon">▣</span>
+                <span>مرخصی و مأموریت</span>
+            </a>
+
+            <a href="#" class="menu-item" data-page="reports">
+                <span class="icon">▤</span>
+                <span>گزارش‌ها</span>
+            </a>
+
+            <div class="menu-title">سیستم</div>
+
+            <a href="#" class="menu-item" data-page="notifications">
+                <span class="icon">♢</span>
+                <span>اعلان‌ها</span>
+                <span class="notification-badge">4</span>
+            </a>
+
+            <a href="#" class="menu-item" data-page="settings">
+                <span class="icon">⚙</span>
+                <span>تنظیمات</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <div class="support-box">
+                <div class="support-icon">?</div>
+                <div>
+                    <strong>نیاز به کمک دارید؟</strong>
+                    <small>پشتیبانی سامانه</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Header -->
+        <header class="header">
+
+            <button class="mobile-menu" id="mobileMenu">
+                ☰
+            </button>
+
+            <div class="page-title">
+                <h1 id="pageTitle">داشبورد</h1>
+                <p id="todayDate"></p>
+            </div>
+
+            <div class="header-actions">
+
+                <button class="header-button" title="جستجو">
+                    ⌕
+                </button>
+
+                <button class="header-button notification-button" title="اعلان‌ها">
+                    ♢
+                    <span></span>
+                </button>
+
+                <div class="profile">
+
+                    <div class="avatar">
+                        م
+                    </div>
+
+                    <div class="profile-info">
+                        <strong>مدیر سامانه</strong>
+                        <span>مدیریت منابع انسانی</span>
+                    </div>
+
+                    <span class="profile-arrow">⌄</span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Content -->
+        <section class="content">
+
+            <!-- Dashboard -->
+            <div id="dashboardPage" class="page active-page">
+
+                <div class="welcome">
+
+                    <div>
+                        <span class="welcome-label">خوش آمدید 👋</span>
+                        <h2>مدیریت منابع انسانی</h2>
+                        <p>
+                            وضعیت کلی کارکنان و فعالیت‌های سازمان را از اینجا مدیریت کنید.
+                        </p>
+                    </div>
+
+                    <button class="primary-button">
+                        + افزودن کارمند
+                    </button>
+
+                </div>
+
+
+                <!-- Statistics -->
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon employees-icon">
+                            ♙
+                        </div>
+
+                        <div class="stat-data">
+                            <span>کل کارکنان</span>
+                            <strong>۱٬۲۴۸</strong>
+                            <small class="positive">↑ ۴.۲٪ نسبت به ماه قبل</small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon present-icon">
+                            ✓
+                        </div>
+
+                        <div class="stat-data">
+                            <span>حاضر امروز</span>
+                            <strong>۱٬۱۰۶</strong>
+                            <small class="positive">۸۸.۶٪ از کل کارکنان</small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon absent-icon">
+                            ×
+                        </div>
+
+                        <div class="stat-data">
+                            <span>غایب امروز</span>
+                            <strong>۷۲</strong>
+                            <small class="negative">۵.۸٪ از کل کارکنان</small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon leave-icon">
+                            ◷
+                        </div>
+
+                        <div class="stat-data">
+                            <span>در مرخصی</span>
+                            <strong>۷۰</strong>
+                            <small>۵.۶٪ از کل کارکنان</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Main Grid -->
+                <div class="dashboard-grid">
+
+                    <!-- Attendance Chart -->
+                    <div class="panel chart-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>وضعیت حضور و غیاب</h3>
+                                <span>هفت روز اخیر</span>
+                            </div>
+
+                            <select id="chartFilter">
+                                <option>این هفته</option>
+                                <option>هفته گذشته</option>
+                            </select>
+
+                        </div>
+
+                        <div class="chart">
+
+                            <div class="chart-y">
+                                <span>۱۲۰۰</span>
+                                <span>۹۰۰</span>
+                                <span>۶۰۰</span>
+                                <span>۳۰۰</span>
+                                <span>۰</span>
+                            </div>
+
+                            <div class="chart-area">
+
+                                <div class="grid-lines">
+                                    <i></i>
+                                    <i></i>
+                                    <i></i>
+                                    <i></i>
+                                    <i></i>
+                                </div>
+
+                                <div class="bars">
+
+                                    <div class="bar-group">
+                                        <div class="bar present" style="height: 78%"></div>
+                                        <div class="bar absent" style="height: 10%"></div>
+                                        <span>شنبه</span>
+                                    </div>
+
+                                    <div class="bar-group">
+                                        <div class="bar present" style="height: 84%"></div>
+                                        <div class="bar absent" style="height: 8%"></div>
+                                        <span>یکشنبه</span>
+                                    </div>
+
+                                    <div class="bar-group">
+                                        <div class="bar present" style="height: 82%"></div>
+                                        <div class="bar absent" style="height: 9%"></div>
+                                        <span>دوشنبه</span>
+                                    </div>
+
+                                    <div class="bar-group">
+                                        <div class="bar present" style="height: 91%"></div>
+                                        <div class="bar absent" style="height: 6%"></div>
+                                        <span>سه‌شنبه</span>
+                                    </div>
+
+                                    <div class="bar-group">
+                                        <div class="bar present" style="height: 86%"></div>
+                                        <div class="bar absent" style="height: 7%"></div>
+                                        <span>چهارشنبه</span>
+                                    </div>
+
+                                    <div class="bar-group">
+                                        <div class="bar present" style="height: 88%"></div>
+                                        <div class="bar absent" style="height: 6%"></div>
+                                        <span>پنجشنبه</span>
+                                    </div>
+
+                                    <div class="bar-group">
+                                        <div class="bar present" style="height: 80%"></div>
+                                        <div class="bar absent" style="height: 9%"></div>
+                                        <span>جمعه</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="chart-legend">
+                            <span><i class="legend-present"></i> حاضر</span>
+                            <span><i class="legend-absent"></i> غایب</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Quick Actions -->
+                    <div class="panel quick-panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h3>دسترسی سریع</h3>
+                                <span>عملیات پرکاربرد</span>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions">
+
+                            <button>
+                                <span>♙</span>
+                                افزودن کارمند
+                            </button>
+
+                            <button>
+                                <span>◷</span>
+                                ثبت حضور
+                            </button>
+
+                            <button>
+                                <span>▣</span>
+                                بررسی مرخصی‌ها
+                            </button>
+
+                            <button>
+                                <span>▤</span>
+                                دریافت گزارش
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Bottom -->
+                <div class="bottom-grid">
+
+                    <!-- Recent Attendance -->
+                    <div class="panel table-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>آخرین ورود و خروج</h3>
+                                <span>امروز</span>
+                            </div>
+
+                            <button class="text-button">
+                                مشاهده همه
+                            </button>
+
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+                                <tr>
+                                    <th>کارمند</th>
+                                    <th>واحد</th>
+                                    <th>ورود</th>
+                                    <th>خروج</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                <tr>
+                                    <td>
+                                        <div class="employee">
+                                            <div class="mini-avatar">ع</div>
+                                            <div>
+                                                <strong>علی رضایی</strong>
+                                                <span>PR-1024</span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>تولید</td>
+                                    <td>۰۷:۲۸</td>
+                                    <td>۱۶:۰۲</td>
+
+                                    <td>
+                                        <span class="status success">حاضر</span>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>
+                                        <div class="employee">
+                                            <div class="mini-avatar">م</div>
+                                            <div>
+                                                <strong>محمد احمدی</strong>
+                                                <span>PR-1031</span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>مالی</td>
+                                    <td>۰۷:۴۵</td>
+                                    <td>—</td>
+
+                                    <td>
+                                        <span class="status warning">در محل کار</span>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>
+                                        <div class="employee">
+                                            <div class="mini-avatar">س</div>
+                                            <div>
+                                                <strong>سارا کریمی</strong>
+                                                <span>PR-1045</span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>منابع انسانی</td>
+                                    <td>۰۷:۳۱</td>
+                                    <td>۱۶:۱۰</td>
+
+                                    <td>
+                                        <span class="status success">حاضر</span>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>
+                                        <div class="employee">
+                                            <div class="mini-avatar">ح</div>
+                                            <div>
+                                                <strong>حسین مرادی</strong>
+                                                <span>PR-1052</span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>فنی</td>
+                                    <td>۰۸:۲۲</td>
+                                    <td>—</td>
+
+                                    <td>
+                                        <span class="status danger">تأخیر</span>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Notifications -->
+                    <div class="panel notification-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>اعلان‌های اخیر</h3>
+                                <span>۴ اعلان جدید</span>
+                            </div>
+
+                            <button class="text-button">
+                                همه
+                            </button>
+
+                        </div>
+
+                        <div class="notifications">
+
+                            <div class="notification">
+                                <div class="notification-icon blue">✓</div>
+                                <div>
+                                    <strong>درخواست مرخصی جدید</strong>
+                                    <p>علی رضایی درخواست مرخصی ثبت کرده است.</p>
+                                    <small>۱۰ دقیقه پیش</small>
+                                </div>
+                            </div>
+
+                            <div class="notification">
+                                <div class="notification-icon orange">!</div>
+                                <div>
+                                    <strong>تأخیر ثبت شد</strong>
+                                    <p>حسین مرادی امروز با تأخیر وارد شده است.</p>
+                                    <small>۲۵ دقیقه پیش</small>
+                                </div>
+                            </div>
+
+                            <div class="notification">
+                                <div class="notification-icon green">✓</div>
+                                <div>
+                                    <strong>گزارش ماهانه آماده است</strong>
+                                    <p>گزارش منابع انسانی تیرماه آماده دریافت است.</p>
+                                    <small>۱ ساعت پیش</small>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Other pages -->
+            <div id="employeesPage" class="page">
+                <div class="empty-page">
+                    <div>♙</div>
+                    <h2>مدیریت کارکنان</h2>
+                    <p>این بخش در مرحله بعدی سامانه تکمیل می‌شود.</p>
+                </div>
+            </div>
+
+            <div id="attendancePage" class="page">
+                <div class="empty-page">
+                    <div>◷</div>
+                    <h2>حضور و غیاب</h2>
+                    <p>ماژول حضور و غیاب در نسخه بعدی فعال خواهد شد.</p>
+                </div>
+            </div>
+
+            <div id="leavePage" class="page">
+                <div class="empty-page">
+                    <div>▣</div>
+                    <h2>مرخصی و مأموریت</h2>
+                    <p>مدیریت درخواست‌های مرخصی و مأموریت.</p>
+                </div>
+            </div>
+
+            <div id="reportsPage" class="page">
+                <div class="empty-page">
+                    <div>▤</div>
+                    <h2>گزارش‌ها</h2>
+                    <p>گزارش‌های منابع انسانی در این بخش قرار می‌گیرند.</p>
+                </div>
+            </div>
+
+            <div id="notificationsPage" class="page">
+                <div class="empty-page">
+                    <div>♢</div>
+                    <h2>اعلان‌ها</h2>
+                    <p>اعلان‌های سامانه در این بخش نمایش داده می‌شوند.</p>
+                </div>
+            </div>
+
+            <div id="settingsPage" class="page">
+                <div class="empty-page">
+                    <div>⚙</div>
+                    <h2>تنظیمات</h2>
+                    <p>تنظیمات سامانه در این بخش قرار می‌گیرد.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <footer>
+            <span>سامانه جامع منابع انسانی و حضور و غیاب میرزا کوچک‌خان</span>
+            <span>نسخه ۱.۰.۰</span>
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
