@@ -1,16 +1,7 @@
 /* ==================================================
    MIRZA KHAN HR
-   APP.JS - VERSION 1.4
-
-   امکانات:
-   - داشبورد
-   - مدیریت کارکنان
-   - حضور و غیاب
-   - مرخصی و مأموریت
-   - جستجو و فیلتر
-   - تأیید / رد درخواست
-   - ویرایش / حذف
-   - ذخیره دائمی در LocalStorage
+   APP.JS - VERSION 1.5
+   کارکنان + حضور و غیاب + مرخصی و مأموریت + گزارش‌ها
 ================================================== */
 
 
@@ -18,23 +9,12 @@
    GLOBAL ELEMENTS
 ================================================== */
 
-const menuItems =
-    document.querySelectorAll(".menu-item");
-
-const pages =
-    document.querySelectorAll(".page");
-
-const pageTitle =
-    document.getElementById("pageTitle");
-
-const mobileMenu =
-    document.getElementById("mobileMenu");
-
-const sidebar =
-    document.getElementById("sidebar");
-
-const todayDate =
-    document.getElementById("todayDate");
+const menuItems = document.querySelectorAll(".menu-item");
+const pages = document.querySelectorAll(".page");
+const pageTitle = document.getElementById("pageTitle");
+const mobileMenu = document.getElementById("mobileMenu");
+const sidebar = document.getElementById("sidebar");
+const todayDate = document.getElementById("todayDate");
 
 
 /* ==================================================
@@ -113,61 +93,37 @@ const defaultEmployees = [
 ];
 
 
-let employees =
-    loadJSON(
-        "mirzaKhanEmployees",
-        defaultEmployees
-    );
+let employees = loadJSON(
+    "mirzaKhanEmployees",
+    defaultEmployees
+);
 
 
 /* ==================================================
    ATTENDANCE DATA
 ================================================== */
 
-let attendanceData =
-    loadJSON(
-        "mirzaKhanAttendance",
-        {}
-    );
+let attendanceData = loadJSON(
+    "mirzaKhanAttendance",
+    {}
+);
 
 
 /* ==================================================
    LEAVE DATA
 ================================================== */
 
-/*
-leaveRequests = [
-
-    {
-        id: 123,
-        employeeId: 1,
-        type: "annual",
-        start: "2026-08-20",
-        end: "2026-08-22",
-        days: 3,
-        description: "...",
-        status: "pending",
-        createdAt: "..."
-    }
-
-]
-*/
-
-let leaveRequests =
-    loadJSON(
-        "mirzaKhanLeaveRequests",
-        []
-    );
+let leaveRequests = loadJSON(
+    "mirzaKhanLeaveRequests",
+    []
+);
 
 
 /* ==================================================
    GENERAL FUNCTIONS
 ================================================== */
 
-function loadJSON(
-    key,
-    fallback
-) {
+function loadJSON(key, fallback) {
 
     try {
 
@@ -175,9 +131,7 @@ function loadJSON(
             localStorage.getItem(key);
 
         if (!data) {
-
             return fallback;
-
         }
 
         return JSON.parse(data);
@@ -196,15 +150,39 @@ function loadJSON(
 }
 
 
-function saveJSON(
-    key,
-    data
-) {
+function saveJSON(key, data) {
 
     localStorage.setItem(
         key,
         JSON.stringify(data)
     );
+
+}
+
+
+function setText(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.textContent =
+            value;
+
+    }
+
+}
+
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
 }
 
@@ -239,9 +217,7 @@ function getTodayISO() {
 function setDate() {
 
     if (!todayDate) {
-
         return;
-
     }
 
     const now =
@@ -271,101 +247,98 @@ setDate();
    PAGE NAVIGATION
 ================================================== */
 
-menuItems.forEach(
-    item => {
+menuItems.forEach(item => {
 
-        item.addEventListener(
-            "click",
-            function(event) {
+    item.addEventListener(
+        "click",
+        function(event) {
 
-                event.preventDefault();
+            event.preventDefault();
 
-                const page =
-                    this.dataset.page;
-
-
-                menuItems.forEach(
-                    menu => {
-
-                        menu.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
+            const page =
+                this.dataset.page;
 
 
-                this.classList.add(
+            menuItems.forEach(menu => {
+
+                menu.classList.remove(
                     "active"
                 );
 
+            });
 
-                pages.forEach(
-                    pageElement => {
 
-                        pageElement.classList.remove(
-                            "active-page"
-                        );
+            this.classList.add(
+                "active"
+            );
 
-                    }
+
+            pages.forEach(pageElement => {
+
+                pageElement.classList.remove(
+                    "active-page"
+                );
+
+            });
+
+
+            const selectedPage =
+                document.getElementById(
+                    `${page}Page`
                 );
 
 
-                const selectedPage =
-                    document.getElementById(
-                        `${page}Page`
-                    );
+            if (selectedPage) {
 
-
-                if (selectedPage) {
-
-                    selectedPage.classList.add(
-                        "active-page"
-                    );
-
-                }
-
-
-                pageTitle.textContent =
-                    pageNames[page] ||
-                    "داشبورد";
-
-
-                if (sidebar) {
-
-                    sidebar.classList.remove(
-                        "open"
-                    );
-
-                }
-
-
-                if (page === "employees") {
-
-                    renderEmployees();
-
-                }
-
-
-                if (page === "attendance") {
-
-                    initAttendance();
-
-                }
-
-
-                if (page === "leave") {
-
-                    initLeave();
-
-                }
+                selectedPage.classList.add(
+                    "active-page"
+                );
 
             }
 
-        );
 
-    }
-);
+            pageTitle.textContent =
+                pageNames[page] ||
+                "داشبورد";
+
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+
+            if (page === "employees") {
+
+                renderEmployees();
+
+            }
+
+
+            if (page === "attendance") {
+
+                initAttendance();
+
+            }
+
+
+            if (page === "leave") {
+
+                initLeave();
+
+            }
+
+
+            if (page === "reports") {
+
+                renderReports();
+
+            }
+
+        }
+
+    );
+
+});
 
 
 /* ==================================================
@@ -448,12 +421,11 @@ const cancelModal =
     );
 
 
-let editingEmployeeId =
-    null;
+let editingEmployeeId = null;
 
 
 /* ==================================================
-   SAVE EMPLOYEES
+   EMPLOYEE SAVE
 ================================================== */
 
 function saveEmployees() {
@@ -472,12 +444,15 @@ function saveEmployees() {
 
 function getFilteredEmployees() {
 
+    if (!employeeSearch) {
+        return employees;
+    }
+
+
     const search =
-        employeeSearch
-            ? employeeSearch.value
-                .trim()
-                .toLowerCase()
-            : "";
+        employeeSearch.value
+            .trim()
+            .toLowerCase();
 
 
     const department =
@@ -500,10 +475,12 @@ function getFilteredEmployees() {
                     employee.name || ""
                 ).toLowerCase();
 
+
             const code =
                 String(
                     employee.code || ""
                 ).toLowerCase();
+
 
             const phone =
                 String(
@@ -539,9 +516,7 @@ function getFilteredEmployees() {
             return (
 
                 matchesSearch &&
-
                 matchesDepartment &&
-
                 matchesStatus
 
             );
@@ -559,9 +534,7 @@ function getFilteredEmployees() {
 function renderEmployees() {
 
     if (!employeesTableBody) {
-
         return;
-
     }
 
 
@@ -573,9 +546,7 @@ function renderEmployees() {
         "";
 
 
-    if (
-        filtered.length === 0
-    ) {
+    if (filtered.length === 0) {
 
         employeesTableBody.innerHTML = `
 
@@ -585,10 +556,7 @@ function renderEmployees() {
                     colspan="6"
                     class="empty-employees"
                 >
-
-                    کارمندی با این مشخصات
-                    پیدا نشد.
-
+                    کارمندی با این مشخصات پیدا نشد.
                 </td>
 
             </tr>
@@ -602,174 +570,139 @@ function renderEmployees() {
     }
 
 
-    filtered.forEach(
-        employee => {
+    filtered.forEach(employee => {
 
-            const firstLetter =
-                employee.name
-                    ? employee.name.charAt(0)
-                    : "م";
-
-
-            const statusText =
-                employee.status === "active"
-                    ? "فعال"
-                    : "غیرفعال";
+        const firstLetter =
+            employee.name
+                ? employee.name.charAt(0)
+                : "م";
 
 
-            const row =
-                document.createElement("tr");
+        const statusText =
+            employee.status === "active"
+                ? "فعال"
+                : "غیرفعال";
 
 
-            row.innerHTML = `
+        const row =
+            document.createElement("tr");
 
-                <td>
 
-                    <div class="employee-info">
+        row.innerHTML = `
 
-                        <div class="employee-avatar">
+            <td>
 
+                <div class="employee-info">
+
+                    <div class="employee-avatar">
+
+                        ${escapeHTML(
+                            firstLetter
+                        )}
+
+                    </div>
+
+                    <div>
+
+                        <strong>
                             ${escapeHTML(
-                                firstLetter
+                                employee.name
                             )}
+                        </strong>
 
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                ${escapeHTML(
-                                    employee.name
-                                )}
-                            </strong>
-
-                            <span>
-                                ${escapeHTML(
-                                    employee.code
-                                )}
-                            </span>
-
-                        </div>
+                        <span>
+                            ${escapeHTML(
+                                employee.code
+                            )}
+                        </span>
 
                     </div>
 
-                </td>
+                </div>
+
+            </td>
 
 
-                <td>
-                    ${escapeHTML(
-                        employee.department || "-"
-                    )}
-                </td>
+            <td>
+                ${escapeHTML(
+                    employee.department || "-"
+                )}
+            </td>
 
 
-                <td>
-                    ${escapeHTML(
-                        employee.position || "-"
-                    )}
-                </td>
+            <td>
+                ${escapeHTML(
+                    employee.position || "-"
+                )}
+            </td>
 
 
-                <td>
-                    ${escapeHTML(
-                        employee.phone || "-"
-                    )}
-                </td>
+            <td>
+                ${escapeHTML(
+                    employee.phone || "-"
+                )}
+            </td>
 
 
-                <td>
+            <td>
 
-                    <span
-                        class="employee-status
-                        ${employee.status}"
+                <span
+                    class="employee-status
+                    ${employee.status}"
+                >
+
+                    ${statusText}
+
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <div class="action-buttons">
+
+                    <button
+                        class="action-btn"
+                        title="مشاهده پرونده"
+                        onclick="viewEmployee(${employee.id})"
                     >
-
-                        ${statusText}
-
-                    </span>
-
-                </td>
+                        👁
+                    </button>
 
 
-                <td>
-
-                    <div class="action-buttons">
-
-                        <button
-                            class="action-btn"
-                            title="مشاهده پرونده"
-                            onclick="viewEmployee(${employee.id})"
-                        >
-                            👁
-                        </button>
+                    <button
+                        class="action-btn"
+                        title="ویرایش"
+                        onclick="editEmployee(${employee.id})"
+                    >
+                        ✏️
+                    </button>
 
 
-                        <button
-                            class="action-btn"
-                            title="ویرایش"
-                            onclick="editEmployee(${employee.id})"
-                        >
-                            ✏️
-                        </button>
+                    <button
+                        class="action-btn delete"
+                        title="حذف"
+                        onclick="deleteEmployee(${employee.id})"
+                    >
+                        🗑️
+                    </button>
+
+                </div>
+
+            </td>
+
+        `;
 
 
-                        <button
-                            class="action-btn delete"
-                            title="حذف"
-                            onclick="deleteEmployee(${employee.id})"
-                        >
-                            🗑️
-                        </button>
+        employeesTableBody.appendChild(
+            row
+        );
 
-                    </div>
-
-                </td>
-
-            `;
-
-
-            employeesTableBody.appendChild(
-                row
-            );
-
-        }
-    );
+    });
 
 
     updateSummary();
-
-}
-
-
-/* ==================================================
-   ESCAPE HTML
-================================================== */
-
-function escapeHTML(value) {
-
-    return String(
-        value ?? ""
-    )
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
 
 }
 
@@ -787,16 +720,14 @@ function updateSummary() {
     const active =
         employees.filter(
             employee =>
-                employee.status ===
-                "active"
+                employee.status === "active"
         ).length;
 
 
     const inactive =
         employees.filter(
             employee =>
-                employee.status ===
-                "inactive"
+                employee.status === "inactive"
         ).length;
 
 
@@ -814,10 +745,12 @@ function updateSummary() {
         total
     );
 
+
     setText(
         "activeEmployees",
         active
     );
+
 
     setText(
         "inactiveEmployees",
@@ -830,15 +763,18 @@ function updateSummary() {
         total
     );
 
+
     setText(
         "dashboardActive",
         active
     );
 
+
     setText(
         "dashboardInactive",
         inactive
     );
+
 
     setText(
         "dashboardDepartments",
@@ -849,29 +785,7 @@ function updateSummary() {
 
 
 /* ==================================================
-   SET TEXT
-================================================== */
-
-function setText(
-    id,
-    value
-) {
-
-    const element =
-        document.getElementById(id);
-
-    if (element) {
-
-        element.textContent =
-            value;
-
-    }
-
-}
-
-
-/* ==================================================
-   EMPLOYEE MODAL
+   OPEN EMPLOYEE MODAL
 ================================================== */
 
 function openEmployeeModal(
@@ -879,9 +793,7 @@ function openEmployeeModal(
 ) {
 
     if (!employeeModal) {
-
         return;
-
     }
 
 
@@ -899,40 +811,46 @@ function openEmployeeModal(
             "ویرایش کارمند";
 
 
-        setInput(
-            "fullName",
-            employee.name
-        );
+        document.getElementById(
+            "fullName"
+        ).value =
+            employee.name || "";
 
-        setInput(
-            "personnelCode",
-            employee.code
-        );
 
-        setInput(
-            "phone",
-            employee.phone
-        );
+        document.getElementById(
+            "personnelCode"
+        ).value =
+            employee.code || "";
 
-        setInput(
-            "department",
-            employee.department
-        );
 
-        setInput(
-            "position",
-            employee.position
-        );
+        document.getElementById(
+            "phone"
+        ).value =
+            employee.phone || "";
 
-        setInput(
-            "status",
-            employee.status
-        );
 
-        setInput(
-            "address",
-            employee.address
-        );
+        document.getElementById(
+            "department"
+        ).value =
+            employee.department || "";
+
+
+        document.getElementById(
+            "position"
+        ).value =
+            employee.position || "";
+
+
+        document.getElementById(
+            "status"
+        ).value =
+            employee.status || "active";
+
+
+        document.getElementById(
+            "address"
+        ).value =
+            employee.address || "";
 
 
         editingEmployeeId =
@@ -944,45 +862,24 @@ function openEmployeeModal(
             "افزودن کارمند";
 
 
-        if (employeeForm) {
-
-            employeeForm.reset();
-
-        }
+        employeeForm.reset();
 
 
-        editingEmployeeId =
-            null;
+        editingEmployeeId = null;
 
     }
 
 }
 
 
-function setInput(
-    id,
-    value
-) {
-
-    const element =
-        document.getElementById(id);
-
-    if (element) {
-
-        element.value =
-            value || "";
-
-    }
-
-}
-
+/* ==================================================
+   CLOSE EMPLOYEE MODAL
+================================================== */
 
 function closeEmployeeModal() {
 
     if (!employeeModal) {
-
         return;
-
     }
 
 
@@ -995,17 +892,18 @@ function closeEmployeeModal() {
 
 
     if (employeeForm) {
-
         employeeForm.reset();
-
     }
 
 
-    editingEmployeeId =
-        null;
+    editingEmployeeId = null;
 
 }
 
+
+/* ==================================================
+   RESTORE PROFILE
+================================================== */
 
 function restoreProfileView() {
 
@@ -1031,19 +929,11 @@ function restoreProfileView() {
 
     }
 
-
-    if (modalTitle) {
-
-        modalTitle.textContent =
-            "افزودن کارمند";
-
-    }
-
 }
 
 
 /* ==================================================
-   EMPLOYEE BUTTONS
+   ADD EMPLOYEE EVENTS
 ================================================== */
 
 if (addEmployeeBtn) {
@@ -1066,24 +956,20 @@ if (dashboardAddEmployee) {
         "click",
         () => {
 
-            const employeesMenu =
+            const menu =
                 document.querySelector(
                     '[data-page="employees"]'
                 );
 
 
-            if (employeesMenu) {
-
-                employeesMenu.click();
-
+            if (menu) {
+                menu.click();
             }
 
 
             setTimeout(
                 () => {
-
                     openEmployeeModal();
-
                 },
                 100
             );
@@ -1093,6 +979,10 @@ if (dashboardAddEmployee) {
 
 }
 
+
+/* ==================================================
+   MODAL EVENTS
+================================================== */
 
 if (closeModal) {
 
@@ -1128,45 +1018,45 @@ if (employeeForm) {
 
 
             const name =
-                getValue(
+                document.getElementById(
                     "fullName"
-                ).trim();
+                ).value.trim();
 
 
             const code =
-                getValue(
+                document.getElementById(
                     "personnelCode"
-                ).trim();
+                ).value.trim();
 
 
             const phone =
-                getValue(
+                document.getElementById(
                     "phone"
-                ).trim();
+                ).value.trim();
 
 
             const department =
-                getValue(
+                document.getElementById(
                     "department"
-                );
+                ).value;
 
 
             const position =
-                getValue(
+                document.getElementById(
                     "position"
-                ).trim();
+                ).value.trim();
 
 
             const status =
-                getValue(
+                document.getElementById(
                     "status"
-                );
+                ).value;
 
 
             const address =
-                getValue(
+                document.getElementById(
                     "address"
-                ).trim();
+                ).value.trim();
 
 
             if (
@@ -1209,17 +1099,11 @@ if (employeeForm) {
             const employeeData = {
 
                 name,
-
                 code,
-
                 phone,
-
                 department,
-
                 position,
-
                 status,
-
                 address
 
             };
@@ -1291,22 +1175,6 @@ if (employeeForm) {
 
 
 /* ==================================================
-   GET VALUE
-================================================== */
-
-function getValue(id) {
-
-    const element =
-        document.getElementById(id);
-
-    return element
-        ? element.value
-        : "";
-
-}
-
-
-/* ==================================================
    EDIT EMPLOYEE
 ================================================== */
 
@@ -1320,9 +1188,7 @@ function editEmployee(id) {
 
 
     if (!employee) {
-
         return;
-
     }
 
 
@@ -1347,9 +1213,7 @@ function deleteEmployee(id) {
 
 
     if (!employee) {
-
         return;
-
     }
 
 
@@ -1360,9 +1224,7 @@ function deleteEmployee(id) {
 
 
     if (!confirmed) {
-
         return;
-
     }
 
 
@@ -1395,13 +1257,8 @@ function viewEmployee(id) {
         );
 
 
-    if (
-        !employee ||
-        !employeeModal
-    ) {
-
+    if (!employee || !employeeModal) {
         return;
-
     }
 
 
@@ -1418,9 +1275,15 @@ function viewEmployee(id) {
     }
 
 
-    if (modalTitle) {
+    const header =
+        document.querySelector(
+            ".modal-header h3"
+        );
 
-        modalTitle.textContent =
+
+    if (header) {
+
+        header.textContent =
             "پرونده پرسنلی";
 
     }
@@ -1448,30 +1311,36 @@ function viewEmployee(id) {
             : "م"
     );
 
+
     setText(
         "profileName",
         employee.name
     );
+
 
     setText(
         "profilePosition",
         employee.position || "-"
     );
 
+
     setText(
         "profileCode",
         employee.code
     );
+
 
     setText(
         "profileDepartment",
         employee.department
     );
 
+
     setText(
         "profilePhone",
         employee.phone || "-"
     );
+
 
     setText(
         "profileStatus",
@@ -1479,6 +1348,7 @@ function viewEmployee(id) {
             ? "فعال"
             : "غیرفعال"
     );
+
 
     setText(
         "profileAddress",
@@ -1522,6 +1392,10 @@ if (statusFilter) {
 }
 
 
+/* ==================================================
+   EMPLOYEE MODAL BACKDROP
+================================================== */
+
 if (employeeModal) {
 
     employeeModal.addEventListener(
@@ -1544,7 +1418,7 @@ if (employeeModal) {
 
 
 /* ==================================================
-   ATTENDANCE
+   ATTENDANCE ELEMENTS
 ================================================== */
 
 const attendanceDate =
@@ -1573,6 +1447,10 @@ const openAttendanceModal =
     );
 
 
+/* ==================================================
+   ATTENDANCE DATE
+================================================== */
+
 function getSelectedAttendanceDate() {
 
     if (
@@ -1584,6 +1462,7 @@ function getSelectedAttendanceDate() {
 
     }
 
+
     return getTodayISO();
 
 }
@@ -1592,9 +1471,7 @@ function getSelectedAttendanceDate() {
 function initAttendance() {
 
     if (!attendanceDate) {
-
         return;
-
     }
 
 
@@ -1610,6 +1487,10 @@ function initAttendance() {
 
 }
 
+
+/* ==================================================
+   ATTENDANCE RECORD
+================================================== */
 
 function getAttendanceRecord(
     employeeId,
@@ -1647,6 +1528,10 @@ function getAttendanceRecord(
 }
 
 
+/* ==================================================
+   SAVE ATTENDANCE
+================================================== */
+
 function saveAttendance() {
 
     saveJSON(
@@ -1656,6 +1541,10 @@ function saveAttendance() {
 
 }
 
+
+/* ==================================================
+   ATTENDANCE STATUS
+================================================== */
 
 function getAttendanceStatusText(
     status
@@ -1680,20 +1569,23 @@ function getAttendanceStatusText(
 }
 
 
+/* ==================================================
+   CALCULATE WORK
+================================================== */
+
 function calculateMinutes(
     start,
     end
 ) {
 
     if (!start || !end) {
-
         return 0;
-
     }
 
 
     const startParts =
         start.split(":").map(Number);
+
 
     const endParts =
         end.split(":").map(Number);
@@ -1740,9 +1632,7 @@ function calculateMinutes(
 function formatMinutes(minutes) {
 
     if (!minutes) {
-
         return "-";
-
     }
 
 
@@ -1750,6 +1640,7 @@ function formatMinutes(minutes) {
         Math.floor(
             minutes / 60
         );
+
 
     const mins =
         minutes % 60;
@@ -1760,13 +1651,20 @@ function formatMinutes(minutes) {
 }
 
 
+/* ==================================================
+   ATTENDANCE STATS
+================================================== */
+
 function updateAttendanceStats(
     records
 ) {
 
     let present = 0;
+
     let late = 0;
+
     let absent = 0;
+
     let leave = 0;
 
 
@@ -1815,15 +1713,18 @@ function updateAttendanceStats(
         present
     );
 
+
     setText(
         "lateCount",
         late
     );
 
+
     setText(
         "absentCount",
         absent
     );
+
 
     setText(
         "leaveCount",
@@ -1833,12 +1734,14 @@ function updateAttendanceStats(
 }
 
 
+/* ==================================================
+   RENDER ATTENDANCE
+================================================== */
+
 function renderAttendance() {
 
     if (!attendanceTableBody) {
-
         return;
-
     }
 
 
@@ -1906,9 +1809,6 @@ function renderAttendance() {
                 const employee =
                     item.employee;
 
-                const record =
-                    item.record;
-
 
                 const matchesSearch =
 
@@ -1930,7 +1830,7 @@ function renderAttendance() {
 
                     ||
 
-                    record.status ===
+                    item.record.status ===
                     statusFilter;
 
 
@@ -1949,9 +1849,7 @@ function renderAttendance() {
         "";
 
 
-    if (
-        filtered.length === 0
-    ) {
+    if (filtered.length === 0) {
 
         attendanceTableBody.innerHTML = `
 
@@ -1961,9 +1859,7 @@ function renderAttendance() {
                     colspan="8"
                     class="empty-employees"
                 >
-
                     موردی برای نمایش وجود ندارد.
-
                 </td>
 
             </tr>
@@ -1980,6 +1876,7 @@ function renderAttendance() {
 
             const employee =
                 item.employee;
+
 
             const record =
                 item.record;
@@ -2121,26 +2018,21 @@ function renderAttendance() {
 
 
                 <td>
-
                     ${formatMinutes(
                         workMinutes
                     )}
-
                 </td>
 
 
                 <td>
 
                     ${
-                        record.status === "late"
-                            ? `
-                                <span
-                                    class="attendance-late-text"
-                                >
-                                    تأخیر
-                                </span>
-                              `
-                            : "-"
+                        record.status ===
+                        "late"
+
+                        ? "تأخیر"
+
+                        : "-"
                     }
 
                 </td>
@@ -2211,6 +2103,10 @@ function renderAttendance() {
 
 }
 
+
+/* ==================================================
+   ATTENDANCE ACTIONS
+================================================== */
 
 function changeAttendanceStatus(
     employeeId,
@@ -2359,9 +2255,7 @@ function clearAttendance(
 
 
     if (!confirmed) {
-
         return;
-
     }
 
 
@@ -2444,6 +2338,11 @@ if (openAttendanceModal) {
    LEAVE ELEMENTS
 ================================================== */
 
+const leaveTableBody =
+    document.getElementById(
+        "leaveTableBody"
+    );
+
 const addLeaveBtn =
     document.getElementById(
         "addLeaveBtn"
@@ -2454,7 +2353,12 @@ const leaveModal =
         "leaveModal"
     );
 
-const closeLeaveModalBtn =
+const leaveForm =
+    document.getElementById(
+        "leaveForm"
+    );
+
+const closeLeaveModal =
     document.getElementById(
         "closeLeaveModal"
     );
@@ -2464,39 +2368,9 @@ const cancelLeaveModal =
         "cancelLeaveModal"
     );
 
-const leaveForm =
-    document.getElementById(
-        "leaveForm"
-    );
-
 const leaveEmployee =
     document.getElementById(
         "leaveEmployee"
-    );
-
-const leaveType =
-    document.getElementById(
-        "leaveType"
-    );
-
-const leaveStart =
-    document.getElementById(
-        "leaveStart"
-    );
-
-const leaveEnd =
-    document.getElementById(
-        "leaveEnd"
-    );
-
-const leaveDays =
-    document.getElementById(
-        "leaveDays"
-    );
-
-const leaveDescription =
-    document.getElementById(
-        "leaveDescription"
     );
 
 const leaveSearch =
@@ -2519,201 +2393,70 @@ const leaveDateFilter =
         "leaveDateFilter"
     );
 
-const leaveTableBody =
-    document.getElementById(
-        "leaveTableBody"
-    );
-
-
-let editingLeaveId =
-    null;
-
 
 /* ==================================================
-   LEAVE TEXT
+   LEAVE HELPERS
 ================================================== */
 
-function getLeaveTypeText(
-    type
-) {
+function saveLeaveRequests() {
+
+    saveJSON(
+        "mirzaKhanLeaveRequests",
+        leaveRequests
+    );
+
+}
+
+
+function getLeaveTypeText(type) {
 
     const types = {
 
-        annual:
-            "مرخصی استحقاقی",
+        annual: "مرخصی استحقاقی",
 
-        sick:
-            "مرخصی استعلاجی",
+        sick: "مرخصی استعلاجی",
 
-        unpaid:
-            "مرخصی بدون حقوق",
+        unpaid: "مرخصی بدون حقوق",
 
-        mission:
-            "مأموریت"
+        mission: "مأموریت"
 
     };
 
 
     return types[type] ||
-        "نامشخص";
+        type;
 
 }
 
 
-function getLeaveStatusText(
-    status
-) {
+function getLeaveStatusText(status) {
 
     const statuses = {
 
-        pending:
-            "در انتظار بررسی",
+        pending: "در انتظار بررسی",
 
-        approved:
-            "تأیید شده",
+        approved: "تأیید شده",
 
-        rejected:
-            "رد شده"
+        rejected: "رد شده"
 
     };
 
 
     return statuses[status] ||
-        "در انتظار بررسی";
+        status;
 
 }
 
 
 /* ==================================================
-   LEAVE DAYS CALCULATION
-================================================== */
-
-function calculateLeaveDays(
-    start,
-    end
-) {
-
-    if (!start || !end) {
-
-        return 0;
-
-    }
-
-
-    const startDate =
-        new Date(
-            start + "T00:00:00"
-        );
-
-    const endDate =
-        new Date(
-            end + "T00:00:00"
-        );
-
-
-    if (
-        Number.isNaN(
-            startDate.getTime()
-        ) ||
-        Number.isNaN(
-            endDate.getTime()
-        )
-    ) {
-
-        return 0;
-
-    }
-
-
-    if (
-        endDate < startDate
-    ) {
-
-        return 0;
-
-    }
-
-
-    const difference =
-        endDate.getTime() -
-        startDate.getTime();
-
-
-    return (
-        Math.floor(
-            difference /
-            (1000 * 60 * 60 * 24)
-        ) + 1
-    );
-
-}
-
-
-/* ==================================================
-   FORMAT DATE
-================================================== */
-
-function formatDate(
-    date
-) {
-
-    if (!date) {
-
-        return "-";
-
-    }
-
-
-    try {
-
-        return new Intl.DateTimeFormat(
-            "fa-IR"
-        ).format(
-            new Date(
-                date + "T00:00:00"
-            )
-        );
-
-    } catch {
-
-        return date;
-
-    }
-
-}
-
-
-/* ==================================================
-   FIND EMPLOYEE
-================================================== */
-
-function getEmployeeById(
-    id
-) {
-
-    return employees.find(
-        employee =>
-            employee.id === Number(id)
-    );
-
-}
-
-
-/* ==================================================
-   POPULATE EMPLOYEES
+   LEAVE EMPLOYEE OPTIONS
 ================================================== */
 
 function populateLeaveEmployees() {
 
     if (!leaveEmployee) {
-
         return;
-
     }
-
-
-    const currentValue =
-        leaveEmployee.value;
 
 
     leaveEmployee.innerHTML = `
@@ -2755,416 +2498,94 @@ function populateLeaveEmployees() {
             }
         );
 
-
-    if (currentValue) {
-
-        leaveEmployee.value =
-            currentValue;
-
-    }
-
 }
 
 
 /* ==================================================
-   OPEN LEAVE MODAL
+   LEAVE INIT
 ================================================== */
 
-function openLeaveModal(
-    request = null
-) {
-
-    if (!leaveModal) {
-
-        return;
-
-    }
-
+function initLeave() {
 
     populateLeaveEmployees();
 
-
-    leaveModal.classList.add(
-        "show"
-    );
-
-
-    if (request) {
-
-        editingLeaveId =
-            request.id;
-
-
-        const title =
-            document.getElementById(
-                "leaveModalTitle"
-            );
-
-
-        if (title) {
-
-            title.textContent =
-                "ویرایش درخواست";
-
-        }
-
-
-        setInput(
-            "leaveEmployee",
-            request.employeeId
-        );
-
-        setInput(
-            "leaveType",
-            request.type
-        );
-
-        setInput(
-            "leaveStart",
-            request.start
-        );
-
-        setInput(
-            "leaveEnd",
-            request.end
-        );
-
-        setInput(
-            "leaveDays",
-            request.days
-        );
-
-        setInput(
-            "leaveDescription",
-            request.description
-        );
-
-    } else {
-
-        editingLeaveId =
-            null;
-
-
-        if (leaveForm) {
-
-            leaveForm.reset();
-
-        }
-
-
-        const title =
-            document.getElementById(
-                "leaveModalTitle"
-            );
-
-
-        if (title) {
-
-            title.textContent =
-                "ثبت درخواست مرخصی";
-
-        }
-
-    }
+    renderLeave();
 
 }
 
 
 /* ==================================================
-   CLOSE LEAVE MODAL
+   LEAVE STATS
 ================================================== */
 
-function closeLeaveModal() {
+function updateLeaveStats() {
 
-    if (!leaveModal) {
-
-        return;
-
-    }
+    const total =
+        leaveRequests.length;
 
 
-    leaveModal.classList.remove(
-        "show"
+    const pending =
+        leaveRequests.filter(
+            item =>
+                item.status ===
+                "pending"
+        ).length;
+
+
+    const approved =
+        leaveRequests.filter(
+            item =>
+                item.status ===
+                "approved"
+        ).length;
+
+
+    const rejected =
+        leaveRequests.filter(
+            item =>
+                item.status ===
+                "rejected"
+        ).length;
+
+
+    setText(
+        "totalLeave",
+        total
     );
 
 
-    if (leaveForm) {
-
-        leaveForm.reset();
-
-    }
-
-
-    editingLeaveId =
-        null;
-
-}
-
-
-/* ==================================================
-   AUTO CALCULATE DAYS
-================================================== */
-
-function updateLeaveDays() {
-
-    if (
-        !leaveStart ||
-        !leaveEnd ||
-        !leaveDays
-    ) {
-
-        return;
-
-    }
-
-
-    const days =
-        calculateLeaveDays(
-            leaveStart.value,
-            leaveEnd.value
-        );
-
-
-    if (days > 0) {
-
-        leaveDays.value =
-            days;
-
-    }
-
-}
-
-
-if (leaveStart) {
-
-    leaveStart.addEventListener(
-        "change",
-        updateLeaveDays
+    setText(
+        "pendingLeave",
+        pending
     );
 
-}
+
+    setText(
+        "approvedLeave",
+        approved
+    );
 
 
-if (leaveEnd) {
-
-    leaveEnd.addEventListener(
-        "change",
-        updateLeaveDays
+    setText(
+        "rejectedLeave",
+        rejected
     );
 
 }
 
 
 /* ==================================================
-   SAVE LEAVE
-================================================== */
-
-if (leaveForm) {
-
-    leaveForm.addEventListener(
-        "submit",
-        function(event) {
-
-            event.preventDefault();
-
-
-            const employeeId =
-                Number(
-                    getValue(
-                        "leaveEmployee"
-                    )
-                );
-
-
-            const type =
-                getValue(
-                    "leaveType"
-                );
-
-
-            const start =
-                getValue(
-                    "leaveStart"
-                );
-
-
-            const end =
-                getValue(
-                    "leaveEnd"
-                );
-
-
-            const days =
-                Number(
-                    getValue(
-                        "leaveDays"
-                    )
-                );
-
-
-            const description =
-                getValue(
-                    "leaveDescription"
-                ).trim();
-
-
-            if (
-                !employeeId ||
-                !type ||
-                !start ||
-                !end ||
-                !days
-            ) {
-
-                alert(
-                    "لطفاً تمام اطلاعات الزامی را وارد کنید."
-                );
-
-                return;
-
-            }
-
-
-            if (end < start) {
-
-                alert(
-                    "تاریخ پایان نمی‌تواند قبل از تاریخ شروع باشد."
-                );
-
-                return;
-
-            }
-
-
-            if (days <= 0) {
-
-                alert(
-                    "تعداد روز باید بیشتر از صفر باشد."
-                );
-
-                return;
-
-            }
-
-
-            const employee =
-                getEmployeeById(
-                    employeeId
-                );
-
-
-            if (!employee) {
-
-                alert(
-                    "کارمند انتخاب‌شده پیدا نشد."
-                );
-
-                return;
-
-            }
-
-
-            const existing =
-                leaveRequests.find(
-                    request =>
-                        request.id ===
-                        editingLeaveId
-                );
-
-
-            const requestData = {
-
-                employeeId,
-
-                type,
-
-                start,
-
-                end,
-
-                days,
-
-                description
-
-            };
-
-
-            if (existing) {
-
-                existing.employeeId =
-                    requestData.employeeId;
-
-                existing.type =
-                    requestData.type;
-
-                existing.start =
-                    requestData.start;
-
-                existing.end =
-                    requestData.end;
-
-                existing.days =
-                    requestData.days;
-
-                existing.description =
-                    requestData.description;
-
-            } else {
-
-                leaveRequests.push({
-
-                    id: Date.now(),
-
-                    ...requestData,
-
-                    status:
-                        "pending",
-
-                    createdAt:
-                        new Date()
-                            .toISOString()
-
-                });
-
-            }
-
-
-            saveJSON(
-                "mirzaKhanLeaveRequests",
-                leaveRequests
-            );
-
-
-            renderLeave();
-
-            updateLeaveSummary();
-
-            closeLeaveModal();
-
-
-            alert(
-                existing
-                    ? "درخواست با موفقیت ویرایش شد."
-                    : "درخواست با موفقیت ثبت شد و در انتظار بررسی است."
-            );
-
-        }
-    );
-
-}
-
-
-/* ==================================================
-   RENDER LEAVE
+   LEAVE RENDER
 ================================================== */
 
 function renderLeave() {
 
     if (!leaveTableBody) {
-
         return;
-
     }
+
+
+    updateLeaveStats();
 
 
     const search =
@@ -3175,19 +2596,19 @@ function renderLeave() {
             : "";
 
 
-    const typeFilter =
+    const type =
         leaveTypeFilter
             ? leaveTypeFilter.value
             : "all";
 
 
-    const statusFilter =
+    const status =
         leaveStatusFilter
             ? leaveStatusFilter.value
             : "all";
 
 
-    const dateFilter =
+    const date =
         leaveDateFilter
             ? leaveDateFilter.value
             : "";
@@ -3198,70 +2619,72 @@ function renderLeave() {
             request => {
 
                 const employee =
-                    getEmployeeById(
-                        request.employeeId
+                    employees.find(
+                        item =>
+                            item.id ===
+                            Number(
+                                request.employeeId
+                            )
                     );
 
 
                 const employeeName =
                     employee
                         ? employee.name
-                        : "کارمند حذف شده";
+                        : request.employeeName;
 
 
                 const employeeCode =
                     employee
                         ? employee.code
-                        : "";
+                        : request.employeeCode;
 
 
                 const matchesSearch =
 
-                    employeeName
-                        .toLowerCase()
-                        .includes(search)
+                    !search ||
+
+                    String(
+                        employeeName || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
 
                     ||
 
-                    employeeCode
-                        .toLowerCase()
-                        .includes(search);
+                    String(
+                        employeeCode || ""
+                    )
+                    .toLowerCase()
+                    .includes(search);
 
 
                 const matchesType =
 
-                    typeFilter ===
-                    "all"
-
-                    ||
+                    type === "all" ||
 
                     request.type ===
-                    typeFilter;
+                    type;
 
 
                 const matchesStatus =
 
-                    statusFilter ===
-                    "all"
-
-                    ||
+                    status === "all" ||
 
                     request.status ===
-                    statusFilter;
+                    status;
 
 
                 const matchesDate =
 
-                    !dateFilter
-
-                    ||
+                    !date ||
 
                     (
-                        request.start <=
-                        dateFilter &&
+                        request.startDate <=
+                        date &&
 
-                        request.end >=
-                        dateFilter
+                        request.endDate >=
+                        date
                     );
 
 
@@ -3285,9 +2708,7 @@ function renderLeave() {
         "";
 
 
-    if (
-        filtered.length === 0
-    ) {
+    if (filtered.length === 0) {
 
         leaveTableBody.innerHTML = `
 
@@ -3298,8 +2719,7 @@ function renderLeave() {
                     class="empty-employees"
                 >
 
-                    هنوز درخواست مرخصی یا مأموریتی
-                    برای نمایش وجود ندارد.
+                    هنوز درخواست مورد نظر پیدا نشد.
 
                 </td>
 
@@ -3307,477 +2727,475 @@ function renderLeave() {
 
         `;
 
-        updateLeaveSummary();
-
         return;
 
     }
 
 
-    filtered
-        .sort(
-            (a, b) =>
-                b.id - a.id
-        )
-        .forEach(
-            request => {
+    filtered.forEach(
+        request => {
 
-                const employee =
-                    getEmployeeById(
-                        request.employeeId
-                    );
-
-
-                const employeeName =
-                    employee
-                        ? employee.name
-                        : "کارمند حذف شده";
+            const employee =
+                employees.find(
+                    item =>
+                        item.id ===
+                        Number(
+                            request.employeeId
+                        )
+                );
 
 
-                const employeeCode =
-                    employee
-                        ? employee.code
-                        : "-";
+            const employeeName =
+                employee
+                    ? employee.name
+                    : request.employeeName;
 
 
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
+            const employeeCode =
+                employee
+                    ? employee.code
+                    : request.employeeCode;
 
 
-                row.innerHTML = `
+            const row =
+                document.createElement(
+                    "tr"
+                );
 
-                    <td>
 
-                        <div class="employee-info">
+            row.innerHTML = `
 
-                            <div class="employee-avatar">
+                <td>
 
-                                ${escapeHTML(
-                                    employeeName.charAt(0)
-                                )}
+                    <div class="employee-info">
 
-                            </div>
+                        <div class="employee-avatar">
 
-                            <div>
-
-                                <strong>
-                                    ${escapeHTML(
-                                        employeeName
-                                    )}
-                                </strong>
-
-                                <span>
-                                    ${escapeHTML(
-                                        employeeCode
-                                    )}
-                                </span>
-
-                            </div>
+                            ${escapeHTML(
+                                String(
+                                    employeeName || "م"
+                                ).charAt(0)
+                            )}
 
                         </div>
 
-                    </td>
+                        <div>
+
+                            <strong>
+                                ${escapeHTML(
+                                    employeeName || "-"
+                                )}
+                            </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    employeeCode || "-"
+                                )}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </td>
 
 
-                    <td>
+                <td>
+
+                    ${escapeHTML(
+                        getLeaveTypeText(
+                            request.type
+                        )
+                    )}
+
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        request.startDate
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        request.endDate
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        request.days
+                    )} روز
+                </td>
+
+
+                <td>
+
+                    ${escapeHTML(
+                        request.description || "-"
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="employee-status
+                        ${request.status}"
+                    >
 
                         ${escapeHTML(
-                            getLeaveTypeText(
-                                request.type
+                            getLeaveStatusText(
+                                request.status
                             )
                         )}
 
-                    </td>
+                    </span>
+
+                </td>
 
 
-                    <td>
+                <td>
 
-                        ${formatDate(
-                            request.start
-                        )}
+                    <div class="action-buttons">
 
-                    </td>
+                        ${
+                            request.status ===
+                            "pending"
 
+                            ? `
 
-                    <td>
-
-                        ${formatDate(
-                            request.end
-                        )}
-
-                    </td>
-
-
-                    <td>
-
-                        ${request.days}
-                        روز
-
-                    </td>
+                                <button
+                                    class="action-btn"
+                                    title="تأیید"
+                                    onclick="
+                                        updateLeaveStatus(
+                                            ${request.id},
+                                            'approved'
+                                        )
+                                    "
+                                >
+                                    ✅
+                                </button>
 
 
-                    <td>
+                                <button
+                                    class="action-btn delete"
+                                    title="رد"
+                                    onclick="
+                                        updateLeaveStatus(
+                                            ${request.id},
+                                            'rejected'
+                                        )
+                                    "
+                                >
+                                    ❌
+                                </button>
 
-                        ${escapeHTML(
-                            request.description ||
-                            "-"
-                        )}
+                            `
 
-                    </td>
+                            : ""
+
+                        }
 
 
-                    <td>
-
-                        <span
-                            class="employee-status
-                            ${getLeaveStatusClass(
-                                request.status
-                            )}"
+                        <button
+                            class="action-btn delete"
+                            title="حذف"
+                            onclick="
+                                deleteLeaveRequest(
+                                    ${request.id}
+                                )
+                            "
                         >
+                            🗑️
+                        </button>
 
-                            ${getLeaveStatusText(
-                                request.status
-                            )}
+                    </div>
 
-                        </span>
+                </td>
 
-                    </td>
-
-
-                    <td>
-
-                        <div
-                            class="action-buttons"
-                        >
-
-                            ${
-                                request.status ===
-                                "pending"
-                                    ? `
-
-                                        <button
-                                            class="action-btn"
-                                            title="تأیید"
-                                            onclick="
-                                                approveLeave(
-                                                    ${request.id}
-                                                )
-                                            "
-                                        >
-                                            ✅
-                                        </button>
+            `;
 
 
-                                        <button
-                                            class="action-btn"
-                                            title="رد"
-                                            onclick="
-                                                rejectLeave(
-                                                    ${request.id}
-                                                )
-                                            "
-                                        >
-                                            ❌
-                                        </button>
+            leaveTableBody.appendChild(
+                row
+            );
 
-                                      `
-                                    : ""
-                            }
-
-
-                            <button
-                                class="action-btn"
-                                title="ویرایش"
-                                onclick="
-                                    editLeave(
-                                        ${request.id}
-                                    )
-                                "
-                            >
-                                ✏️
-                            </button>
-
-
-                            <button
-                                class="action-btn delete"
-                                title="حذف"
-                                onclick="
-                                    deleteLeave(
-                                        ${request.id}
-                                    )
-                                "
-                            >
-                                🗑️
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                `;
-
-
-                leaveTableBody.appendChild(
-                    row
-                );
-
-            }
-        );
-
-
-    updateLeaveSummary();
+        }
+    );
 
 }
 
 
 /* ==================================================
-   LEAVE STATUS CLASS
+   OPEN LEAVE MODAL
 ================================================== */
 
-function getLeaveStatusClass(
+function openLeaveRequestModal() {
+
+    if (!leaveModal) {
+        return;
+    }
+
+
+    populateLeaveEmployees();
+
+
+    if (leaveForm) {
+        leaveForm.reset();
+    }
+
+
+    leaveModal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* ==================================================
+   CLOSE LEAVE MODAL
+================================================== */
+
+function closeLeaveRequestModal() {
+
+    if (!leaveModal) {
+        return;
+    }
+
+
+    leaveModal.classList.remove(
+        "show"
+    );
+
+
+    if (leaveForm) {
+        leaveForm.reset();
+    }
+
+}
+
+
+/* ==================================================
+   ADD LEAVE EVENT
+================================================== */
+
+if (addLeaveBtn) {
+
+    addLeaveBtn.addEventListener(
+        "click",
+        openLeaveRequestModal
+    );
+
+}
+
+
+if (closeLeaveModal) {
+
+    closeLeaveModal.addEventListener(
+        "click",
+        closeLeaveRequestModal
+    );
+
+}
+
+
+if (cancelLeaveModal) {
+
+    cancelLeaveModal.addEventListener(
+        "click",
+        closeLeaveRequestModal
+    );
+
+}
+
+
+/* ==================================================
+   LEAVE FORM
+================================================== */
+
+if (leaveForm) {
+
+    leaveForm.addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const employeeId =
+                Number(
+                    document.getElementById(
+                        "leaveEmployee"
+                    ).value
+                );
+
+
+            const type =
+                document.getElementById(
+                    "leaveType"
+                ).value;
+
+
+            const startDate =
+                document.getElementById(
+                    "leaveStart"
+                ).value;
+
+
+            const endDate =
+                document.getElementById(
+                    "leaveEnd"
+                ).value;
+
+
+            const days =
+                document.getElementById(
+                    "leaveDays"
+                ).value;
+
+
+            const description =
+                document.getElementById(
+                    "leaveDescription"
+                ).value.trim();
+
+
+            if (
+                !employeeId ||
+                !type ||
+                !startDate ||
+                !endDate ||
+                !days
+            ) {
+
+                alert(
+                    "لطفاً تمام اطلاعات الزامی را وارد کنید."
+                );
+
+                return;
+
+            }
+
+
+            if (endDate < startDate) {
+
+                alert(
+                    "تاریخ پایان نمی‌تواند قبل از تاریخ شروع باشد."
+                );
+
+                return;
+
+            }
+
+
+            const employee =
+                employees.find(
+                    item =>
+                        item.id ===
+                        employeeId
+                );
+
+
+            if (!employee) {
+
+                alert(
+                    "کارمند انتخاب‌شده پیدا نشد."
+                );
+
+                return;
+
+            }
+
+
+            leaveRequests.push({
+
+                id: Date.now(),
+
+                employeeId,
+
+                employeeName:
+                    employee.name,
+
+                employeeCode:
+                    employee.code,
+
+                type,
+
+                startDate,
+
+                endDate,
+
+                days:
+                    Number(days),
+
+                description,
+
+                status:
+                    "pending",
+
+                createdAt:
+                    new Date().toISOString()
+
+            });
+
+
+            saveLeaveRequests();
+
+            renderLeave();
+
+            closeLeaveRequestModal();
+
+
+            alert(
+                "درخواست با موفقیت ثبت شد و در انتظار بررسی است."
+            );
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   LEAVE STATUS
+================================================== */
+
+function updateLeaveStatus(
+    id,
     status
 ) {
 
-    if (
+    const request =
+        leaveRequests.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!request) {
+        return;
+    }
+
+
+    request.status =
+        status;
+
+
+    saveLeaveRequests();
+
+    renderLeave();
+
+
+    alert(
         status === "approved"
-    ) {
-
-        return "active";
-
-    }
-
-
-    if (
-        status === "rejected"
-    ) {
-
-        return "inactive";
-
-    }
-
-
-    return "";
-
-}
-
-
-/* ==================================================
-   LEAVE SUMMARY
-================================================== */
-
-function updateLeaveSummary() {
-
-    const total =
-        leaveRequests.length;
-
-
-    const pending =
-        leaveRequests.filter(
-            request =>
-                request.status ===
-                "pending"
-        ).length;
-
-
-    const approved =
-        leaveRequests.filter(
-            request =>
-                request.status ===
-                "approved"
-        ).length;
-
-
-    const rejected =
-        leaveRequests.filter(
-            request =>
-                request.status ===
-                "rejected"
-        ).length;
-
-
-    setText(
-        "totalLeave",
-        total
-    );
-
-    setText(
-        "pendingLeave",
-        pending
-    );
-
-    setText(
-        "approvedLeave",
-        approved
-    );
-
-    setText(
-        "rejectedLeave",
-        rejected
-    );
-
-}
-
-
-/* ==================================================
-   APPROVE LEAVE
-================================================== */
-
-function approveLeave(
-    id
-) {
-
-    const request =
-        leaveRequests.find(
-            item =>
-                item.id === id
-        );
-
-
-    if (!request) {
-
-        return;
-
-    }
-
-
-    const employee =
-        getEmployeeById(
-            request.employeeId
-        );
-
-
-    const name =
-        employee
-            ? employee.name
-            : "این کارمند";
-
-
-    const confirmed =
-        confirm(
-            `درخواست «${name}» تأیید شود؟`
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    request.status =
-        "approved";
-
-
-    saveJSON(
-        "mirzaKhanLeaveRequests",
-        leaveRequests
-    );
-
-
-    renderLeave();
-
-
-    alert(
-        "درخواست با موفقیت تأیید شد."
-    );
-
-}
-
-
-/* ==================================================
-   REJECT LEAVE
-================================================== */
-
-function rejectLeave(
-    id
-) {
-
-    const request =
-        leaveRequests.find(
-            item =>
-                item.id === id
-        );
-
-
-    if (!request) {
-
-        return;
-
-    }
-
-
-    const employee =
-        getEmployeeById(
-            request.employeeId
-        );
-
-
-    const name =
-        employee
-            ? employee.name
-            : "این کارمند";
-
-
-    const confirmed =
-        confirm(
-            `درخواست «${name}» رد شود؟`
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    request.status =
-        "rejected";
-
-
-    saveJSON(
-        "mirzaKhanLeaveRequests",
-        leaveRequests
-    );
-
-
-    renderLeave();
-
-
-    alert(
-        "درخواست رد شد."
-    );
-
-}
-
-
-/* ==================================================
-   EDIT LEAVE
-================================================== */
-
-function editLeave(
-    id
-) {
-
-    const request =
-        leaveRequests.find(
-            item =>
-                item.id === id
-        );
-
-
-    if (!request) {
-
-        return;
-
-    }
-
-
-    openLeaveModal(
-        request
+            ? "درخواست تأیید شد."
+            : "درخواست رد شد."
     );
 
 }
@@ -3787,9 +3205,7 @@ function editLeave(
    DELETE LEAVE
 ================================================== */
 
-function deleteLeave(
-    id
-) {
+function deleteLeaveRequest(id) {
 
     const request =
         leaveRequests.find(
@@ -3799,34 +3215,18 @@ function deleteLeave(
 
 
     if (!request) {
-
         return;
-
     }
-
-
-    const employee =
-        getEmployeeById(
-            request.employeeId
-        );
-
-
-    const name =
-        employee
-            ? employee.name
-            : "این درخواست";
 
 
     const confirmed =
         confirm(
-            `آیا درخواست «${name}» حذف شود؟`
+            "آیا از حذف این درخواست مطمئن هستید؟"
         );
 
 
     if (!confirmed) {
-
         return;
-
     }
 
 
@@ -3837,11 +3237,7 @@ function deleteLeave(
         );
 
 
-    saveJSON(
-        "mirzaKhanLeaveRequests",
-        leaveRequests
-    );
-
+    saveLeaveRequests();
 
     renderLeave();
 
@@ -3849,78 +3245,8 @@ function deleteLeave(
 
 
 /* ==================================================
-   LEAVE INIT
+   LEAVE FILTERS
 ================================================== */
-
-function initLeave() {
-
-    populateLeaveEmployees();
-
-    renderLeave();
-
-    updateLeaveSummary();
-
-}
-
-
-/* ==================================================
-   LEAVE EVENTS
-================================================== */
-
-if (addLeaveBtn) {
-
-    addLeaveBtn.addEventListener(
-        "click",
-        () => {
-
-            openLeaveModal();
-
-        }
-    );
-
-}
-
-
-if (closeLeaveModalBtn) {
-
-    closeLeaveModalBtn.addEventListener(
-        "click",
-        closeLeaveModal
-    );
-
-}
-
-
-if (cancelLeaveModal) {
-
-    cancelLeaveModal.addEventListener(
-        "click",
-        closeLeaveModal
-    );
-
-}
-
-
-if (leaveModal) {
-
-    leaveModal.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target ===
-                leaveModal
-            ) {
-
-                closeLeaveModal();
-
-            }
-
-        }
-    );
-
-}
-
 
 if (leaveSearch) {
 
@@ -3957,6 +3283,529 @@ if (leaveDateFilter) {
     leaveDateFilter.addEventListener(
         "change",
         renderLeave
+    );
+
+}
+
+
+if (leaveModal) {
+
+    leaveModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                leaveModal
+            ) {
+
+                closeLeaveRequestModal();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   REPORTS
+================================================== */
+
+function getAllAttendanceRecords() {
+
+    const result = [];
+
+
+    Object.keys(
+        attendanceData
+    ).forEach(
+        date => {
+
+            const daily =
+                attendanceData[date];
+
+
+            Object.keys(daily).forEach(
+                employeeId => {
+
+                    const record =
+                        daily[employeeId];
+
+
+                    result.push({
+
+                        date,
+
+                        employeeId:
+                            Number(employeeId),
+
+                        ...record
+
+                    });
+
+                }
+            );
+
+        }
+    );
+
+
+    return result;
+
+}
+
+
+/* ==================================================
+   REPORT SUMMARY
+================================================== */
+
+function calculateReportData() {
+
+    const totalEmployees =
+        employees.length;
+
+
+    const activeEmployees =
+        employees.filter(
+            employee =>
+                employee.status ===
+                "active"
+        ).length;
+
+
+    const inactiveEmployees =
+        employees.filter(
+            employee =>
+                employee.status ===
+                "inactive"
+        ).length;
+
+
+    const attendanceRecords =
+        getAllAttendanceRecords();
+
+
+    const present =
+        attendanceRecords.filter(
+            record =>
+                record.status ===
+                "present"
+        ).length;
+
+
+    const late =
+        attendanceRecords.filter(
+            record =>
+                record.status ===
+                "late"
+        ).length;
+
+
+    const absent =
+        attendanceRecords.filter(
+            record =>
+                record.status ===
+                "absent"
+        ).length;
+
+
+    const attendanceLeave =
+        attendanceRecords.filter(
+            record =>
+                record.status ===
+                "leave"
+        ).length;
+
+
+    const totalLeaveRequests =
+        leaveRequests.length;
+
+
+    const approvedLeaves =
+        leaveRequests.filter(
+            request =>
+                request.status ===
+                "approved"
+        ).length;
+
+
+    const pendingLeaves =
+        leaveRequests.filter(
+            request =>
+                request.status ===
+                "pending"
+        ).length;
+
+
+    const rejectedLeaves =
+        leaveRequests.filter(
+            request =>
+                request.status ===
+                "rejected"
+        ).length;
+
+
+    const missions =
+        leaveRequests.filter(
+            request =>
+                request.type ===
+                "mission"
+        ).length;
+
+
+    return {
+
+        totalEmployees,
+
+        activeEmployees,
+
+        inactiveEmployees,
+
+        present,
+
+        late,
+
+        absent,
+
+        attendanceLeave,
+
+        totalLeaveRequests,
+
+        approvedLeaves,
+
+        pendingLeaves,
+
+        rejectedLeaves,
+
+        missions
+
+    };
+
+}
+
+
+/* ==================================================
+   RENDER REPORTS
+================================================== */
+
+function renderReports() {
+
+    const reportData =
+        calculateReportData();
+
+
+    setText(
+        "reportTotalEmployees",
+        reportData.totalEmployees
+    );
+
+
+    setText(
+        "reportActiveEmployees",
+        reportData.activeEmployees
+    );
+
+
+    setText(
+        "reportInactiveEmployees",
+        reportData.inactiveEmployees
+    );
+
+
+    setText(
+        "reportPresent",
+        reportData.present
+    );
+
+
+    setText(
+        "reportLate",
+        reportData.late
+    );
+
+
+    setText(
+        "reportAbsent",
+        reportData.absent
+    );
+
+
+    setText(
+        "reportLeave",
+        reportData.attendanceLeave
+    );
+
+
+    setText(
+        "reportTotalLeave",
+        reportData.totalLeaveRequests
+    );
+
+
+    setText(
+        "reportApprovedLeave",
+        reportData.approvedLeaves
+    );
+
+
+    setText(
+        "reportPendingLeave",
+        reportData.pendingLeaves
+    );
+
+
+    setText(
+        "reportRejectedLeave",
+        reportData.rejectedLeaves
+    );
+
+
+    setText(
+        "reportMissions",
+        reportData.missions
+    );
+
+
+    renderDepartmentReport();
+
+}
+
+
+/* ==================================================
+   DEPARTMENT REPORT
+================================================== */
+
+function renderDepartmentReport() {
+
+    const container =
+        document.getElementById(
+            "departmentReport"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const departments = {};
+
+
+    employees.forEach(
+        employee => {
+
+            const department =
+                employee.department ||
+                "بدون واحد";
+
+
+            if (!departments[department]) {
+
+                departments[department] = {
+
+                    total: 0,
+
+                    active: 0,
+
+                    inactive: 0
+
+                };
+
+            }
+
+
+            departments[
+                department
+            ].total++;
+
+
+            if (
+                employee.status ===
+                "active"
+            ) {
+
+                departments[
+                    department
+                ].active++;
+
+            } else {
+
+                departments[
+                    department
+                ].inactive++;
+
+            }
+
+        }
+    );
+
+
+    container.innerHTML =
+        "";
+
+
+    Object.keys(
+        departments
+    ).forEach(
+        department => {
+
+            const data =
+                departments[
+                    department
+                ];
+
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "report-department-row";
+
+
+            row.innerHTML = `
+
+                <strong>
+                    ${escapeHTML(
+                        department
+                    )}
+                </strong>
+
+                <span>
+                    کل: ${data.total}
+                </span>
+
+                <span>
+                    فعال: ${data.active}
+                </span>
+
+                <span>
+                    غیرفعال: ${data.inactive}
+                </span>
+
+            `;
+
+
+            container.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   EXPORT REPORT
+================================================== */
+
+function exportReports() {
+
+    const data =
+        calculateReportData();
+
+
+    const reportText = `
+
+گزارش منابع انسانی شرکت میرزا کوچک خان
+=====================================
+
+تعداد کل کارکنان:
+${data.totalEmployees}
+
+کارکنان فعال:
+${data.activeEmployees}
+
+کارکنان غیرفعال:
+${data.inactiveEmployees}
+
+-------------------------------------
+
+حضور:
+${data.present}
+
+تأخیر:
+${data.late}
+
+غیبت:
+${data.absent}
+
+مرخصی در حضور و غیاب:
+${data.attendanceLeave}
+
+-------------------------------------
+
+کل درخواست‌های مرخصی و مأموریت:
+${data.totalLeaveRequests}
+
+تأیید شده:
+${data.approvedLeaves}
+
+در انتظار بررسی:
+${data.pendingLeaves}
+
+رد شده:
+${data.rejectedLeaves}
+
+تعداد مأموریت:
+${data.missions}
+
+-------------------------------------
+
+تاریخ گزارش:
+${new Date().toLocaleDateString("fa-IR")}
+
+`;
+
+
+    const blob =
+        new Blob(
+            [reportText],
+            {
+                type:
+                    "text/plain;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "گزارش-منابع-انسانی-میرزا-کوچک-خان.txt";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
     );
 
 }
@@ -4005,7 +3854,7 @@ renderEmployees();
 
 updateSummary();
 
-updateLeaveSummary();
+initLeave();
 
 
 if (
@@ -4026,21 +3875,21 @@ if (
 if (
     document
         .getElementById(
-            "leavePage"
+            "reportsPage"
         )
         ?.classList.contains(
             "active-page"
         )
 ) {
 
-    initLeave();
+    renderReports();
 
 }
 
 
 /* ==================================================
-   GLOBAL FUNCTIONS
-   برای onclick های داخل جدول
+   GLOBAL EXPORTS
+   برای onclick های داخل HTML
 ================================================== */
 
 window.editEmployee =
@@ -4067,14 +3916,11 @@ window.setCurrentExit =
 window.clearAttendance =
     clearAttendance;
 
-window.approveLeave =
-    approveLeave;
+window.updateLeaveStatus =
+    updateLeaveStatus;
 
-window.rejectLeave =
-    rejectLeave;
+window.deleteLeaveRequest =
+    deleteLeaveRequest;
 
-window.editLeave =
-    editLeave;
-
-window.deleteLeave =
-    deleteLeave;
+window.exportReports =
+    exportReports;
