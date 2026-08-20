@@ -1,115 +1,244 @@
 /* =========================================================
    MIRZA KHAN HR
-   Complete Front-End HR Management System
-   ========================================================= */
+   Complete Front-End Application
+========================================================= */
 
 
-/* ================= STORAGE ================= */
+/* =========================================================
+   DATABASE
+========================================================= */
 
-const STORAGE_KEYS = {
-    employees: "mirza_hr_employees",
-    attendance: "mirza_hr_attendance",
-    leaves: "mirza_hr_leaves",
-    notifications: "mirza_hr_notifications",
-    activities: "mirza_hr_activities",
-    session: "mirza_hr_session"
+const STORAGE_KEY = "mirza_khan_hr_database";
+
+const defaultDatabase = {
+
+    users: [
+        {
+            id: "admin",
+            username: "admin",
+            password: "1234",
+            role: "admin",
+            employeeId: null
+        }
+    ],
+
+    employees: [],
+
+    attendance: [],
+
+    leaves: [],
+
+    activities: []
+
 };
 
 
-/* ================= HELPERS ================= */
+let db = loadDatabase();
 
-const $ = id => document.getElementById(id);
+let currentUser = null;
 
-function save(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
-}
 
-function load(key, fallback = []) {
-    try {
-        const data = localStorage.getItem(key);
-        return data ? JSON.parse(data) : fallback;
-    } catch {
-        return fallback;
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function loadDatabase() {
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (!saved) {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(defaultDatabase)
+        );
+
+        return JSON.parse(
+            JSON.stringify(defaultDatabase)
+        );
     }
+
+    try {
+
+        const data = JSON.parse(saved);
+
+        data.users ||= [];
+        data.employees ||= [];
+        data.attendance ||= [];
+        data.leaves ||= [];
+        data.activities ||= [];
+
+        return data;
+
+    } catch (error) {
+
+        console.error(error);
+
+        return JSON.parse(
+            JSON.stringify(defaultDatabase)
+        );
+
+    }
+
 }
+
+
+function saveDatabase() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(db)
+    );
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+
+function uid(prefix = "id") {
+
+    return (
+        prefix +
+        "_" +
+        Date.now() +
+        "_" +
+        Math.random()
+            .toString(36)
+            .substring(2, 8)
+    );
+
+}
+
 
 function today() {
+
     const d = new Date();
+
     return d.toISOString().split("T")[0];
+
 }
+
 
 function formatMoney(value) {
-    return Number(value || 0).toLocaleString("fa-IR") + " تومان";
+
+    return Number(value || 0)
+        .toLocaleString("fa-IR") + " تومان";
+
 }
 
-function escapeHTML(value) {
+
+function formatDate(date) {
+
+    if (!date) {
+        return "-";
+    }
+
+    try {
+
+        return new Date(date).toLocaleDateString(
+            "fa-IR"
+        );
+
+    } catch {
+
+        return date;
+
+    }
+
+}
+
+
+function escapeHtml(value) {
+
     return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+
 }
 
-function initials(name) {
-    if (!name) return "؟";
 
-    const parts = name.trim().split(/\s+/);
+function getEmployee(id) {
 
-    if (parts.length === 1) {
-        return parts[0].slice(0, 1);
-    }
-
-    return parts[0].slice(0, 1) + parts[1].slice(0, 1);
-}
-
-function calculateDays(start, end) {
-
-    if (!start || !end) return 0;
-
-    const a = new Date(start);
-    const b = new Date(end);
-
-    const diff = Math.floor(
-        (b - a) / (1000 * 60 * 60 * 24)
+    return db.employees.find(
+        employee => employee.id === id
     );
 
-    return diff >= 0 ? diff + 1 : 0;
 }
 
-function statusText(status) {
 
-    const map = {
-        active: "فعال",
-        inactive: "غیرفعال",
-        present: "حاضر",
-        absent: "غایب",
-        late: "تأخیر",
-        leave: "مرخصی",
-        pending: "در انتظار",
-        approved: "تأیید شده",
-        rejected: "رد شده"
-    };
+function getCurrentEmployee() {
 
-    return map[status] || status;
+    if (!currentUser?.employeeId) {
+        return null;
+    }
+
+    return getEmployee(currentUser.employeeId);
+
 }
 
-function showToast(title, message, type = "success") {
+
+function addActivity(text) {
+
+    db.activities.unshift({
+        id: uid("activity"),
+        text,
+        date: new Date().toISOString()
+    });
+
+    db.activities = db.activities.slice(0, 30);
+
+    saveDatabase();
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(
+    message,
+    title = "موفق",
+    type = "success"
+) {
 
     const toast = $("toast");
-    const icon = $("toastIcon");
+
+    if (!toast) {
+        return;
+    }
 
     $("toastTitle").textContent = title;
+
     $("toastMessage").textContent = message;
 
+    const icon = $("toastIcon");
+
     if (type === "error") {
+
         icon.style.background = "#fee2e2";
         icon.style.color = "#dc2626";
-        icon.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+
+        icon.innerHTML =
+            '<i class="fa-solid fa-xmark"></i>';
+
     } else {
+
         icon.style.background = "#dcfce7";
         icon.style.color = "#166534";
-        icon.innerHTML = '<i class="fa-solid fa-check"></i>';
+
+        icon.innerHTML =
+            '<i class="fa-solid fa-check"></i>';
+
     }
 
     toast.classList.add("show");
@@ -117,288 +246,163 @@ function showToast(title, message, type = "success") {
     clearTimeout(window.toastTimer);
 
     window.toastTimer = setTimeout(() => {
+
         toast.classList.remove("show");
-    }, 3200);
-}
 
-
-/* ================= INITIAL DATA ================= */
-
-function initializeData() {
-
-    let employees = load(STORAGE_KEYS.employees, null);
-
-    if (!employees) {
-
-        employees = [
-            {
-                id: "emp-1",
-                name: "علی احمدی",
-                nationalId: "0012345678",
-                birthDate: "1990-05-15",
-                phone: "09121234567",
-                code: "MK-1001",
-                department: "منابع انسانی",
-                position: "کارشناس منابع انسانی",
-                hireDate: "2020-03-10",
-                salary: 25000000,
-                status: "active",
-                username: "ali",
-                password: "1234",
-                payroll: {
-                    base: 25000000,
-                    overtime: 3000000,
-                    bonus: 1500000,
-                    insurance: 2500000,
-                    tax: 1000000,
-                    other: 300000
-                }
-            },
-            {
-                id: "emp-2",
-                name: "رضا محمدی",
-                nationalId: "0023456789",
-                birthDate: "1988-08-20",
-                phone: "09129876543",
-                code: "MK-1002",
-                department: "تولید",
-                position: "سرپرست تولید",
-                hireDate: "2019-06-01",
-                salary: 32000000,
-                status: "active",
-                username: "reza",
-                password: "1234",
-                payroll: {
-                    base: 32000000,
-                    overtime: 4500000,
-                    bonus: 2000000,
-                    insurance: 3200000,
-                    tax: 1500000,
-                    other: 400000
-                }
-            }
-        ];
-
-        save(STORAGE_KEYS.employees, employees);
-    }
-
-
-    if (!localStorage.getItem(STORAGE_KEYS.attendance)) {
-
-        const attendance = employees.map(emp => ({
-            id: "att-" + emp.id,
-            employeeId: emp.id,
-            date: today(),
-            entry: "08:00",
-            exit: "16:00",
-            status: "present"
-        }));
-
-        save(STORAGE_KEYS.attendance, attendance);
-    }
-
-
-    if (!localStorage.getItem(STORAGE_KEYS.leaves)) {
-        save(STORAGE_KEYS.leaves, []);
-    }
-
-
-    if (!localStorage.getItem(STORAGE_KEYS.notifications)) {
-        save(STORAGE_KEYS.notifications, []);
-    }
-
-
-    if (!localStorage.getItem(STORAGE_KEYS.activities)) {
-
-        save(STORAGE_KEYS.activities, [
-            {
-                text: "سامانه با موفقیت راه‌اندازی شد",
-                date: new Date().toLocaleString("fa-IR")
-            }
-        ]);
-
-    }
-}
-
-
-/* ================= SESSION ================= */
-
-let session = load(STORAGE_KEYS.session, null);
-
-let authMode = "employee";
-
-
-function setSession(data) {
-
-    session = data;
-
-    if (data) {
-        save(STORAGE_KEYS.session, data);
-    } else {
-        localStorage.removeItem(STORAGE_KEYS.session);
-    }
+    }, 3000);
 
 }
 
 
-function currentEmployee() {
+/* =========================================================
+   AUTH
+========================================================= */
 
-    if (!session || session.role !== "employee") {
-        return null;
-    }
+function showLogin() {
 
-    const employees = load(STORAGE_KEYS.employees);
+    $("loginBox").classList.remove("hidden");
 
-    return employees.find(
-        e => e.id === session.employeeId
-    ) || null;
+    $("registerBox").classList.add("hidden");
+
 }
 
 
-/* ================= AUTH ================= */
+function showRegister() {
 
-function setupAuth() {
+    $("loginBox").classList.add("hidden");
 
-    document.querySelectorAll(".auth-tab").forEach(tab => {
+    $("registerBox").classList.remove("hidden");
 
-        tab.addEventListener("click", () => {
-
-            document.querySelectorAll(".auth-tab")
-                .forEach(t => t.classList.remove("active"));
-
-            tab.classList.add("active");
-
-            authMode = tab.dataset.auth;
-
-        });
-
-    });
+}
 
 
-    $("togglePassword").addEventListener("click", () => {
+$("showRegisterBtn").addEventListener(
+    "click",
+    showRegister
+);
 
-        const input = $("loginPassword");
-        const icon = $("togglePassword i");
+
+$("showLoginBtn").addEventListener(
+    "click",
+    showLogin
+);
+
+
+/* PASSWORD TOGGLE */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(".password-toggle");
+
+        if (!button) {
+            return;
+        }
+
+        const input =
+            $(button.dataset.target);
+
+        if (!input) {
+            return;
+        }
 
         if (input.type === "password") {
+
             input.type = "text";
-            icon.className = "fa-solid fa-eye-slash";
+
+            button.innerHTML =
+                '<i class="fa-solid fa-eye-slash"></i>';
+
         } else {
+
             input.type = "password";
-            icon.className = "fa-solid fa-eye";
+
+            button.innerHTML =
+                '<i class="fa-solid fa-eye"></i>';
+
         }
 
-    });
+    }
+);
 
 
-    $("loginForm").addEventListener("submit", e => {
+/* LOGIN */
 
-        e.preventDefault();
+$("loginForm").addEventListener(
+    "submit",
+    function (event) {
 
-        const username = $("loginUsername").value.trim();
-        const password = $("loginPassword").value;
+        event.preventDefault();
 
-        if (authMode === "manager") {
+        const username =
+            $("loginUsername").value.trim();
 
-            if (
-                username === "admin" &&
-                password === "123456"
-            ) {
+        const password =
+            $("loginPassword").value;
 
-                setSession({
-                    role: "manager",
-                    username: "admin"
-                });
-
-                openMainApp();
-
-                showToast(
-                    "خوش آمدید",
-                    "با حساب مدیر وارد شدید."
-                );
-
-                return;
-            }
-
-            showToast(
-                "ورود ناموفق",
-                "نام کاربری یا رمز مدیر صحیح نیست.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        const employees = load(STORAGE_KEYS.employees);
-
-        const employee = employees.find(
-            e =>
-                e.username === username &&
-                e.password === password &&
-                e.status === "active"
+        const user = db.users.find(
+            item =>
+                item.username === username &&
+                item.password === password
         );
 
-
-        if (!employee) {
-
-            showToast(
-                "ورود ناموفق",
-                "اطلاعات ورود کارمند صحیح نیست.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        setSession({
-            role: "employee",
-            employeeId: employee.id,
-            username: employee.username
-        });
-
-
-        openMainApp();
-
-        showToast(
-            "خوش آمدید",
-            `${employee.name} عزیز، ورود شما موفق بود.`
-        );
-
-    });
-
-
-    $("showRegister").addEventListener("click", () => {
-
-        $("loginBox").classList.add("hidden");
-        $("registerBox").classList.remove("hidden");
-
-    });
-
-
-    $("backToLogin").addEventListener("click", () => {
-
-        $("registerBox").classList.add("hidden");
-        $("loginBox").classList.remove("hidden");
-
-    });
-
-
-    $("registerForm").addEventListener("submit", e => {
-
-        e.preventDefault();
-
-        const employees = load(STORAGE_KEYS.employees);
-
-        const username = $("registerUsername").value.trim();
-        const nationalId = $("registerNationalId").value.trim();
-
-        if (employees.some(e => e.username === username)) {
+        if (!user) {
 
             showToast(
+                "نام کاربری یا رمز عبور اشتباه است.",
                 "خطا",
+                "error"
+            );
+
+            return;
+        }
+
+        currentUser = user;
+
+        sessionStorage.setItem(
+            "mirza_current_user",
+            user.id
+        );
+
+        openApplication();
+
+    }
+);
+
+
+/* REGISTER */
+
+$("registerForm").addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault();
+
+        const name =
+            $("registerName").value.trim();
+
+        const nationalCode =
+            $("registerNationalCode").value.trim();
+
+        const username =
+            $("registerUsername").value.trim();
+
+        const password =
+            $("registerPassword").value;
+
+        if (
+            db.users.some(
+                user =>
+                    user.username.toLowerCase() ===
+                    username.toLowerCase()
+            )
+        ) {
+
+            showToast(
                 "این نام کاربری قبلاً استفاده شده است.",
+                "خطا",
                 "error"
             );
 
@@ -406,11 +410,16 @@ function setupAuth() {
         }
 
 
-        if (employees.some(e => e.nationalId === nationalId)) {
+        if (
+            db.employees.some(
+                employee =>
+                    employee.nationalCode === nationalCode
+            )
+        ) {
 
             showToast(
-                "خطا",
                 "این کد ملی قبلاً ثبت شده است.",
+                "خطا",
                 "error"
             );
 
@@ -420,21 +429,25 @@ function setupAuth() {
 
         const employee = {
 
-            id: "emp-" + Date.now(),
+            id: uid("employee"),
 
-            name: $("registerName").value.trim(),
+            name,
 
-            nationalId,
+            nationalCode,
 
-            birthDate: $("registerBirthDate").value,
+            code: "MK-" +
+                Math.floor(
+                    1000 +
+                    Math.random() * 9000
+                ),
 
-            phone: $("registerPhone").value.trim(),
+            birthDate: "",
 
-            code: "MK-" + Math.floor(1000 + Math.random() * 9000),
-
-            department: "تعیین نشده",
+            department: "اداری",
 
             position: "کارمند",
+
+            phone: "",
 
             hireDate: today(),
 
@@ -442,408 +455,378 @@ function setupAuth() {
 
             status: "active",
 
-            username,
-
-            password: $("registerPassword").value,
-
             payroll: {
+
                 base: 0,
                 overtime: 0,
                 bonus: 0,
                 insurance: 0,
                 tax: 0,
                 other: 0
+
             }
 
         };
 
 
-        employees.push(employee);
+        db.employees.push(employee);
 
-        save(STORAGE_KEYS.employees, employees);
+
+        const user = {
+
+            id: uid("user"),
+
+            username,
+
+            password,
+
+            role: "employee",
+
+            employeeId: employee.id
+
+        };
+
+
+        db.users.push(user);
+
 
         addActivity(
-            `ثبت‌نام کارمند جدید: ${employee.name}`
+            `کارمند جدید ${name} ثبت‌نام کرد.`
         );
+
+
+        saveDatabase();
 
 
         $("registerForm").reset();
 
-        $("registerBox").classList.add("hidden");
-        $("loginBox").classList.remove("hidden");
+        showLogin();
+
 
         showToast(
-            "ثبت‌نام موفق",
-            "حساب کاربری شما ساخته شد. اکنون وارد شوید."
+            "ثبت‌نام با موفقیت انجام شد. اکنون وارد شوید."
         );
 
-    });
+    }
+);
 
-}
 
+/* =========================================================
+   APPLICATION OPEN
+========================================================= */
 
-/* ================= OPEN APP ================= */
-
-function openMainApp() {
+function openApplication() {
 
     $("authPage").classList.add("hidden");
-    $("mainApp").classList.remove("hidden");
 
-    if (session.role === "manager") {
-        setupManagerUI();
-    } else {
-        setupEmployeeUI();
+    $("app").classList.remove("hidden");
+
+    setupUserInterface();
+
+    renderAll();
+
+}
+
+
+function setupUserInterface() {
+
+    if (!currentUser) {
+        return;
     }
 
-    updateTopUser();
-
-}
-
-
-function setupManagerUI() {
-
-    $("managerMenu").classList.remove("hidden");
-    $("employeeMenu").classList.add("hidden");
-
-    navigate("dashboard");
-
-    renderAllManager();
-
-}
+    const isAdmin =
+        currentUser.role === "admin";
 
 
-function setupEmployeeUI() {
-
-    $("managerMenu").classList.add("hidden");
-    $("employeeMenu").classList.remove("hidden");
-
-    navigate("employeeProfile");
-
-    renderAllEmployee();
-
-}
+    $("adminMenu")
+        .classList.toggle(
+            "hidden",
+            !isAdmin
+        );
 
 
-function updateTopUser() {
+    $("employeeMenu")
+        .classList.toggle(
+            "hidden",
+            isAdmin
+        );
 
-    if (session.role === "manager") {
 
-        $("topUserName").textContent = "مدیر سیستم";
-        $("topUserRole").textContent = "مدیریت منابع انسانی";
-        $("topUserAvatar").textContent = "م";
+    if (isAdmin) {
+
+        $("topUserName").textContent =
+            "مدیر سیستم";
+
+        $("topUserRole").textContent =
+            "مدیریت منابع انسانی";
+
+        $("topAvatar").textContent = "م";
+
+        navigateTo("dashboard");
 
     } else {
 
-        const emp = currentEmployee();
+        const employee =
+            getCurrentEmployee();
 
-        if (!emp) return;
+        $("topUserName").textContent =
+            employee?.name || "کارمند";
 
-        $("topUserName").textContent = emp.name;
-        $("topUserRole").textContent = emp.position;
-        $("topUserAvatar").textContent = initials(emp.name);
+        $("topUserRole").textContent =
+            employee?.position || "کارمند";
+
+        $("topAvatar").textContent =
+            employee?.name?.charAt(0) || "ک";
+
+        navigateTo("myProfile");
 
     }
 
 }
 
 
-/* ================= NAVIGATION ================= */
+/* LOGOUT */
 
-const pageInfo = {
+$("logoutBtn").addEventListener(
+    "click",
+    function () {
 
-    dashboard: ["داشبورد", "مدیریت جامع منابع انسانی"],
-    employees: ["کارکنان", "مدیریت اطلاعات کارکنان"],
-    attendance: ["حضور و غیاب", "مدیریت وضعیت حضور کارکنان"],
-    leave: ["مرخصی", "درخواست‌ها و سوابق مرخصی"],
-    payroll: ["حقوق و کسورات", "مدیریت حقوق و پرداختی"],
-    reports: ["گزارش‌ها", "گزارش‌های مدیریتی سامانه"],
-    notifications: ["اعلان‌ها", "اطلاعیه‌ها و رویدادها"],
+        currentUser = null;
 
-    employeeProfile: ["پروفایل من", "اطلاعات شخصی و شغلی"],
-    employeePayroll: ["حقوق و کسورات من", "مشاهده جزئیات پرداختی"],
-    employeeAttendance: ["حضور و غیاب من", "سوابق ورود و خروج"],
-    employeeLeave: ["مرخصی من", "درخواست و پیگیری مرخصی"]
+        sessionStorage.removeItem(
+            "mirza_current_user"
+        );
 
-};
+        $("app").classList.add("hidden");
 
+        $("authPage").classList.remove("hidden");
 
-function navigate(page) {
+        $("loginForm").reset();
 
-    document.querySelectorAll(".page")
-        .forEach(p => p.classList.remove("active-page"));
+        showLogin();
 
-    const target = $("page-" + page);
+        showToast("با موفقیت خارج شدید.");
 
-    if (!target) return;
-
-    target.classList.add("active-page");
+    }
+);
 
 
-    document.querySelectorAll(".menu-item")
-        .forEach(btn => {
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
-            btn.classList.toggle(
-                "active",
-                btn.dataset.page === page
+function navigateTo(page) {
+
+    document
+        .querySelectorAll(".page")
+        .forEach(section => {
+
+            section.classList.remove(
+                "active-page"
             );
 
         });
 
 
-    if (pageInfo[page]) {
+    const target =
+        $("page-" + page);
 
-        $("pageTitle").textContent = pageInfo[page][0];
-        $("pageSubtitle").textContent = pageInfo[page][1];
+    if (!target) {
+        return;
+    }
+
+    target.classList.add(
+        "active-page"
+    );
+
+
+    document
+        .querySelectorAll(".menu-item")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.page === page
+            );
+
+        });
+
+
+    const titles = {
+
+        dashboard: [
+            "داشبورد",
+            "مدیریت جامع منابع انسانی"
+        ],
+
+        employees: [
+            "مدیریت کارکنان",
+            "ثبت و مدیریت اطلاعات کارکنان"
+        ],
+
+        attendance: [
+            "حضور و غیاب",
+            "مدیریت حضور کارکنان"
+        ],
+
+        leave: [
+            "مدیریت مرخصی",
+            "بررسی درخواست‌های مرخصی"
+        ],
+
+        payroll: [
+            "حقوق و کسورات",
+            "مدیریت پرداختی کارکنان"
+        ],
+
+        reports: [
+            "گزارش‌ها",
+            "گزارش مدیریتی سامانه"
+        ],
+
+        myProfile: [
+            "پروفایل من",
+            "اطلاعات شخصی و شغلی"
+        ],
+
+        myAttendance: [
+            "حضور و غیاب من",
+            "سوابق حضور و غیاب"
+        ],
+
+        myLeave: [
+            "مرخصی من",
+            "درخواست و پیگیری مرخصی"
+        ],
+
+        myPayroll: [
+            "حقوق من",
+            "مشاهده حقوق و کسورات"
+        ]
+
+    };
+
+
+    if (titles[page]) {
+
+        $("pageTitle").textContent =
+            titles[page][0];
+
+        $("pageSubtitle").textContent =
+            titles[page][1];
 
     }
 
 
-    $("sidebar").classList.remove("open");
-    $("menuOverlay").classList.remove("show");
-
-}
-
-
-/* ================= NAV BUTTONS ================= */
-
-function setupNavigation() {
-
-    document.addEventListener("click", e => {
-
-        const button = e.target.closest("[data-page]");
-
-        if (!button) return;
-
-        const page = button.dataset.page;
-
-        if (
-            session &&
-            session.role === "manager" &&
-            [
-                "dashboard",
-                "employees",
-                "attendance",
-                "leave",
-                "payroll",
-                "reports",
-                "notifications"
-            ].includes(page)
-        ) {
-
-            navigate(page);
-            return;
-
-        }
-
-
-        if (
-            session &&
-            session.role === "employee" &&
-            [
-                "employeeProfile",
-                "employeePayroll",
-                "employeeAttendance",
-                "employeeLeave"
-            ].includes(page)
-        ) {
-
-            navigate(page);
-            return;
-
-        }
-
-    });
-
-
-    $("mobileMenuBtn").addEventListener("click", () => {
-
-        $("sidebar").classList.add("open");
-        $("menuOverlay").classList.add("show");
-
-    });
-
-
-    $("menuOverlay").addEventListener("click", () => {
+    if (window.innerWidth <= 1000) {
 
         $("sidebar").classList.remove("open");
+
         $("menuOverlay").classList.remove("show");
 
-    });
+    }
+
+
+    renderPage(page);
 
 }
 
 
-/* ================= LOGOUT ================= */
+document.addEventListener(
+    "click",
+    function (event) {
 
-function setupLogout() {
+        const button =
+            event.target.closest("[data-page]");
 
-    $("logoutButton").addEventListener("click", () => {
-
-        setSession(null);
-
-        $("mainApp").classList.add("hidden");
-        $("authPage").classList.remove("hidden");
-
-        $("loginForm").reset();
-
-        showToast(
-            "خروج",
-            "با موفقیت از سامانه خارج شدید."
-        );
-
-    });
-
-}
-
-
-/* ================= PROFILE BUTTON ================= */
-
-function setupProfile() {
-
-    $("profileButton").addEventListener("click", () => {
-
-        if (session.role === "manager") {
-
-            $("modalProfileName").textContent = "مدیر سیستم";
-            $("modalProfileRole").textContent = "مدیریت منابع انسانی";
-            $("modalProfileUsername").textContent = "admin";
-            $("modalProfileRole2").textContent = "مدیر";
-
-        } else {
-
-            const emp = currentEmployee();
-
-            if (!emp) return;
-
-            $("modalProfileName").textContent = emp.name;
-            $("modalProfileRole").textContent = emp.position;
-            $("modalProfileUsername").textContent = emp.username;
-            $("modalProfileRole2").textContent = "کارمند";
-
-            $("modalProfileAvatar").textContent =
-                initials(emp.name);
-
+        if (!button) {
+            return;
         }
 
-        openModal("profileModal");
+        const page =
+            button.dataset.page;
 
-    });
-
-
-    $("notificationButton").addEventListener("click", () => {
-
-        if (session.role === "manager") {
-            navigate("notifications");
-        } else {
-            navigate("employeeLeave");
+        if (!page) {
+            return;
         }
 
-    });
+        navigateTo(page);
 
-}
-
-
-/* ================= MODALS ================= */
-
-function openModal(id) {
-    $(id).classList.add("open");
-}
-
-function closeModal(id) {
-    $(id).classList.remove("open");
-}
-
-function setupModals() {
-
-    document.addEventListener("click", e => {
-
-        const close = e.target.closest("[data-close]");
-
-        if (close) {
-            closeModal(close.dataset.close);
-        }
-
-    });
+    }
+);
 
 
-    document.querySelectorAll(".modal").forEach(modal => {
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-        modal.addEventListener("click", e => {
+$("mobileMenuBtn").addEventListener(
+    "click",
+    function () {
 
-            if (e.target === modal) {
-                modal.classList.remove("open");
-            }
+        $("sidebar").classList.add("open");
 
-        });
+        $("menuOverlay").classList.add("show");
 
-    });
-
-}
-
-
-/* ================= ACTIVITIES ================= */
-
-function addActivity(text) {
-
-    const activities = load(
-        STORAGE_KEYS.activities,
-        []
-    );
-
-    activities.unshift({
-        text,
-        date: new Date().toLocaleString("fa-IR")
-    });
-
-    save(
-        STORAGE_KEYS.activities,
-        activities.slice(0, 30)
-    );
-
-}
+    }
+);
 
 
-/* ================= EMPLOYEE CRUD ================= */
+$("menuOverlay").addEventListener(
+    "click",
+    function () {
 
-function setupEmployeeManagement() {
+        $("sidebar").classList.remove("open");
 
-    $("addEmployeeBtn").addEventListener("click", () => {
+        $("menuOverlay").classList.remove("show");
+
+    }
+);
+
+
+/* =========================================================
+   EMPLOYEES
+========================================================= */
+
+$("addEmployeeBtn").addEventListener(
+    "click",
+    function () {
 
         $("employeeModalTitle").textContent =
             "افزودن کارمند";
 
         $("employeeForm").reset();
+
         $("employeeId").value = "";
 
         openModal("employeeModal");
 
-    });
+    }
+);
 
 
-    $("employeeForm").addEventListener("submit", e => {
+$("employeeForm").addEventListener(
+    "submit",
+    function (event) {
 
-        e.preventDefault();
+        event.preventDefault();
 
-        const employees = load(STORAGE_KEYS.employees);
+        const id =
+            $("employeeId").value;
 
-        const id = $("employeeId").value;
+        const employeeData = {
 
+            name:
+                $("employeeName").value.trim(),
 
-        const data = {
-
-            name: $("employeeName").value.trim(),
-
-            nationalId:
-                $("employeeNationalId").value.trim(),
-
-            birthDate:
-                $("employeeBirthDate").value,
-
-            phone:
-                $("employeePhone").value.trim(),
+            nationalCode:
+                $("employeeNationalCode").value.trim(),
 
             code:
                 $("employeeCode").value.trim(),
+
+            birthDate:
+                $("employeeBirthDate").value,
 
             department:
                 $("employeeDepartment").value,
@@ -851,17 +834,16 @@ function setupEmployeeManagement() {
             position:
                 $("employeePosition").value.trim(),
 
+            phone:
+                $("employeePhone").value.trim(),
+
             hireDate:
                 $("employeeHireDate").value,
 
             salary:
-                Number($("employeeSalary").value || 0),
-
-            username:
-                $("employeeUsername").value.trim(),
-
-            password:
-                $("employeePassword").value,
+                Number(
+                    $("employeeSalary").value || 0
+                ),
 
             status:
                 $("employeeStatus").value
@@ -869,1217 +851,144 @@ function setupEmployeeManagement() {
         };
 
 
-        if (!data.username) {
-
-            showToast(
-                "خطا",
-                "نام کاربری را وارد کنید.",
-                "error"
-            );
-
-            return;
-        }
-
-
         if (id) {
 
-            const index = employees.findIndex(
-                e => e.id === id
-            );
+            const employee =
+                getEmployee(id);
 
-            if (index === -1) return;
-
-
-            employees[index] = {
-
-                ...employees[index],
-
-                ...data,
-
-                payroll: employees[index].payroll || {
-                    base: data.salary,
-                    overtime: 0,
-                    bonus: 0,
-                    insurance: 0,
-                    tax: 0,
-                    other: 0
-                }
-
-            };
-
-
-            if (
-                !employees[index].payroll.base ||
-                employees[index].payroll.base === 0
-            ) {
-                employees[index].payroll.base = data.salary;
+            if (!employee) {
+                return;
             }
 
-
-            addActivity(
-                `ویرایش اطلاعات ${data.name}`
+            Object.assign(
+                employee,
+                employeeData
             );
 
+            addActivity(
+                `اطلاعات ${employee.name} ویرایش شد.`
+            );
 
             showToast(
-                "ذخیره شد",
-                "اطلاعات کارمند به‌روزرسانی شد."
+                "اطلاعات کارمند ویرایش شد."
             );
 
         } else {
 
-            if (
-                employees.some(
-                    e => e.username === data.username
-                )
-            ) {
-
-                showToast(
-                    "خطا",
-                    "این نام کاربری قبلاً وجود دارد.",
-                    "error"
-                );
-
-                return;
-            }
-
-
             const employee = {
 
-                id: "emp-" + Date.now(),
+                id: uid("employee"),
 
-                ...data,
+                ...employeeData,
 
                 payroll: {
-                    base: data.salary,
+
+                    base: employeeData.salary,
                     overtime: 0,
                     bonus: 0,
                     insurance: 0,
                     tax: 0,
                     other: 0
+
                 }
 
             };
 
 
-            employees.push(employee);
+            db.employees.push(employee);
+
 
             addActivity(
-                `افزودن کارمند جدید: ${data.name}`
+                `کارمند ${employee.name} اضافه شد.`
             );
 
 
             showToast(
-                "کارمند اضافه شد",
-                "اطلاعات کارمند با موفقیت ثبت شد."
+                "کارمند با موفقیت اضافه شد."
             );
 
         }
 
 
-        save(
-            STORAGE_KEYS.employees,
-            employees
-        );
+        saveDatabase();
 
         closeModal("employeeModal");
 
-        renderAllManager();
+        renderAll();
 
-    });
+    }
+);
 
-}
+
+/* EMPLOYEE SEARCH */
+
+$("employeeSearch").addEventListener(
+    "input",
+    renderEmployees
+);
+
+$("employeeDepartmentFilter").addEventListener(
+    "change",
+    renderEmployees
+);
 
 
-/* ================= EMPLOYEE TABLE ================= */
+/* =========================================================
+   RENDER EMPLOYEES
+========================================================= */
 
-function renderEmployeesTable() {
+function renderEmployees() {
 
-    const employees = load(STORAGE_KEYS.employees);
+    const body =
+        $("employeesTableBody");
+
+    if (!body) {
+        return;
+    }
+
 
     const search =
-        $("employeeSearch").value.trim().toLowerCase();
+        $("employeeSearch")
+            .value
+            .trim()
+            .toLowerCase();
+
 
     const department =
-        $("employeeDepartmentFilter").value;
+        $("employeeDepartmentFilter")
+            .value;
 
 
-    const filtered = employees.filter(emp => {
+    const employees =
+        db.employees.filter(employee => {
 
-        const matchesSearch =
-            !search ||
-            emp.name.toLowerCase().includes(search) ||
-            emp.nationalId.includes(search) ||
-            emp.code.toLowerCase().includes(search) ||
-            emp.position.toLowerCase().includes(search);
-
-        const matchesDepartment =
-            !department ||
-            emp.department === department;
-
-        return matchesSearch && matchesDepartment;
-
-    });
+            const matchesSearch =
+                !search ||
+                employee.name.toLowerCase().includes(search) ||
+                employee.nationalCode.includes(search) ||
+                employee.code.toLowerCase().includes(search);
 
 
-    const body = $("employeesTableBody");
+            const matchesDepartment =
+                !department ||
+                employee.department === department;
 
-    if (!filtered.length) {
+
+            return (
+                matchesSearch &&
+                matchesDepartment
+            );
+
+        });
+
+
+    if (!employees.length) {
 
         body.innerHTML = `
             <tr>
                 <td colspan="6">
                     <div class="empty-state">
-                        <i class="fa-solid fa-users-slash"></i>
-                        <div>کارمندی پیدا نشد.</div>
-                    </div>
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    body.innerHTML = filtered.map(emp => `
-
-        <tr>
-
-            <td>
-
-                <div class="employee-cell">
-
-                    <span class="table-avatar">
-                        ${escapeHTML(initials(emp.name))}
-                    </span>
-
-                    <div>
-                        <strong>
-                            ${escapeHTML(emp.name)}
-                        </strong>
-
-                        <small>
-                            ${escapeHTML(emp.phone || "-")}
-                        </small>
-                    </div>
-
-                </div>
-
-            </td>
-
-            <td>
-                ${escapeHTML(emp.code)}
-            </td>
-
-            <td>
-                ${escapeHTML(emp.department)}
-            </td>
-
-            <td>
-                ${escapeHTML(emp.position)}
-            </td>
-
-            <td>
-
-                <span class="status ${emp.status}">
-                    ${statusText(emp.status)}
-                </span>
-
-            </td>
-
-            <td>
-
-                <div class="action-buttons">
-
-                    <button
-                        class="action-btn edit"
-                        title="ویرایش"
-                        data-action="editEmployee"
-                        data-id="${emp.id}"
-                    >
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
-
-                    <button
-                        class="action-btn view"
-                        title="مشاهده"
-                        data-action="viewEmployee"
-                        data-id="${emp.id}"
-                    >
-                        <i class="fa-solid fa-eye"></i>
-                    </button>
-
-                    <button
-                        class="action-btn delete"
-                        title="حذف"
-                        data-action="deleteEmployee"
-                        data-id="${emp.id}"
-                    >
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-
-                </div>
-
-            </td>
-
-        </tr>
-
-    `).join("");
-
-}
-
-
-function editEmployee(id) {
-
-    const employees = load(STORAGE_KEYS.employees);
-
-    const emp = employees.find(
-        e => e.id === id
-    );
-
-    if (!emp) return;
-
-
-    $("employeeModalTitle").textContent =
-        "ویرایش کارمند";
-
-    $("employeeId").value = emp.id;
-
-    $("employeeName").value = emp.name;
-    $("employeeNationalId").value = emp.nationalId || "";
-    $("employeeBirthDate").value = emp.birthDate || "";
-    $("employeePhone").value = emp.phone || "";
-    $("employeeCode").value = emp.code || "";
-    $("employeeDepartment").value = emp.department || "";
-    $("employeePosition").value = emp.position || "";
-    $("employeeHireDate").value = emp.hireDate || "";
-    $("employeeSalary").value = emp.salary || 0;
-    $("employeeUsername").value = emp.username || "";
-    $("employeePassword").value = emp.password || "";
-    $("employeeStatus").value = emp.status || "active";
-
-    openModal("employeeModal");
-
-}
-
-
-function deleteEmployee(id) {
-
-    const employees = load(STORAGE_KEYS.employees);
-
-    const emp = employees.find(
-        e => e.id === id
-    );
-
-    if (!emp) return;
-
-
-    if (
-        !confirm(
-            `آیا از حذف ${emp.name} مطمئن هستید؟`
-        )
-    ) {
-        return;
-    }
-
-
-    save(
-        STORAGE_KEYS.employees,
-        employees.filter(e => e.id !== id)
-    );
-
-
-    save(
-        STORAGE_KEYS.attendance,
-        load(STORAGE_KEYS.attendance)
-            .filter(a => a.employeeId !== id)
-    );
-
-
-    addActivity(
-        `حذف کارمند: ${emp.name}`
-    );
-
-
-    showToast(
-        "حذف شد",
-        "کارمند از سامانه حذف شد."
-    );
-
-
-    renderAllManager();
-
-}
-
-
-function viewEmployee(id) {
-
-    const employees = load(STORAGE_KEYS.employees);
-
-    const emp = employees.find(
-        e => e.id === id
-    );
-
-    if (!emp) return;
-
-
-    $("modalProfileName").textContent = emp.name;
-    $("modalProfileRole").textContent =
-        `${emp.position} - ${emp.department}`;
-
-    $("modalProfileUsername").textContent =
-        emp.username || "-";
-
-    $("modalProfileRole2").textContent =
-        formatMoney(emp.salary);
-
-    $("modalProfileAvatar").textContent =
-        initials(emp.name);
-
-
-    openModal("profileModal");
-
-}
-
-
-/* ================= EMPLOYEE TABLE EVENTS ================= */
-
-function setupEmployeeTableActions() {
-
-    document.addEventListener("click", e => {
-
-        const btn =
-            e.target.closest("[data-action]");
-
-        if (!btn) return;
-
-        const id = btn.dataset.id;
-
-        if (btn.dataset.action === "editEmployee") {
-            editEmployee(id);
-        }
-
-        if (btn.dataset.action === "deleteEmployee") {
-            deleteEmployee(id);
-        }
-
-        if (btn.dataset.action === "viewEmployee") {
-            viewEmployee(id);
-        }
-
-        if (btn.dataset.action === "editPayroll") {
-            editPayroll(id);
-        }
-
-        if (btn.dataset.action === "attendance") {
-            changeAttendance(id);
-        }
-
-        if (btn.dataset.action === "approveLeave") {
-            updateLeaveStatus(id, "approved");
-        }
-
-        if (btn.dataset.action === "rejectLeave") {
-            updateLeaveStatus(id, "rejected");
-        }
-
-    });
-
-
-    $("employeeSearch").addEventListener(
-        "input",
-        renderEmployeesTable
-    );
-
-
-    $("employeeDepartmentFilter").addEventListener(
-        "change",
-        renderEmployeesTable
-    );
-
-}
-
-
-/* ================= ATTENDANCE ================= */
-
-function setupAttendance() {
-
-    $("attendanceDate").value = today();
-
-    $("attendanceDate").addEventListener(
-        "change",
-        renderAttendance
-    );
-
-}
-
-
-function renderAttendance() {
-
-    const employees = load(STORAGE_KEYS.employees);
-
-    const allAttendance =
-        load(STORAGE_KEYS.attendance);
-
-    const date =
-        $("attendanceDate").value || today();
-
-
-    const body = $("attendanceTableBody");
-
-
-    const rows = employees.map(emp => {
-
-        let record = allAttendance.find(
-            a =>
-                a.employeeId === emp.id &&
-                a.date === date
-        );
-
-
-        if (!record) {
-
-            record = {
-                id: "att-" + emp.id + "-" + date,
-                employeeId: emp.id,
-                date,
-                entry: "",
-                exit: "",
-                status: "absent"
-            };
-
-            allAttendance.push(record);
-
-        }
-
-
-        return {
-            emp,
-            record
-        };
-
-    });
-
-
-    save(
-        STORAGE_KEYS.attendance,
-        allAttendance
-    );
-
-
-    let present = 0;
-    let absent = 0;
-    let late = 0;
-    let leave = 0;
-
-
-    body.innerHTML = rows.map(({ emp, record }) => {
-
-        if (record.status === "present") present++;
-        if (record.status === "absent") absent++;
-        if (record.status === "late") late++;
-        if (record.status === "leave") leave++;
-
-
-        return `
-
-            <tr>
-
-                <td>
-
-                    <div class="employee-cell">
-
-                        <span class="table-avatar">
-                            ${escapeHTML(initials(emp.name))}
-                        </span>
-
-                        <strong>
-                            ${escapeHTML(emp.name)}
-                        </strong>
-
-                    </div>
-
-                </td>
-
-                <td>
-                    ${record.entry || "-"}
-                </td>
-
-                <td>
-                    ${record.exit || "-"}
-                </td>
-
-                <td>
-                    <span class="status ${record.status}">
-                        ${statusText(record.status)}
-                    </span>
-                </td>
-
-                <td>
-
-                    <div class="action-buttons">
-
-                        <button
-                            class="action-btn success"
-                            title="حاضر"
-                            data-action="attendance"
-                            data-id="${emp.id}"
-                            data-status="present"
-                        >
-                            <i class="fa-solid fa-check"></i>
-                        </button>
-
-                        <button
-                            class="action-btn warning"
-                            title="تأخیر"
-                            data-action="attendance"
-                            data-id="${emp.id}"
-                            data-status="late"
-                        >
-                            <i class="fa-solid fa-clock"></i>
-                        </button>
-
-                        <button
-                            class="action-btn delete"
-                            title="غایب"
-                            data-action="attendance"
-                            data-id="${emp.id}"
-                            data-status="absent"
-                        >
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-
-                        <button
-                            class="action-btn view"
-                            title="مرخصی"
-                            data-action="attendance"
-                            data-id="${emp.id}"
-                            data-status="leave"
-                        >
-                            <i class="fa-solid fa-calendar"></i>
-                        </button>
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    }).join("");
-
-
-    $("attendancePresent").textContent = present;
-    $("attendanceAbsent").textContent = absent;
-    $("attendanceLate").textContent = late;
-    $("attendanceLeave").textContent = leave;
-
-}
-
-
-function changeAttendance(id) {
-
-    const event =
-        window.event;
-
-    if (!event) return;
-
-    const button =
-        event.target.closest("[data-action='attendance']");
-
-    if (!button) return;
-
-    const status =
-        button.dataset.status;
-
-    const date =
-        $("attendanceDate").value || today();
-
-    const attendance =
-        load(STORAGE_KEYS.attendance);
-
-    let record =
-        attendance.find(
-            a =>
-                a.employeeId === id &&
-                a.date === date
-        );
-
-
-    if (!record) {
-
-        record = {
-            id: "att-" + Date.now(),
-            employeeId: id,
-            date,
-            entry: "",
-            exit: "",
-            status
-        };
-
-        attendance.push(record);
-
-    } else {
-
-        record.status = status;
-
-    }
-
-
-    if (status === "present") {
-
-        record.entry =
-            record.entry || "08:00";
-
-        record.exit =
-            record.exit || "16:00";
-
-    }
-
-    if (status === "late") {
-
-        record.entry =
-            record.entry || "08:35";
-
-        record.exit =
-            record.exit || "16:00";
-
-    }
-
-    if (status === "absent") {
-
-        record.entry = "";
-        record.exit = "";
-
-    }
-
-
-    save(
-        STORAGE_KEYS.attendance,
-        attendance
-    );
-
-
-    const employees =
-        load(STORAGE_KEYS.employees);
-
-    const emp =
-        employees.find(e => e.id === id);
-
-
-    addActivity(
-        `وضعیت حضور ${emp?.name || ""} به ${statusText(status)} تغییر کرد`
-    );
-
-
-    showToast(
-        "ثبت شد",
-        `وضعیت ${emp?.name || "کارمند"} ثبت شد.`
-    );
-
-
-    renderAttendance();
-
-}
-
-
-/* ================= PAYROLL ================= */
-
-function renderPayroll() {
-
-    const employees =
-        load(STORAGE_KEYS.employees);
-
-    let gross = 0;
-    let deductions = 0;
-    let net = 0;
-
-
-    const body = $("payrollTableBody");
-
-
-    body.innerHTML = employees.map(emp => {
-
-        const p = emp.payroll || {
-            base: emp.salary || 0,
-            overtime: 0,
-            bonus: 0,
-            insurance: 0,
-            tax: 0,
-            other: 0
-        };
-
-
-        const grossEmp =
-            Number(p.base || 0) +
-            Number(p.overtime || 0) +
-            Number(p.bonus || 0);
-
-
-        const ded =
-            Number(p.insurance || 0) +
-            Number(p.tax || 0) +
-            Number(p.other || 0);
-
-
-        const netEmp =
-            grossEmp - ded;
-
-
-        gross += grossEmp;
-        deductions += ded;
-        net += netEmp;
-
-
-        return `
-
-            <tr>
-
-                <td>
-                    <div class="employee-cell">
-                        <span class="table-avatar">
-                            ${escapeHTML(initials(emp.name))}
-                        </span>
-                        <strong>
-                            ${escapeHTML(emp.name)}
-                        </strong>
-                    </div>
-                </td>
-
-                <td>${formatMoney(p.base)}</td>
-
-                <td>${formatMoney(p.overtime)}</td>
-
-                <td>${formatMoney(p.bonus)}</td>
-
-                <td>${formatMoney(ded)}</td>
-
-                <td>
-                    <strong>
-                        ${formatMoney(netEmp)}
-                    </strong>
-                </td>
-
-                <td>
-
-                    <button
-                        class="action-btn edit"
-                        data-action="editPayroll"
-                        data-id="${emp.id}"
-                        title="ویرایش حقوق"
-                    >
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    }).join("");
-
-
-    $("grossPayroll").textContent =
-        formatMoney(gross);
-
-    $("deductionPayroll").textContent =
-        formatMoney(deductions);
-
-    $("netPayroll").textContent =
-        formatMoney(net);
-
-}
-
-
-function editPayroll(id) {
-
-    const employees =
-        load(STORAGE_KEYS.employees);
-
-    const emp =
-        employees.find(e => e.id === id);
-
-    if (!emp) return;
-
-
-    const p = emp.payroll || {
-        base: emp.salary || 0,
-        overtime: 0,
-        bonus: 0,
-        insurance: 0,
-        tax: 0,
-        other: 0
-    };
-
-
-    $("payrollEmployeeId").value = emp.id;
-
-    $("payrollBase").value = p.base || 0;
-    $("payrollOvertime").value = p.overtime || 0;
-    $("payrollBonus").value = p.bonus || 0;
-    $("payrollInsurance").value = p.insurance || 0;
-    $("payrollTax").value = p.tax || 0;
-    $("payrollOther").value = p.other || 0;
-
-
-    updatePayrollPreview();
-
-    openModal("payrollModal");
-
-}
-
-
-function updatePayrollPreview() {
-
-    const base =
-        Number($("payrollBase").value || 0);
-
-    const overtime =
-        Number($("payrollOvertime").value || 0);
-
-    const bonus =
-        Number($("payrollBonus").value || 0);
-
-    const insurance =
-        Number($("payrollInsurance").value || 0);
-
-    const tax =
-        Number($("payrollTax").value || 0);
-
-    const other =
-        Number($("payrollOther").value || 0);
-
-
-    const net =
-        base +
-        overtime +
-        bonus -
-        insurance -
-        tax -
-        other;
-
-
-    $("payrollNetPreview").textContent =
-        formatMoney(net);
-
-}
-
-
-function setupPayroll() {
-
-    [
-        "payrollBase",
-        "payrollOvertime",
-        "payrollBonus",
-        "payrollInsurance",
-        "payrollTax",
-        "payrollOther"
-    ].forEach(id => {
-
-        $(id).addEventListener(
-            "input",
-            updatePayrollPreview
-        );
-
-    });
-
-
-    $("payrollForm").addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            const employees =
-                load(STORAGE_KEYS.employees);
-
-            const id =
-                $("payrollEmployeeId").value;
-
-            const emp =
-                employees.find(e => e.id === id);
-
-            if (!emp) return;
-
-
-            emp.salary =
-                Number($("payrollBase").value || 0);
-
-
-            emp.payroll = {
-
-                base:
-                    Number($("payrollBase").value || 0),
-
-                overtime:
-                    Number($("payrollOvertime").value || 0),
-
-                bonus:
-                    Number($("payrollBonus").value || 0),
-
-                insurance:
-                    Number($("payrollInsurance").value || 0),
-
-                tax:
-                    Number($("payrollTax").value || 0),
-
-                other:
-                    Number($("payrollOther").value || 0)
-
-            };
-
-
-            save(
-                STORAGE_KEYS.employees,
-                employees
-            );
-
-
-            addActivity(
-                `حقوق ${emp.name} به‌روزرسانی شد`
-            );
-
-
-            closeModal("payrollModal");
-
-            showToast(
-                "ذخیره شد",
-                "اطلاعات حقوق با موفقیت ثبت شد."
-            );
-
-
-            renderPayroll();
-            renderEmployeePayroll();
-
-        }
-    );
-
-}
-
-
-/* ================= LEAVE ================= */
-
-function setupLeave() {
-
-    $("addLeaveBtn").addEventListener(
-        "click",
-        () => openLeaveModal(true)
-    );
-
-
-    $("employeeAddLeaveBtn").addEventListener(
-        "click",
-        () => openLeaveModal(false)
-    );
-
-
-    $("leaveForm").addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            const leaves =
-                load(STORAGE_KEYS.leaves);
-
-            let employeeId;
-
-            if (session.role === "manager") {
-
-                employeeId =
-                    $("leaveEmployee").value;
-
-            } else {
-
-                employeeId =
-                    session.employeeId;
-
-            }
-
-
-            const start =
-                $("leaveStart").value;
-
-            const end =
-                $("leaveEnd").value;
-
-
-            if (
-                !employeeId ||
-                !start ||
-                !end
-            ) {
-
-                showToast(
-                    "خطا",
-                    "اطلاعات درخواست را کامل کنید.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const days =
-                calculateDays(start, end);
-
-
-            if (days <= 0) {
-
-                showToast(
-                    "خطا",
-                    "تاریخ پایان باید بعد از شروع باشد.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const leave = {
-
-                id: "leave-" + Date.now(),
-
-                employeeId,
-
-                type:
-                    $("leaveType").value,
-
-                start,
-
-                end,
-
-                days,
-
-                description:
-                    $("leaveDescription").value.trim(),
-
-                status:
-                    "pending",
-
-                createdAt:
-                    new Date().toISOString()
-
-            };
-
-
-            leaves.push(leave);
-
-            save(
-                STORAGE_KEYS.leaves,
-                leaves
-            );
-
-
-            const employees =
-                load(STORAGE_KEYS.employees);
-
-            const emp =
-                employees.find(e => e.id === employeeId);
-
-
-            addActivity(
-                `درخواست مرخصی ${emp?.name || ""} ثبت شد`
-            );
-
-
-            closeModal("leaveModal");
-
-            $("leaveForm").reset();
-
-
-            showToast(
-                "درخواست ثبت شد",
-                "درخواست مرخصی برای بررسی ارسال شد."
-            );
-
-
-            renderAllManager();
-            renderAllEmployee();
-
-        }
-    );
-
-}
-
-
-function openLeaveModal(managerMode) {
-
-    $("leaveForm").reset();
-
-
-    if (managerMode) {
-
-        $("leaveEmployeeGroup").classList.remove("hidden");
-
-        const employees =
-            load(STORAGE_KEYS.employees);
-
-        $("leaveEmployee").innerHTML =
-            employees.map(emp => `
-                <option value="${emp.id}">
-                    ${escapeHTML(emp.name)}
-                </option>
-            `).join("");
-
-    } else {
-
-        $("leaveEmployeeGroup").classList.add("hidden");
-
-    }
-
-
-    openModal("leaveModal");
-
-}
-
-
-function renderLeaves() {
-
-    const leaves =
-        load(STORAGE_KEYS.leaves);
-
-    const employees =
-        load(STORAGE_KEYS.employees);
-
-
-    let pending = 0;
-    let approved = 0;
-    let rejected = 0;
-    let totalDays = 0;
-
-
-    leaves.forEach(leave => {
-
-        totalDays += Number(leave.days || 0);
-
-        if (leave.status === "pending") pending++;
-        if (leave.status === "approved") approved++;
-        if (leave.status === "rejected") rejected++;
-
-    });
-
-
-    $("pendingLeaves").textContent = pending;
-    $("approvedLeaves").textContent = approved;
-    $("rejectedLeaves").textContent = rejected;
-    $("totalLeaveDays").textContent = totalDays;
-
-
-    const body =
-        $("leaveTableBody");
-
-
-    if (!leaves.length) {
-
-        body.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    <div class="empty-state">
-                        <i class="fa-solid fa-calendar-xmark"></i>
-                        <div>درخواستی ثبت نشده است.</div>
+                        هنوز کارمندی ثبت نشده است.
                     </div>
                 </td>
             </tr>
@@ -2090,11 +999,717 @@ function renderLeaves() {
 
 
     body.innerHTML =
-        leaves.map(leave => {
+        employees.map(employee => `
 
-            const emp =
-                employees.find(
-                    e => e.id === leave.employeeId
+            <tr>
+
+                <td>
+
+                    <div class="employee-cell">
+
+                        <div class="employee-avatar">
+                            ${escapeHtml(
+                                employee.name.charAt(0)
+                            )}
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                ${escapeHtml(employee.name)}
+                            </strong>
+
+                            <small>
+                                کد ملی:
+                                ${escapeHtml(employee.nationalCode)}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+                    ${escapeHtml(employee.code)}
+                </td>
+
+
+                <td>
+                    ${escapeHtml(employee.department)}
+                </td>
+
+
+                <td>
+                    ${escapeHtml(employee.position)}
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="status ${
+                            employee.status === "active"
+                                ? "active"
+                                : "inactive"
+                        }"
+                    >
+                        ${
+                            employee.status === "active"
+                                ? "فعال"
+                                : "غیرفعال"
+                        }
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <div class="action-buttons">
+
+                        <button
+                            class="action-btn edit"
+                            title="ویرایش"
+                            onclick="editEmployee('${employee.id}')"
+                        >
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+
+
+                        <button
+                            class="action-btn attendance"
+                            title="ثبت حضور"
+                            onclick="openAttendance('${employee.id}')"
+                        >
+                            <i class="fa-solid fa-clock"></i>
+                        </button>
+
+
+                        <button
+                            class="action-btn delete"
+                            title="حذف"
+                            onclick="deleteEmployee('${employee.id}')"
+                        >
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+/* EDIT EMPLOYEE */
+
+function editEmployee(id) {
+
+    const employee =
+        getEmployee(id);
+
+    if (!employee) {
+        return;
+    }
+
+
+    $("employeeModalTitle").textContent =
+        "ویرایش اطلاعات کارمند";
+
+
+    $("employeeId").value =
+        employee.id;
+
+    $("employeeName").value =
+        employee.name || "";
+
+    $("employeeNationalCode").value =
+        employee.nationalCode || "";
+
+    $("employeeCode").value =
+        employee.code || "";
+
+    $("employeeBirthDate").value =
+        employee.birthDate || "";
+
+    $("employeeDepartment").value =
+        employee.department || "";
+
+    $("employeePosition").value =
+        employee.position || "";
+
+    $("employeePhone").value =
+        employee.phone || "";
+
+    $("employeeHireDate").value =
+        employee.hireDate || "";
+
+    $("employeeSalary").value =
+        employee.salary || 0;
+
+    $("employeeStatus").value =
+        employee.status || "active";
+
+
+    openModal("employeeModal");
+
+}
+
+
+window.editEmployee = editEmployee;
+
+
+/* DELETE */
+
+function deleteEmployee(id) {
+
+    const employee =
+        getEmployee(id);
+
+    if (!employee) {
+        return;
+    }
+
+
+    if (
+        !confirm(
+            `آیا از حذف ${employee.name} مطمئن هستید؟`
+        )
+    ) {
+        return;
+    }
+
+
+    db.employees =
+        db.employees.filter(
+            item => item.id !== id
+        );
+
+
+    db.users =
+        db.users.filter(
+            user => user.employeeId !== id
+        );
+
+
+    db.attendance =
+        db.attendance.filter(
+            item => item.employeeId !== id
+        );
+
+
+    db.leaves =
+        db.leaves.filter(
+            item => item.employeeId !== id
+        );
+
+
+    addActivity(
+        `کارمند ${employee.name} حذف شد.`
+    );
+
+
+    saveDatabase();
+
+    renderAll();
+
+    showToast(
+        "کارمند حذف شد."
+    );
+
+}
+
+
+window.deleteEmployee = deleteEmployee;
+
+
+/* =========================================================
+   ATTENDANCE
+========================================================= */
+
+$("attendanceDate").value =
+    today();
+
+
+$("attendanceDate").addEventListener(
+    "change",
+    renderAttendance
+);
+
+
+function openAttendance(id) {
+
+    $("attendanceEmployeeId").value =
+        id;
+
+    const record =
+        db.attendance.find(
+            item =>
+                item.employeeId === id &&
+                item.date === $("attendanceDate").value
+        );
+
+
+    if (record) {
+
+        $("attendanceStatus").value =
+            record.status;
+
+        $("attendanceIn").value =
+            record.inTime || "";
+
+        $("attendanceOut").value =
+            record.outTime || "";
+
+    } else {
+
+        $("attendanceStatus").value =
+            "present";
+
+        $("attendanceIn").value = "";
+
+        $("attendanceOut").value = "";
+
+    }
+
+
+    openModal("attendanceModal");
+
+}
+
+
+window.openAttendance = openAttendance;
+
+
+$("attendanceForm").addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault();
+
+
+        const employeeId =
+            $("attendanceEmployeeId").value;
+
+        const date =
+            $("attendanceDate").value ||
+            today();
+
+        const status =
+            $("attendanceStatus").value;
+
+
+        let record =
+            db.attendance.find(
+                item =>
+                    item.employeeId === employeeId &&
+                    item.date === date
+            );
+
+
+        if (!record) {
+
+            record = {
+
+                id: uid("attendance"),
+
+                employeeId,
+
+                date,
+
+                status,
+
+                inTime:
+                    $("attendanceIn").value,
+
+                outTime:
+                    $("attendanceOut").value
+
+            };
+
+            db.attendance.push(record);
+
+        } else {
+
+            record.status = status;
+
+            record.inTime =
+                $("attendanceIn").value;
+
+            record.outTime =
+                $("attendanceOut").value;
+
+        }
+
+
+        const employee =
+            getEmployee(employeeId);
+
+
+        addActivity(
+            `وضعیت حضور ${employee?.name || "کارمند"} ثبت شد.`
+        );
+
+
+        saveDatabase();
+
+        closeModal("attendanceModal");
+
+        renderAll();
+
+        showToast(
+            "حضور و غیاب ثبت شد."
+        );
+
+    }
+);
+
+
+/* RENDER ATTENDANCE */
+
+function renderAttendance() {
+
+    const body =
+        $("attendanceTableBody");
+
+    if (!body) {
+        return;
+    }
+
+
+    const date =
+        $("attendanceDate").value ||
+        today();
+
+
+    const employees =
+        db.employees;
+
+
+    let present = 0;
+    let absent = 0;
+    let late = 0;
+    let leave = 0;
+
+
+    body.innerHTML =
+        employees.map(employee => {
+
+            const record =
+                db.attendance.find(
+                    item =>
+                        item.employeeId === employee.id &&
+                        item.date === date
+                );
+
+
+            const status =
+                record?.status || "absent";
+
+
+            if (status === "present") {
+                present++;
+            }
+
+            if (status === "absent") {
+                absent++;
+            }
+
+            if (status === "late") {
+                late++;
+            }
+
+            if (status === "leave") {
+                leave++;
+            }
+
+
+            const labels = {
+
+                present: "حاضر",
+                absent: "غایب",
+                late: "تأخیر",
+                leave: "مرخصی"
+
+            };
+
+
+            return `
+
+                <tr>
+
+                    <td>
+                        <div class="employee-cell">
+
+                            <div class="employee-avatar">
+                                ${escapeHtml(
+                                    employee.name.charAt(0)
+                                )}
+                            </div>
+
+                            <strong>
+                                ${escapeHtml(employee.name)}
+                            </strong>
+
+                        </div>
+                    </td>
+
+
+                    <td>
+                        ${record?.inTime || "-"}
+                    </td>
+
+
+                    <td>
+                        ${record?.outTime || "-"}
+                    </td>
+
+
+                    <td>
+
+                        <span class="status ${status}">
+                            ${labels[status]}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+                            class="action-btn attendance"
+                            title="ویرایش حضور"
+                            onclick="openAttendance('${employee.id}')"
+                        >
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+
+    $("attendancePresent").textContent =
+        present;
+
+    $("attendanceAbsent").textContent =
+        absent;
+
+    $("attendanceLate").textContent =
+        late;
+
+    $("attendanceLeave").textContent =
+        leave;
+
+}
+
+
+/* =========================================================
+   LEAVE
+========================================================= */
+
+$("addLeaveBtn").addEventListener(
+    "click",
+    function () {
+
+        prepareLeaveModal();
+
+        openModal("leaveModal");
+
+    }
+);
+
+
+$("employeeRequestLeaveBtn").addEventListener(
+    "click",
+    function () {
+
+        prepareLeaveModal(
+            getCurrentEmployee()?.id
+        );
+
+        openModal("leaveModal");
+
+    }
+);
+
+
+function prepareLeaveModal(employeeId = "") {
+
+    const select =
+        $("leaveEmployee");
+
+
+    select.innerHTML =
+        db.employees
+            .map(
+                employee =>
+                    `<option value="${employee.id}">
+                        ${escapeHtml(employee.name)}
+                    </option>`
+            )
+            .join("");
+
+
+    if (employeeId) {
+
+        select.value =
+            employeeId;
+
+        select.disabled = true;
+
+    } else {
+
+        select.disabled = false;
+
+    }
+
+
+    $("leaveForm").reset();
+
+    if (employeeId) {
+        select.value = employeeId;
+        select.disabled = true;
+    }
+
+}
+
+
+$("leaveForm").addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault();
+
+
+        const employeeId =
+            $("leaveEmployee").value;
+
+
+        const start =
+            $("leaveStart").value;
+
+        const end =
+            $("leaveEnd").value;
+
+
+        if (end < start) {
+
+            showToast(
+                "تاریخ پایان نمی‌تواند قبل از تاریخ شروع باشد.",
+                "خطا",
+                "error"
+            );
+
+            return;
+        }
+
+
+        const startDate =
+            new Date(start);
+
+        const endDate =
+            new Date(end);
+
+
+        const days =
+            Math.floor(
+                (
+                    endDate - startDate
+                ) /
+                (1000 * 60 * 60 * 24)
+            ) + 1;
+
+
+        const leave = {
+
+            id: uid("leave"),
+
+            employeeId,
+
+            type:
+                $("leaveType").value,
+
+            start,
+
+            end,
+
+            days,
+
+            description:
+                $("leaveDescription").value.trim(),
+
+            status:
+                "pending",
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        db.leaves.push(leave);
+
+
+        const employee =
+            getEmployee(employeeId);
+
+
+        addActivity(
+            `درخواست مرخصی ${employee?.name || ""} ثبت شد.`
+        );
+
+
+        saveDatabase();
+
+        closeModal("leaveModal");
+
+        renderAll();
+
+        showToast(
+            "درخواست مرخصی ثبت شد."
+        );
+
+    }
+);
+
+
+/* RENDER LEAVE */
+
+function renderLeaves() {
+
+    const body =
+        $("leaveTableBody");
+
+    if (!body) {
+        return;
+    }
+
+
+    const labels = {
+
+        pending: "در انتظار بررسی",
+        approved: "تأیید شده",
+        rejected: "رد شده"
+
+    };
+
+
+    body.innerHTML =
+        db.leaves.map(leave => {
+
+            const employee =
+                getEmployee(
+                    leave.employeeId
                 );
 
 
@@ -2103,19 +1718,21 @@ function renderLeaves() {
                 <tr>
 
                     <td>
-                        ${escapeHTML(emp?.name || "-")}
+                        ${escapeHtml(
+                            employee?.name || "-"
+                        )}
                     </td>
 
                     <td>
-                        ${escapeHTML(leave.type)}
+                        ${escapeHtml(leave.type)}
                     </td>
 
                     <td>
-                        ${escapeHTML(leave.start)}
+                        ${formatDate(leave.start)}
                     </td>
 
                     <td>
-                        ${escapeHTML(leave.end)}
+                        ${formatDate(leave.end)}
                     </td>
 
                     <td>
@@ -2124,7 +1741,7 @@ function renderLeaves() {
 
                     <td>
                         <span class="status ${leave.status}">
-                            ${statusText(leave.status)}
+                            ${labels[leave.status]}
                         </span>
                     </td>
 
@@ -2132,32 +1749,28 @@ function renderLeaves() {
 
                         ${
                             leave.status === "pending"
-                            ?
-                            `
-                            <div class="action-buttons">
+                                ? `
+                                    <div class="action-buttons">
 
-                                <button
-                                    class="action-btn success"
-                                    data-action="approveLeave"
-                                    data-id="${leave.id}"
-                                    title="تأیید"
-                                >
-                                    <i class="fa-solid fa-check"></i>
-                                </button>
+                                        <button
+                                            class="action-btn approve"
+                                            title="تأیید"
+                                            onclick="approveLeave('${leave.id}')"
+                                        >
+                                            <i class="fa-solid fa-check"></i>
+                                        </button>
 
-                                <button
-                                    class="action-btn delete"
-                                    data-action="rejectLeave"
-                                    data-id="${leave.id}"
-                                    title="رد"
-                                >
-                                    <i class="fa-solid fa-xmark"></i>
-                                </button>
+                                        <button
+                                            class="action-btn reject"
+                                            title="رد"
+                                            onclick="rejectLeave('${leave.id}')"
+                                        >
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
 
-                            </div>
-                            `
-                            :
-                            "-"
+                                    </div>
+                                `
+                                : "-"
                         }
 
                     </td>
@@ -2168,126 +1781,183 @@ function renderLeaves() {
 
         }).join("");
 
+
+    const pending =
+        db.leaves.filter(
+            item => item.status === "pending"
+        ).length;
+
+
+    const approved =
+        db.leaves.filter(
+            item => item.status === "approved"
+        ).length;
+
+
+    const rejected =
+        db.leaves.filter(
+            item => item.status === "rejected"
+        ).length;
+
+
+    const totalDays =
+        db.leaves
+            .filter(
+                item =>
+                    item.status === "approved"
+            )
+            .reduce(
+                (sum, item) =>
+                    sum + Number(item.days || 0),
+                0
+            );
+
+
+    $("pendingLeaves").textContent =
+        pending;
+
+    $("approvedLeaves").textContent =
+        approved;
+
+    $("rejectedLeaves").textContent =
+        rejected;
+
+    $("totalLeaveDays").textContent =
+        totalDays;
+
 }
 
 
-function updateLeaveStatus(id, status) {
-
-    const leaves =
-        load(STORAGE_KEYS.leaves);
+function approveLeave(id) {
 
     const leave =
-        leaves.find(l => l.id === id);
-
-    if (!leave) return;
-
-
-    leave.status = status;
-
-    save(
-        STORAGE_KEYS.leaves,
-        leaves
-    );
-
-
-    const employees =
-        load(STORAGE_KEYS.employees);
-
-    const emp =
-        employees.find(
-            e => e.id === leave.employeeId
+        db.leaves.find(
+            item => item.id === id
         );
 
+    if (!leave) {
+        return;
+    }
 
-    addNotification(
-        leave.employeeId,
-        status === "approved"
-            ? "درخواست مرخصی شما تأیید شد."
-            : "درخواست مرخصی شما رد شد."
-    );
+
+    leave.status =
+        "approved";
+
+
+    const employee =
+        getEmployee(leave.employeeId);
 
 
     addActivity(
-        `درخواست مرخصی ${emp?.name || ""} ${statusText(status)} شد`
+        `مرخصی ${employee?.name || ""} تأیید شد.`
     );
 
+
+    saveDatabase();
+
+    renderAll();
 
     showToast(
-        "ثبت شد",
-        `درخواست ${statusText(status)} شد.`
+        "درخواست مرخصی تأیید شد."
+    );
+
+}
+
+
+window.approveLeave = approveLeave;
+
+
+function rejectLeave(id) {
+
+    const leave =
+        db.leaves.find(
+            item => item.id === id
+        );
+
+    if (!leave) {
+        return;
+    }
+
+
+    leave.status =
+        "rejected";
+
+
+    const employee =
+        getEmployee(leave.employeeId);
+
+
+    addActivity(
+        `مرخصی ${employee?.name || ""} رد شد.`
     );
 
 
-    renderLeaves();
-    renderNotifications();
+    saveDatabase();
+
+    renderAll();
+
+    showToast(
+        "درخواست مرخصی رد شد."
+    );
 
 }
 
 
-/* ================= EMPLOYEE PAGES ================= */
-
-function renderEmployeeProfile() {
-
-    const emp =
-        currentEmployee();
-
-    if (!emp) return;
+window.rejectLeave = rejectLeave;
 
 
-    $("employeeProfileAvatar").textContent =
-        initials(emp.name);
+/* =========================================================
+   PAYROLL
+========================================================= */
 
-    $("employeeProfileName").textContent =
-        emp.name;
+$("calculatePayrollBtn").addEventListener(
+    "click",
+    function () {
 
-    $("employeeProfilePosition").textContent =
-        `${emp.position} - ${emp.department}`;
+        renderPayroll();
 
+        showToast(
+            "اطلاعات حقوق محاسبه و به‌روزرسانی شد."
+        );
 
-    $("myName").textContent =
-        emp.name;
-
-    $("myNationalId").textContent =
-        emp.nationalId || "-";
-
-    $("myBirthDate").textContent =
-        emp.birthDate || "-";
-
-    $("myPhone").textContent =
-        emp.phone || "-";
-
-    $("myEmployeeCode").textContent =
-        emp.code || "-";
-
-    $("myDepartment").textContent =
-        emp.department || "-";
-
-    $("myPosition").textContent =
-        emp.position || "-";
-
-    $("myHireDate").textContent =
-        emp.hireDate || "-";
-
-}
+    }
+);
 
 
-function renderEmployeePayroll() {
+function getPayroll(employee) {
 
-    const emp =
-        currentEmployee();
+    if (!employee.payroll) {
 
-    if (!emp) return;
+        employee.payroll = {
 
+            base:
+                Number(employee.salary || 0),
 
-    const p =
-        emp.payroll || {
-            base: emp.salary || 0,
             overtime: 0,
             bonus: 0,
             insurance: 0,
             tax: 0,
             other: 0
+
         };
+
+    }
+
+    return employee.payroll;
+
+}
+
+
+function calculateNet(employee) {
+
+    const p =
+        getPayroll(employee);
+
+
+    const gross =
+        Number(p.base || 0) +
+        Number(p.overtime || 0) +
+        Number(p.bonus || 0);
 
 
     const deductions =
@@ -2296,61 +1966,436 @@ function renderEmployeePayroll() {
         Number(p.other || 0);
 
 
-    const net =
-        Number(p.base || 0) +
-        Number(p.overtime || 0) +
-        Number(p.bonus || 0) -
-        deductions;
-
-
-    $("myBaseSalary").textContent =
-        formatMoney(p.base);
-
-    $("myOvertime").textContent =
-        formatMoney(p.overtime);
-
-    $("myBonus").textContent =
-        formatMoney(p.bonus);
-
-    $("myDeductions").textContent =
-        formatMoney(deductions);
-
-    $("myNetSalary").textContent =
-        formatMoney(net);
+    return {
+        gross,
+        deductions,
+        net: gross - deductions
+    };
 
 }
 
 
-function renderEmployeeAttendance() {
+function renderPayroll() {
 
-    const emp =
-        currentEmployee();
+    const body =
+        $("payrollTableBody");
 
-    if (!emp) return;
+    if (!body) {
+        return;
+    }
 
 
-    const attendance =
-        load(STORAGE_KEYS.attendance)
-            .filter(a => a.employeeId === emp.id)
+    let grossTotal = 0;
+    let deductionTotal = 0;
+    let netTotal = 0;
+
+
+    body.innerHTML =
+        db.employees.map(employee => {
+
+            const result =
+                calculateNet(employee);
+
+
+            grossTotal += result.gross;
+
+            deductionTotal +=
+                result.deductions;
+
+            netTotal += result.net;
+
+
+            return `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(employee.name)}
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            employee.payroll?.base || 0
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            employee.payroll?.overtime || 0
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            employee.payroll?.bonus || 0
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            result.deductions
+                        )}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${formatMoney(result.net)}
+                        </strong>
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="action-btn edit"
+                            title="ویرایش حقوق"
+                            onclick="editPayroll('${employee.id}')"
+                        >
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+
+    $("grossPayroll").textContent =
+        formatMoney(grossTotal);
+
+    $("deductionPayroll").textContent =
+        formatMoney(deductionTotal);
+
+    $("netPayroll").textContent =
+        formatMoney(netTotal);
+
+
+    saveDatabase();
+
+}
+
+
+function editPayroll(id) {
+
+    const employee =
+        getEmployee(id);
+
+    if (!employee) {
+        return;
+    }
+
+
+    const p =
+        getPayroll(employee);
+
+
+    $("payrollEmployeeId").value =
+        id;
+
+    $("payrollBase").value =
+        p.base || 0;
+
+    $("payrollOvertime").value =
+        p.overtime || 0;
+
+    $("payrollBonus").value =
+        p.bonus || 0;
+
+    $("payrollInsurance").value =
+        p.insurance || 0;
+
+    $("payrollTax").value =
+        p.tax || 0;
+
+    $("payrollOther").value =
+        p.other || 0;
+
+
+    updatePayrollPreview();
+
+    openModal("payrollModal");
+
+}
+
+
+window.editPayroll = editPayroll;
+
+
+[
+    "payrollBase",
+    "payrollOvertime",
+    "payrollBonus",
+    "payrollInsurance",
+    "payrollTax",
+    "payrollOther"
+].forEach(id => {
+
+    $(id).addEventListener(
+        "input",
+        updatePayrollPreview
+    );
+
+});
+
+
+function updatePayrollPreview() {
+
+    const gross =
+        Number($("payrollBase").value || 0) +
+        Number($("payrollOvertime").value || 0) +
+        Number($("payrollBonus").value || 0);
+
+
+    const deductions =
+        Number($("payrollInsurance").value || 0) +
+        Number($("payrollTax").value || 0) +
+        Number($("payrollOther").value || 0);
+
+
+    $("payrollNetPreview").textContent =
+        formatMoney(
+            gross - deductions
+        );
+
+}
+
+
+$("payrollForm").addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault();
+
+
+        const employee =
+            getEmployee(
+                $("payrollEmployeeId").value
+            );
+
+
+        if (!employee) {
+            return;
+        }
+
+
+        employee.payroll = {
+
+            base:
+                Number($("payrollBase").value || 0),
+
+            overtime:
+                Number($("payrollOvertime").value || 0),
+
+            bonus:
+                Number($("payrollBonus").value || 0),
+
+            insurance:
+                Number($("payrollInsurance").value || 0),
+
+            tax:
+                Number($("payrollTax").value || 0),
+
+            other:
+                Number($("payrollOther").value || 0)
+
+        };
+
+
+        employee.salary =
+            employee.payroll.base;
+
+
+        addActivity(
+            `حقوق ${employee.name} ویرایش شد.`
+        );
+
+
+        saveDatabase();
+
+        closeModal("payrollModal");
+
+        renderAll();
+
+        showToast(
+            "اطلاعات حقوق ذخیره شد."
+        );
+
+    }
+);
+
+
+/* =========================================================
+   MY PROFILE
+========================================================= */
+
+function renderMyProfile() {
+
+    const employee =
+        getCurrentEmployee();
+
+    const container =
+        $("myProfileContent");
+
+    if (!container) {
+        return;
+    }
+
+
+    if (!employee) {
+
+        container.innerHTML = `
+            <div class="card">
+                <div style="padding:30px">
+                    اطلاعات کارمند پیدا نشد.
+                </div>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = `
+
+        <div class="profile-card">
+
+            <div class="profile-cover"></div>
+
+            <div class="profile-main">
+
+                <div class="big-avatar">
+                    ${escapeHtml(
+                        employee.name.charAt(0)
+                    )}
+                </div>
+
+
+                <div class="profile-heading">
+
+                    <h2>
+                        ${escapeHtml(employee.name)}
+                    </h2>
+
+                    <p>
+                        ${escapeHtml(employee.position)}
+                        -
+                        ${escapeHtml(employee.department)}
+                    </p>
+
+                </div>
+
+
+                <div class="profile-info-grid">
+
+                    <div class="profile-info">
+                        <span>نام و نام خانوادگی</span>
+                        <strong>${escapeHtml(employee.name)}</strong>
+                    </div>
+
+                    <div class="profile-info">
+                        <span>کد ملی</span>
+                        <strong>${escapeHtml(employee.nationalCode)}</strong>
+                    </div>
+
+                    <div class="profile-info">
+                        <span>کد پرسنلی</span>
+                        <strong>${escapeHtml(employee.code)}</strong>
+                    </div>
+
+                    <div class="profile-info">
+                        <span>تاریخ تولد</span>
+                        <strong>${formatDate(employee.birthDate)}</strong>
+                    </div>
+
+                    <div class="profile-info">
+                        <span>واحد سازمانی</span>
+                        <strong>${escapeHtml(employee.department)}</strong>
+                    </div>
+
+                    <div class="profile-info">
+                        <span>سمت</span>
+                        <strong>${escapeHtml(employee.position)}</strong>
+                    </div>
+
+                    <div class="profile-info">
+                        <span>شماره تماس</span>
+                        <strong>${escapeHtml(employee.phone || "-")}</strong>
+                    </div>
+
+                    <div class="profile-info">
+                        <span>تاریخ استخدام</span>
+                        <strong>${formatDate(employee.hireDate)}</strong>
+                    </div>
+
+                    <div class="profile-info">
+                        <span>وضعیت</span>
+                        <strong>
+                            ${
+                                employee.status === "active"
+                                    ? "فعال"
+                                    : "غیرفعال"
+                            }
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   MY ATTENDANCE
+========================================================= */
+
+function renderMyAttendance() {
+
+    const body =
+        $("myAttendanceBody");
+
+    const employee =
+        getCurrentEmployee();
+
+    if (!body || !employee) {
+        return;
+    }
+
+
+    const records =
+        db.attendance
+            .filter(
+                item =>
+                    item.employeeId === employee.id
+            )
             .sort(
                 (a, b) =>
                     b.date.localeCompare(a.date)
             );
 
 
-    const body =
-        $("myAttendanceBody");
+    const labels = {
+
+        present: "حاضر",
+        absent: "غایب",
+        late: "تأخیر",
+        leave: "مرخصی"
+
+    };
 
 
-    if (!attendance.length) {
+    if (!records.length) {
 
         body.innerHTML = `
             <tr>
                 <td colspan="4">
-                    <div class="empty-state">
-                        <i class="fa-solid fa-clock"></i>
-                        <div>سابقه‌ای ثبت نشده است.</div>
-                    </div>
+                    هنوز سابقه‌ای ثبت نشده است.
                 </td>
             </tr>
         `;
@@ -2360,19 +2405,25 @@ function renderEmployeeAttendance() {
 
 
     body.innerHTML =
-        attendance.map(a => `
+        records.map(record => `
 
             <tr>
 
-                <td>${escapeHTML(a.date)}</td>
-
-                <td>${a.entry || "-"}</td>
-
-                <td>${a.exit || "-"}</td>
+                <td>
+                    ${formatDate(record.date)}
+                </td>
 
                 <td>
-                    <span class="status ${a.status}">
-                        ${statusText(a.status)}
+                    ${record.inTime || "-"}
+                </td>
+
+                <td>
+                    ${record.outTime || "-"}
+                </td>
+
+                <td>
+                    <span class="status ${record.status}">
+                        ${labels[record.status]}
                     </span>
                 </td>
 
@@ -2383,44 +2434,52 @@ function renderEmployeeAttendance() {
 }
 
 
-function renderEmployeeLeaves() {
+/* =========================================================
+   MY LEAVE
+========================================================= */
 
-    const emp =
-        currentEmployee();
-
-    if (!emp) return;
-
-
-    const leaves =
-        load(STORAGE_KEYS.leaves)
-            .filter(
-                l => l.employeeId === emp.id
-            )
-            .sort(
-                (a, b) =>
-                    b.createdAt.localeCompare(a.createdAt)
-            );
-
+function renderMyLeave() {
 
     const body =
         $("myLeaveBody");
 
+    const employee =
+        getCurrentEmployee();
 
-    $("employeeLeaveBadge").textContent =
-        leaves.filter(
-            l => l.status === "pending"
-        ).length;
+    if (!body || !employee) {
+        return;
+    }
 
 
-    if (!leaves.length) {
+    const records =
+        db.leaves
+            .filter(
+                item =>
+                    item.employeeId === employee.id
+            )
+            .sort(
+                (a, b) =>
+                    b.createdAt.localeCompare(
+                        a.createdAt
+                    )
+            );
+
+
+    const labels = {
+
+        pending: "در انتظار بررسی",
+        approved: "تأیید شده",
+        rejected: "رد شده"
+
+    };
+
+
+    if (!records.length) {
 
         body.innerHTML = `
             <tr>
-                <td colspan="6">
-                    <div class="empty-state">
-                        <i class="fa-solid fa-calendar-days"></i>
-                        <div>هنوز درخواست مرخصی ثبت نکرده‌اید.</div>
-                    </div>
+                <td colspan="5">
+                    هنوز درخواست مرخصی ثبت نکرده‌اید.
                 </td>
             </tr>
         `;
@@ -2430,20 +2489,20 @@ function renderEmployeeLeaves() {
 
 
     body.innerHTML =
-        leaves.map(leave => `
+        records.map(leave => `
 
             <tr>
 
                 <td>
-                    ${escapeHTML(leave.type)}
+                    ${escapeHtml(leave.type)}
                 </td>
 
                 <td>
-                    ${escapeHTML(leave.start)}
+                    ${formatDate(leave.start)}
                 </td>
 
                 <td>
-                    ${escapeHTML(leave.end)}
+                    ${formatDate(leave.end)}
                 </td>
 
                 <td>
@@ -2451,14 +2510,8 @@ function renderEmployeeLeaves() {
                 </td>
 
                 <td>
-                    ${escapeHTML(
-                        leave.description || "-"
-                    )}
-                </td>
-
-                <td>
                     <span class="status ${leave.status}">
-                        ${statusText(leave.status)}
+                        ${labels[leave.status]}
                     </span>
                 </td>
 
@@ -2469,43 +2522,167 @@ function renderEmployeeLeaves() {
 }
 
 
-/* ================= DASHBOARD ================= */
+/* =========================================================
+   MY PAYROLL
+========================================================= */
+
+function renderMyPayroll() {
+
+    const container =
+        $("myPayrollContent");
+
+    const employee =
+        getCurrentEmployee();
+
+    if (!container || !employee) {
+        return;
+    }
+
+
+    const result =
+        calculateNet(employee);
+
+
+    const p =
+        getPayroll(employee);
+
+
+    container.innerHTML = `
+
+        <div class="payroll-summary">
+
+            <div class="payroll-summary-card">
+                <span>حقوق پایه</span>
+                <strong>
+                    ${formatMoney(p.base)}
+                </strong>
+            </div>
+
+            <div class="payroll-summary-card">
+                <span>اضافه‌کاری</span>
+                <strong>
+                    ${formatMoney(p.overtime)}
+                </strong>
+            </div>
+
+            <div class="payroll-summary-card">
+                <span>پاداش</span>
+                <strong>
+                    ${formatMoney(p.bonus)}
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="section-card-header">
+                <h3>
+                    جزئیات حقوق
+                </h3>
+            </div>
+
+
+            <div style="padding:20px">
+
+                <div class="department-row">
+                    <span>حقوق پایه</span>
+                    <strong>
+                        ${formatMoney(p.base)}
+                    </strong>
+                </div>
+
+                <div class="department-row">
+                    <span>اضافه‌کاری</span>
+                    <strong>
+                        ${formatMoney(p.overtime)}
+                    </strong>
+                </div>
+
+                <div class="department-row">
+                    <span>پاداش</span>
+                    <strong>
+                        ${formatMoney(p.bonus)}
+                    </strong>
+                </div>
+
+                <div class="department-row">
+                    <span>بیمه</span>
+                    <strong>
+                        ${formatMoney(p.insurance)}
+                    </strong>
+                </div>
+
+                <div class="department-row">
+                    <span>مالیات</span>
+                    <strong>
+                        ${formatMoney(p.tax)}
+                    </strong>
+                </div>
+
+                <div class="department-row">
+                    <span>سایر کسورات</span>
+                    <strong>
+                        ${formatMoney(p.other)}
+                    </strong>
+                </div>
+
+                <div
+                    class="department-row"
+                    style="font-size:17px;color:#166534"
+                >
+                    <strong>حقوق خالص</strong>
+
+                    <strong>
+                        ${formatMoney(result.net)}
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
 function renderDashboard() {
 
-    const employees =
-        load(STORAGE_KEYS.employees);
+    const total =
+        db.employees.length;
 
-    const attendance =
-        load(STORAGE_KEYS.attendance);
 
-    const todayRecords =
-        attendance.filter(
-            a => a.date === today()
+    const date =
+        today();
+
+
+    const records =
+        db.attendance.filter(
+            item => item.date === date
         );
 
 
-    const total =
-        employees.filter(
-            e => e.status === "active"
-        ).length;
-
-
     const present =
-        todayRecords.filter(
-            a => a.status === "present"
+        records.filter(
+            item => item.status === "present"
         ).length;
 
 
     const absent =
-        todayRecords.filter(
-            a => a.status === "absent"
+        records.filter(
+            item => item.status === "absent"
         ).length;
 
 
     const late =
-        todayRecords.filter(
-            a => a.status === "late"
+        records.filter(
+            item => item.status === "late"
         ).length;
 
 
@@ -2523,143 +2700,176 @@ function renderDashboard() {
 
 
     $("employeeMenuBadge").textContent =
-        employees.length;
+        total;
+
+
+    const pendingLeaves =
+        db.leaves.filter(
+            item =>
+                item.status === "pending"
+        ).length;
+
+
+    $("leaveMenuBadge").textContent =
+        pendingLeaves;
 
 
     $("recentEmployees").innerHTML =
-        employees.slice(-5).reverse().map(emp => `
+        db.employees
+            .slice(-5)
+            .reverse()
+            .map(employee => `
 
-            <div class="employee-cell" style="margin-bottom:12px">
+                <div class="department-row">
 
-                <span class="table-avatar">
-                    ${escapeHTML(initials(emp.name))}
-                </span>
+                    <div class="employee-cell">
 
-                <div>
-                    <strong>
-                        ${escapeHTML(emp.name)}
-                    </strong>
+                        <div class="employee-avatar">
+                            ${escapeHtml(
+                                employee.name.charAt(0)
+                            )}
+                        </div>
 
-                    <small>
-                        ${escapeHTML(emp.position)}
-                    </small>
+                        <div>
+
+                            <strong>
+                                ${escapeHtml(employee.name)}
+                            </strong>
+
+                            <small>
+                                ${escapeHtml(employee.position)}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <span>
+                        ${escapeHtml(employee.department)}
+                    </span>
+
                 </div>
 
-            </div>
+            `)
+            .join("");
 
-        `).join("") ||
-        `
-            <div class="empty-state">
-                کارمندی ثبت نشده است.
+
+    if (!db.employees.length) {
+
+        $("recentEmployees").innerHTML = `
+            <div style="padding:25px;color:#6b7280">
+                هنوز کارمندی ثبت نشده است.
             </div>
         `;
 
-
-    const activities =
-        load(STORAGE_KEYS.activities, []);
+    }
 
 
     $("recentActivities").innerHTML =
-        activities.slice(0, 6).map(a => `
+        db.activities
+            .slice(0, 7)
+            .map(activity => `
 
-            <div style="
-                padding:12px 0;
-                border-bottom:1px solid #eef2ef;
-            ">
+                <div class="department-row">
 
-                <strong style="font-size:12px">
-                    ${escapeHTML(a.text)}
-                </strong>
+                    <div>
 
-                <div style="
-                    color:#8a978f;
-                    font-size:10px;
-                    margin-top:4px;
-                ">
-                    ${escapeHTML(a.date)}
+                        <strong>
+                            ${escapeHtml(activity.text)}
+                        </strong>
+
+                        <small
+                            style="
+                                display:block;
+                                color:#6b7280;
+                                margin-top:4px
+                            "
+                        >
+                            ${formatDate(
+                                activity.date
+                            )}
+                        </small>
+
+                    </div>
+
                 </div>
 
-            </div>
+            `)
+            .join("");
 
-        `).join("") ||
-        `
-            <div class="empty-state">
-                فعالیتی وجود ندارد.
+
+    if (!db.activities.length) {
+
+        $("recentActivities").innerHTML = `
+            <div style="padding:25px;color:#6b7280">
+                فعالیتی ثبت نشده است.
             </div>
         `;
+
+    }
 
 }
 
 
-/* ================= REPORTS ================= */
+/* =========================================================
+   REPORTS
+========================================================= */
 
 function renderReports() {
 
-    const employees =
-        load(STORAGE_KEYS.employees);
-
-    const attendance =
-        load(STORAGE_KEYS.attendance)
-            .filter(a => a.date === today());
-
-    const leaves =
-        load(STORAGE_KEYS.leaves);
-
-
     const activeEmployees =
-        employees.filter(
-            e => e.status === "active"
-        );
-
-
-    const present =
-        attendance.filter(
-            a =>
-                a.status === "present" ||
-                a.status === "late"
+        db.employees.filter(
+            employee =>
+                employee.status === "active"
         ).length;
 
 
+    const records =
+        db.attendance;
+
+
     const attendanceRate =
-        activeEmployees.length
+        records.length
             ? Math.round(
-                (present / activeEmployees.length) * 100
+                (
+                    records.filter(
+                        item =>
+                            item.status === "present" ||
+                            item.status === "late"
+                    ).length /
+                    records.length
+                ) * 100
             )
             : 0;
 
 
-    let totalPayroll = 0;
+    let payrollTotal = 0;
 
-    employees.forEach(emp => {
+    db.employees.forEach(employee => {
 
-        const p = emp.payroll || {};
-
-        totalPayroll +=
-            Number(p.base || 0) +
-            Number(p.overtime || 0) +
-            Number(p.bonus || 0) -
-            Number(p.insurance || 0) -
-            Number(p.tax || 0) -
-            Number(p.other || 0);
+        payrollTotal +=
+            calculateNet(employee).net;
 
     });
 
 
     $("reportEmployees").textContent =
-        activeEmployees.length;
+        activeEmployees;
 
     $("reportAttendance").textContent =
         attendanceRate + "%";
 
     $("reportLeaves").textContent =
-        leaves.length;
+        db.leaves.length;
 
     $("reportPayroll").textContent =
-        Number(totalPayroll).toLocaleString("fa-IR");
+        Number(payrollTotal)
+            .toLocaleString("fa-IR");
 
 
     $("attendancePercent").textContent =
         attendanceRate + "%";
+
 
     $("attendanceProgress").style.width =
         attendanceRate + "%";
@@ -2667,334 +2877,340 @@ function renderReports() {
 
     const departments = {};
 
-    employees.forEach(emp => {
 
-        departments[emp.department] =
-            (departments[emp.department] || 0) + 1;
+    db.employees.forEach(employee => {
+
+        departments[employee.department] =
+            (departments[employee.department] || 0) + 1;
 
     });
 
 
-    const max =
-        Math.max(
-            1,
-            ...Object.values(departments)
-        );
-
-
     $("departmentReport").innerHTML =
-        Object.entries(departments).map(
-            ([department, count]) => `
+        Object.entries(departments)
+            .map(
+                ([name, count]) => `
 
-                <div class="department-row">
-
-                    <div class="department-label">
+                    <div class="department-row">
 
                         <span>
-                            ${escapeHTML(department)}
+                            ${escapeHtml(name)}
                         </span>
 
                         <strong>
-                            ${count}
+                            ${count} نفر
                         </strong>
 
                     </div>
 
-                    <div class="department-line">
+                `
+            )
+            .join("");
 
-                        <div
-                            class="department-fill"
-                            style="width:${(count / max) * 100}%"
-                        ></div>
 
-                    </div>
+    if (!Object.keys(departments).length) {
 
-                </div>
+        $("departmentReport").innerHTML = `
+            <div style="padding:20px;color:#6b7280">
+                اطلاعاتی وجود ندارد.
+            </div>
+        `;
 
-            `
-        ).join("");
+    }
 
 }
 
 
-/* ================= NOTIFICATIONS ================= */
+/* =========================================================
+   MODALS
+========================================================= */
 
-function addNotification(employeeId, message) {
+function openModal(id) {
 
-    const notifications =
-        load(STORAGE_KEYS.notifications, []);
+    const modal =
+        $(id);
+
+    if (modal) {
+        modal.classList.add("show");
+    }
+
+}
 
 
-    notifications.unshift({
+function closeModal(id) {
 
-        id: "notification-" + Date.now(),
+    const modal =
+        $(id);
 
-        employeeId,
+    if (modal) {
+        modal.classList.remove("show");
+    }
 
-        message,
+}
 
-        read: false,
 
-        date:
-            new Date().toLocaleString("fa-IR")
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(
+                "[data-close]"
+            );
+
+        if (!button) {
+            return;
+        }
+
+        closeModal(
+            button.dataset.close
+        );
+
+    }
+);
+
+
+document.querySelectorAll(".modal")
+    .forEach(modal => {
+
+        modal.addEventListener(
+            "click",
+            function (event) {
+
+                if (event.target === modal) {
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
 
     });
 
 
-    save(
-        STORAGE_KEYS.notifications,
-        notifications.slice(0, 100)
-    );
-
-}
-
-
-function renderNotifications() {
-
-    const notifications =
-        load(STORAGE_KEYS.notifications, []);
-
-
-    let visible = notifications;
-
-
-    if (
-        session.role === "employee"
-    ) {
-
-        visible =
-            notifications.filter(
-                n =>
-                    n.employeeId ===
-                    session.employeeId
-            );
-
-    }
-
-
-    const unread =
-        visible.filter(
-            n => !n.read
-        ).length;
-
-
-    $("notificationBadge").textContent =
-        unread;
-
-    $("notificationMenuBadge").textContent =
-        unread;
-
-
-    const body =
-        $("notificationsList");
-
-
-    if (!visible.length) {
-
-        body.innerHTML = `
-            <div class="empty-state">
-                <i class="fa-regular fa-bell"></i>
-                <div>اعلانی وجود ندارد.</div>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    body.innerHTML =
-        visible.map(n => `
-
-            <div style="
-                padding:18px;
-                border-bottom:1px solid #eef2ef;
-                display:flex;
-                gap:14px;
-                align-items:flex-start;
-            ">
-
-                <div class="large-avatar"
-                    style="
-                        width:45px;
-                        height:45px;
-                        border-radius:13px;
-                        font-size:18px;
-                    "
-                >
-                    <i class="fa-solid fa-bell"></i>
-                </div>
-
-                <div>
-
-                    <strong>
-                        ${escapeHTML(n.message)}
-                    </strong>
-
-                    <div style="
-                        color:#8a978f;
-                        font-size:10px;
-                        margin-top:5px;
-                    ">
-                        ${escapeHTML(n.date)}
-                    </div>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-/* ================= MANAGER RENDER ================= */
-
-function renderAllManager() {
-
-    if (!session || session.role !== "manager") {
-        return;
-    }
-
-    renderDashboard();
-    renderEmployeesTable();
-    renderAttendance();
-    renderLeaves();
-    renderPayroll();
-    renderReports();
-    renderNotifications();
-
-}
-
-
-/* ================= EMPLOYEE RENDER ================= */
-
-function renderAllEmployee() {
-
-    if (!session || session.role !== "employee") {
-        return;
-    }
-
-    renderEmployeeProfile();
-    renderEmployeePayroll();
-    renderEmployeeAttendance();
-    renderEmployeeLeaves();
-    renderNotifications();
-
-}
-
-
-/* ================= CALCULATE PAYROLL ================= */
-
-function setupCalculateButton() {
-
-    $("calculatePayrollBtn").addEventListener(
-        "click",
-        () => {
-
-            renderPayroll();
-            showToast(
-                "محاسبه انجام شد",
-                "حقوق و کسورات کارکنان به‌روزرسانی شد."
-            );
-
-        }
-    );
-
-}
-
-
-/* ================= MARK NOTIFICATIONS ================= */
-
-function setupNotifications() {
-
-    $("markAllNotifications").addEventListener(
-        "click",
-        () => {
-
-            const notifications =
-                load(STORAGE_KEYS.notifications, []);
-
-
-            notifications.forEach(n => {
-
-                if (
-                    session.role === "manager" ||
-                    n.employeeId === session.employeeId
-                ) {
-                    n.read = true;
-                }
-
-            });
-
-
-            save(
-                STORAGE_KEYS.notifications,
-                notifications
-            );
-
-
-            renderNotifications();
+/* =========================================================
+   PROFILE BUTTON
+========================================================= */
+
+$("profileButton").addEventListener(
+    "click",
+    function () {
+
+        if (currentUser?.role === "admin") {
 
             showToast(
-                "انجام شد",
-                "همه اعلان‌ها خوانده شدند."
+                "پروفایل مدیر سیستم"
             );
 
-        }
-    );
+        } else {
 
-}
+            navigateTo("myProfile");
 
-
-/* ================= PRINT ================= */
-
-function setupPrint() {
-
-    $("printReportBtn").addEventListener(
-        "click",
-        () => {
-
-            window.print();
-
-        }
-    );
-
-}
-
-
-/* ================= START ================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initializeData();
-
-        setupAuth();
-        setupNavigation();
-        setupLogout();
-        setupProfile();
-        setupModals();
-
-        setupEmployeeManagement();
-        setupEmployeeTableActions();
-
-        setupAttendance();
-
-        setupPayroll();
-
-        setupLeave();
-
-        setupCalculateButton();
-
-        setupNotifications();
-
-        setupPrint();
-
-
-        if (session) {
-            openMainApp();
         }
 
     }
 );
+
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+$("notificationButton").addEventListener(
+    "click",
+    function () {
+
+        const pending =
+            db.leaves.filter(
+                item =>
+                    item.status === "pending"
+            ).length;
+
+
+        if (currentUser?.role === "admin") {
+
+            if (pending) {
+
+                showToast(
+                    `${pending} درخواست مرخصی در انتظار بررسی است.`
+                );
+
+            } else {
+
+                showToast(
+                    "اعلان جدیدی ندارید."
+                );
+
+            }
+
+        } else {
+
+            const employee =
+                getCurrentEmployee();
+
+            const requests =
+                db.leaves.filter(
+                    item =>
+                        item.employeeId === employee?.id &&
+                        item.status !== "pending"
+                );
+
+
+            if (requests.length) {
+
+                showToast(
+                    "وضعیت درخواست‌های مرخصی خود را در بخش مرخصی ببینید."
+                );
+
+            } else {
+
+                showToast(
+                    "اعلان جدیدی ندارید."
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PRINT REPORT
+========================================================= */
+
+$("printReportBtn").addEventListener(
+    "click",
+    function () {
+
+        window.print();
+
+    }
+);
+
+
+/* =========================================================
+   RENDER PAGE
+========================================================= */
+
+function renderPage(page) {
+
+    switch (page) {
+
+        case "dashboard":
+            renderDashboard();
+            break;
+
+        case "employees":
+            renderEmployees();
+            break;
+
+        case "attendance":
+            renderAttendance();
+            break;
+
+        case "leave":
+            renderLeaves();
+            break;
+
+        case "payroll":
+            renderPayroll();
+            break;
+
+        case "reports":
+            renderReports();
+            break;
+
+        case "myProfile":
+            renderMyProfile();
+            break;
+
+        case "myAttendance":
+            renderMyAttendance();
+            break;
+
+        case "myLeave":
+            renderMyLeave();
+            break;
+
+        case "myPayroll":
+            renderMyPayroll();
+            break;
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER EVERYTHING
+========================================================= */
+
+function renderAll() {
+
+    renderDashboard();
+
+    renderEmployees();
+
+    renderAttendance();
+
+    renderLeaves();
+
+    renderPayroll();
+
+    renderReports();
+
+    renderMyProfile();
+
+    renderMyAttendance();
+
+    renderMyLeave();
+
+    renderMyPayroll();
+
+
+    const pending =
+        db.leaves.filter(
+            item =>
+                item.status === "pending"
+        ).length;
+
+
+    $("notificationBadge").textContent =
+        pending;
+
+}
+
+
+/* =========================================================
+   SESSION RECOVERY
+========================================================= */
+
+const savedUserId =
+    sessionStorage.getItem(
+        "mirza_current_user"
+    );
+
+
+if (savedUserId) {
+
+    const user =
+        db.users.find(
+            item =>
+                item.id === savedUserId
+        );
+
+
+    if (user) {
+
+        currentUser = user;
+
+        openApplication();
+
+    }
+
+           }
