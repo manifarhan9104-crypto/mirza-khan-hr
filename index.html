@@ -2,18 +2,11 @@
 <html lang="fa" dir="rtl">
 
 <head>
-
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="theme-color"
-        content="#0f766e"
-    >
+    <meta name="theme-color" content="#0f766e">
 
     <meta
         name="description"
@@ -23,10 +16,7 @@
     <title>میرزا کوچک خان | منابع انسانی</title>
 
     <!-- فونت -->
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link
         rel="preconnect"
@@ -40,32 +30,16 @@
     >
 
     <!-- CSS -->
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
-<!-- ==================================================
-     APP
-================================================== -->
-
 <div class="app-container">
 
+    <!-- ================= SIDEBAR ================= -->
 
-    <!-- ==================================================
-         SIDEBAR
-    ================================================== -->
-
-    <aside
-        class="sidebar"
-        id="sidebar"
-    >
+    <aside class="sidebar" id="sidebar">
 
         <div class="sidebar-header">
 
@@ -91,154 +65,58 @@
 
         </div>
 
-
-        <!-- Navigation -->
-
         <nav class="sidebar-nav">
 
             <div class="nav-section-title">
                 منوی اصلی
             </div>
 
-
-            <a
-                href="#"
-                class="menu-item active"
-                data-page="dashboard"
-            >
-
-                <span class="menu-icon">
-                    🏠
-                </span>
-
-                <span>
-                    داشبورد
-                </span>
-
+            <a href="#" class="menu-item active" data-page="dashboard">
+                <span class="menu-icon">🏠</span>
+                <span>داشبورد</span>
             </a>
 
-
-            <a
-                href="#"
-                class="menu-item"
-                data-page="employees"
-            >
-
-                <span class="menu-icon">
-                    👥
-                </span>
-
-                <span>
-                    کارکنان
-                </span>
-
+            <a href="#" class="menu-item" data-page="employees">
+                <span class="menu-icon">👥</span>
+                <span>کارکنان</span>
             </a>
 
-
-            <a
-                href="#"
-                class="menu-item"
-                data-page="attendance"
-            >
-
-                <span class="menu-icon">
-                    🕘
-                </span>
-
-                <span>
-                    حضور و غیاب
-                </span>
-
+            <a href="#" class="menu-item" data-page="attendance">
+                <span class="menu-icon">🕘</span>
+                <span>حضور و غیاب</span>
             </a>
 
-
-            <a
-                href="#"
-                class="menu-item"
-                data-page="leave"
-            >
-
-                <span class="menu-icon">
-                    🏖️
-                </span>
-
-                <span>
-                    مرخصی و مأموریت
-                </span>
-
+            <a href="#" class="menu-item" data-page="leave">
+                <span class="menu-icon">🏖️</span>
+                <span>مرخصی و مأموریت</span>
             </a>
-
 
             <div class="nav-section-title">
                 مدیریت
             </div>
 
-
-            <a
-                href="#"
-                class="menu-item"
-                data-page="reports"
-            >
-
-                <span class="menu-icon">
-                    📊
-                </span>
-
-                <span>
-                    گزارش‌ها
-                </span>
-
+            <a href="#" class="menu-item" data-page="reports">
+                <span class="menu-icon">📊</span>
+                <span>گزارش‌ها</span>
             </a>
 
-
-            <a
-                href="#"
-                class="menu-item"
-                data-page="notifications"
-            >
-
-                <span class="menu-icon">
-                    🔔
-                </span>
-
-                <span>
-                    اعلان‌ها
-                </span>
-
+            <a href="#" class="menu-item" data-page="notifications">
+                <span class="menu-icon">🔔</span>
+                <span>اعلان‌ها</span>
             </a>
 
-
-            <a
-                href="#"
-                class="menu-item"
-                data-page="settings"
-            >
-
-                <span class="menu-icon">
-                    ⚙️
-                </span>
-
-                <span>
-                    تنظیمات
-                </span>
-
+            <a href="#" class="menu-item" data-page="settings">
+                <span class="menu-icon">⚙️</span>
+                <span>تنظیمات</span>
             </a>
 
         </nav>
 
-
-        <!-- Sidebar Footer -->
-
         <div class="sidebar-footer">
 
             <div class="system-status">
-
                 <span class="status-dot"></span>
-
-                <span>
-                    سیستم فعال است
-                </span>
-
+                <span>سیستم فعال است</span>
             </div>
 
             <small>
@@ -249,30 +127,25 @@
 
     </aside>
 
-
-    <!-- ==================================================
-         MAIN
-    ================================================== -->
+    <!-- ================= MAIN ================= -->
 
     <main class="main-content">
 
-
-        <!-- ==================================================
-             HEADER
-        ================================================== -->
+        <!-- ================= HEADER ================= -->
 
         <header class="top-header">
 
             <div class="header-right">
 
+                <!-- فقط همین یک دکمه mobileMenu -->
                 <button
                     class="mobile-menu"
                     id="mobileMenu"
-                    aria-label="منو"
+                    aria-label="باز کردن منو"
+                    type="button"
                 >
                     ☰
                 </button>
-
 
                 <div>
 
@@ -288,16 +161,13 @@
 
             </div>
 
-
             <div class="header-left">
-
-
-                <!-- Notification -->
 
                 <button
                     class="header-icon-btn"
                     title="اعلان‌ها"
-                    onclick="document.querySelector('[data-page=notifications]').click()"
+                    type="button"
+                    onclick="openPage('notifications')"
                 >
 
                     🔔
@@ -310,9 +180,6 @@
                     </span>
 
                 </button>
-
-
-                <!-- Profile -->
 
                 <div class="header-profile">
 
@@ -338,23 +205,16 @@
 
         </header>
 
-
-        <!-- ==================================================
-             PAGE CONTENT
-        ================================================== -->
+        <!-- ================= PAGE CONTENT ================= -->
 
         <div class="page-container">
 
-
-            <!-- ==================================================
-                 DASHBOARD
-            ================================================== -->
+            <!-- ================= DASHBOARD ================= -->
 
             <section
                 class="page active-page"
                 id="dashboardPage"
             >
-
 
                 <div class="welcome-card">
 
@@ -377,6 +237,7 @@
                         <button
                             class="primary-btn"
                             id="dashboardAddEmployee"
+                            type="button"
                         >
                             ➕ افزودن کارمند
                         </button>
@@ -389,11 +250,7 @@
 
                 </div>
 
-
-                <!-- Main Stats -->
-
                 <div class="stats-grid">
-
 
                     <div class="stat-card">
 
@@ -415,7 +272,6 @@
 
                     </div>
 
-
                     <div class="stat-card">
 
                         <div class="stat-icon blue">
@@ -435,7 +291,6 @@
                         </div>
 
                     </div>
-
 
                     <div class="stat-card">
 
@@ -457,7 +312,6 @@
 
                     </div>
 
-
                     <div class="stat-card">
 
                         <div class="stat-icon purple">
@@ -478,11 +332,7 @@
 
                     </div>
 
-
                 </div>
-
-
-                <!-- Attendance -->
 
                 <div class="section-header">
 
@@ -500,15 +350,11 @@
 
                 </div>
 
-
                 <div class="attendance-summary-grid">
-
 
                     <div class="mini-stat present">
 
-                        <span>
-                            🟢
-                        </span>
+                        <span>🟢</span>
 
                         <div>
 
@@ -524,12 +370,9 @@
 
                     </div>
 
-
                     <div class="mini-stat late">
 
-                        <span>
-                            🟠
-                        </span>
+                        <span>🟠</span>
 
                         <div>
 
@@ -545,12 +388,9 @@
 
                     </div>
 
-
                     <div class="mini-stat absent">
 
-                        <span>
-                            🔴
-                        </span>
+                        <span>🔴</span>
 
                         <div>
 
@@ -566,12 +406,9 @@
 
                     </div>
 
-
                     <div class="mini-stat leave">
 
-                        <span>
-                            🏖️
-                        </span>
+                        <span>🏖️</span>
 
                         <div>
 
@@ -587,14 +424,9 @@
 
                     </div>
 
-
                 </div>
 
-
-                <!-- Dashboard Panels -->
-
                 <div class="dashboard-panels">
-
 
                     <div class="dashboard-panel">
 
@@ -618,7 +450,6 @@
 
                         </div>
 
-
                         <div class="progress-container">
 
                             <div
@@ -627,7 +458,6 @@
                             ></div>
 
                         </div>
-
 
                         <div class="panel-footer">
 
@@ -642,7 +472,6 @@
                         </div>
 
                     </div>
-
 
                     <div class="dashboard-panel">
 
@@ -662,9 +491,7 @@
 
                         </div>
 
-
                         <div class="request-summary">
-
 
                             <div>
 
@@ -678,7 +505,6 @@
 
                             </div>
 
-
                             <div>
 
                                 <span>
@@ -691,11 +517,9 @@
 
                             </div>
 
-
                         </div>
 
                     </div>
-
 
                     <div class="dashboard-panel">
 
@@ -721,18 +545,15 @@
 
                         <button
                             class="secondary-btn full-width"
-                            onclick="document.querySelector('[data-page=notifications]').click()"
+                            type="button"
+                            onclick="openPage('notifications')"
                         >
                             مشاهده اعلان‌ها
                         </button>
 
                     </div>
 
-
                 </div>
-
-
-                <!-- Recent Activity -->
 
                 <div class="dashboard-panel recent-activity">
 
@@ -752,7 +573,6 @@
 
                     </div>
 
-
                     <div
                         id="dashboardRecentActivity"
                         class="activity-list"
@@ -760,19 +580,14 @@
 
                 </div>
 
-
             </section>
 
-
-            <!-- ==================================================
-                 EMPLOYEES
-            ================================================== -->
+            <!-- ================= EMPLOYEES ================= -->
 
             <section
                 class="page"
                 id="employeesPage"
             >
-
 
                 <div class="page-toolbar">
 
@@ -791,21 +606,18 @@
                     <button
                         class="primary-btn"
                         id="addEmployeeBtn"
+                        type="button"
                     >
                         ➕ افزودن کارمند
                     </button>
 
                 </div>
 
-
                 <div class="summary-cards">
-
 
                     <div class="summary-card">
 
-                        <span>
-                            👥
-                        </span>
+                        <span>👥</span>
 
                         <div>
 
@@ -821,12 +633,9 @@
 
                     </div>
 
-
                     <div class="summary-card">
 
-                        <span>
-                            🟢
-                        </span>
+                        <span>🟢</span>
 
                         <div>
 
@@ -842,12 +651,9 @@
 
                     </div>
 
-
                     <div class="summary-card">
 
-                        <span>
-                            🔴
-                        </span>
+                        <span>🔴</span>
 
                         <div>
 
@@ -865,16 +671,11 @@
 
                 </div>
 
-
-                <!-- Filters -->
-
                 <div class="filters-card">
 
                     <div class="search-box">
 
-                        <span>
-                            🔍
-                        </span>
+                        <span>🔍</span>
 
                         <input
                             type="text"
@@ -883,7 +684,6 @@
                         >
 
                     </div>
-
 
                     <select id="departmentFilter">
 
@@ -909,7 +709,6 @@
 
                     </select>
 
-
                     <select id="statusFilter">
 
                         <option value="all">
@@ -928,9 +727,6 @@
 
                 </div>
 
-
-                <!-- Employees Table -->
-
                 <div class="table-card">
 
                     <div class="table-responsive">
@@ -941,37 +737,18 @@
 
                                 <tr>
 
-                                    <th>
-                                        کارمند
-                                    </th>
-
-                                    <th>
-                                        واحد
-                                    </th>
-
-                                    <th>
-                                        سمت
-                                    </th>
-
-                                    <th>
-                                        تلفن
-                                    </th>
-
-                                    <th>
-                                        وضعیت
-                                    </th>
-
-                                    <th>
-                                        عملیات
-                                    </th>
+                                    <th>کارمند</th>
+                                    <th>واحد</th>
+                                    <th>سمت</th>
+                                    <th>تلفن</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
 
                                 </tr>
 
                             </thead>
 
-                            <tbody
-                                id="employeesTableBody"
-                            ></tbody>
+                            <tbody id="employeesTableBody"></tbody>
 
                         </table>
 
@@ -979,19 +756,14 @@
 
                 </div>
 
-
             </section>
 
-
-            <!-- ==================================================
-                 ATTENDANCE
-            ================================================== -->
+            <!-- ================= ATTENDANCE ================= -->
 
             <section
                 class="page"
                 id="attendancePage"
             >
-
 
                 <div class="page-toolbar">
 
@@ -1010,15 +782,14 @@
                     <button
                         class="secondary-btn"
                         id="openAttendanceModal"
+                        type="button"
                     >
                         🔄 بروزرسانی
                     </button>
 
                 </div>
 
-
                 <div class="filters-card">
-
 
                     <div>
 
@@ -1033,12 +804,9 @@
 
                     </div>
 
-
                     <div class="search-box">
 
-                        <span>
-                            🔍
-                        </span>
+                        <span>🔍</span>
 
                         <input
                             type="text"
@@ -1048,10 +816,7 @@
 
                     </div>
 
-
-                    <select
-                        id="attendanceStatusFilter"
-                    >
+                    <select id="attendanceStatusFilter">
 
                         <option value="all">
                             همه وضعیت‌ها
@@ -1077,96 +842,45 @@
 
                 </div>
 
-
                 <div class="attendance-summary-grid">
 
-
                     <div class="mini-stat present">
-
-                        <span>
-                            🟢
-                        </span>
+                        <span>🟢</span>
 
                         <div>
-
-                            <strong id="presentCount">
-                                0
-                            </strong>
-
-                            <small>
-                                حاضر
-                            </small>
-
+                            <strong id="presentCount">0</strong>
+                            <small>حاضر</small>
                         </div>
-
                     </div>
-
 
                     <div class="mini-stat late">
-
-                        <span>
-                            🟠
-                        </span>
+                        <span>🟠</span>
 
                         <div>
-
-                            <strong id="lateCount">
-                                0
-                            </strong>
-
-                            <small>
-                                تأخیر
-                            </small>
-
+                            <strong id="lateCount">0</strong>
+                            <small>تأخیر</small>
                         </div>
-
                     </div>
-
 
                     <div class="mini-stat absent">
-
-                        <span>
-                            🔴
-                        </span>
+                        <span>🔴</span>
 
                         <div>
-
-                            <strong id="absentCount">
-                                0
-                            </strong>
-
-                            <small>
-                                غایب
-                            </small>
-
+                            <strong id="absentCount">0</strong>
+                            <small>غایب</small>
                         </div>
-
                     </div>
-
 
                     <div class="mini-stat leave">
-
-                        <span>
-                            🏖️
-                        </span>
+                        <span>🏖️</span>
 
                         <div>
-
-                            <strong id="leaveCount">
-                                0
-                            </strong>
-
-                            <small>
-                                مرخصی
-                            </small>
-
+                            <strong id="leaveCount">0</strong>
+                            <small>مرخصی</small>
                         </div>
-
                     </div>
 
-
                 </div>
-
 
                 <div class="table-card">
 
@@ -1178,45 +892,20 @@
 
                                 <tr>
 
-                                    <th>
-                                        کارمند
-                                    </th>
-
-                                    <th>
-                                        وضعیت
-                                    </th>
-
-                                    <th>
-                                        ورود
-                                    </th>
-
-                                    <th>
-                                        خروج
-                                    </th>
-
-                                    <th>
-                                        مدت کار
-                                    </th>
-
-                                    <th>
-                                        تأخیر
-                                    </th>
-
-                                    <th>
-                                        توضیحات
-                                    </th>
-
-                                    <th>
-                                        عملیات
-                                    </th>
+                                    <th>کارمند</th>
+                                    <th>وضعیت</th>
+                                    <th>ورود</th>
+                                    <th>خروج</th>
+                                    <th>مدت کار</th>
+                                    <th>تأخیر</th>
+                                    <th>توضیحات</th>
+                                    <th>عملیات</th>
 
                                 </tr>
 
                             </thead>
 
-                            <tbody
-                                id="attendanceTableBody"
-                            ></tbody>
+                            <tbody id="attendanceTableBody"></tbody>
 
                         </table>
 
@@ -1224,19 +913,14 @@
 
                 </div>
 
-
             </section>
 
-
-            <!-- ==================================================
-                 LEAVE
-            ================================================== -->
+            <!-- ================= LEAVE ================= -->
 
             <section
                 class="page"
                 id="leavePage"
             >
-
 
                 <div class="page-toolbar">
 
@@ -1255,110 +939,58 @@
                     <button
                         class="primary-btn"
                         id="addLeaveBtn"
+                        type="button"
                     >
                         ➕ ثبت درخواست
                     </button>
 
                 </div>
 
-
                 <div class="summary-cards">
 
-
                     <div class="summary-card">
-
-                        <span>
-                            📋
-                        </span>
+                        <span>📋</span>
 
                         <div>
-
-                            <small>
-                                کل درخواست‌ها
-                            </small>
-
-                            <strong id="totalLeave">
-                                0
-                            </strong>
-
+                            <small>کل درخواست‌ها</small>
+                            <strong id="totalLeave">0</strong>
                         </div>
-
                     </div>
-
 
                     <div class="summary-card">
-
-                        <span>
-                            🟠
-                        </span>
+                        <span>🟠</span>
 
                         <div>
-
-                            <small>
-                                در انتظار
-                            </small>
-
-                            <strong id="pendingLeave">
-                                0
-                            </strong>
-
+                            <small>در انتظار</small>
+                            <strong id="pendingLeave">0</strong>
                         </div>
-
                     </div>
-
 
                     <div class="summary-card">
-
-                        <span>
-                            🟢
-                        </span>
+                        <span>🟢</span>
 
                         <div>
-
-                            <small>
-                                تأیید شده
-                            </small>
-
-                            <strong id="approvedLeave">
-                                0
-                            </strong>
-
+                            <small>تأیید شده</small>
+                            <strong id="approvedLeave">0</strong>
                         </div>
-
                     </div>
-
 
                     <div class="summary-card">
-
-                        <span>
-                            🔴
-                        </span>
+                        <span>🔴</span>
 
                         <div>
-
-                            <small>
-                                رد شده
-                            </small>
-
-                            <strong id="rejectedLeave">
-                                0
-                            </strong>
-
+                            <small>رد شده</small>
+                            <strong id="rejectedLeave">0</strong>
                         </div>
-
                     </div>
-
 
                 </div>
-
 
                 <div class="filters-card">
 
                     <div class="search-box">
 
-                        <span>
-                            🔍
-                        </span>
+                        <span>🔍</span>
 
                         <input
                             type="text"
@@ -1367,7 +999,6 @@
                         >
 
                     </div>
-
 
                     <select id="leaveTypeFilter">
 
@@ -1393,7 +1024,6 @@
 
                     </select>
 
-
                     <select id="leaveStatusFilter">
 
                         <option value="all">
@@ -1414,14 +1044,12 @@
 
                     </select>
 
-
                     <input
                         type="date"
                         id="leaveDateFilter"
                     >
 
                 </div>
-
 
                 <div class="table-card">
 
@@ -1433,45 +1061,20 @@
 
                                 <tr>
 
-                                    <th>
-                                        کارمند
-                                    </th>
-
-                                    <th>
-                                        نوع
-                                    </th>
-
-                                    <th>
-                                        شروع
-                                    </th>
-
-                                    <th>
-                                        پایان
-                                    </th>
-
-                                    <th>
-                                        مدت
-                                    </th>
-
-                                    <th>
-                                        توضیحات
-                                    </th>
-
-                                    <th>
-                                        وضعیت
-                                    </th>
-
-                                    <th>
-                                        عملیات
-                                    </th>
+                                    <th>کارمند</th>
+                                    <th>نوع</th>
+                                    <th>شروع</th>
+                                    <th>پایان</th>
+                                    <th>مدت</th>
+                                    <th>توضیحات</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
 
                                 </tr>
 
                             </thead>
 
-                            <tbody
-                                id="leaveTableBody"
-                            ></tbody>
+                            <tbody id="leaveTableBody"></tbody>
 
                         </table>
 
@@ -1479,19 +1082,14 @@
 
                 </div>
 
-
             </section>
 
-
-            <!-- ==================================================
-                 REPORTS
-            ================================================== -->
+            <!-- ================= REPORTS ================= -->
 
             <section
                 class="page"
                 id="reportsPage"
             >
-
 
                 <div class="page-toolbar">
 
@@ -1510,15 +1108,14 @@
                     <button
                         class="primary-btn"
                         id="exportReportsBtn"
+                        type="button"
                     >
                         📥 خروجی گزارش
                     </button>
 
                 </div>
 
-
                 <div class="stats-grid">
-
 
                     <div class="stat-card">
 
@@ -1528,9 +1125,7 @@
 
                         <div class="stat-content">
 
-                            <span>
-                                کل کارکنان
-                            </span>
+                            <span>کل کارکنان</span>
 
                             <strong id="reportTotalEmployees">
                                 0
@@ -1540,7 +1135,6 @@
 
                     </div>
 
-
                     <div class="stat-card">
 
                         <div class="stat-icon blue">
@@ -1549,9 +1143,7 @@
 
                         <div class="stat-content">
 
-                            <span>
-                                کارکنان فعال
-                            </span>
+                            <span>کارکنان فعال</span>
 
                             <strong id="reportActiveEmployees">
                                 0
@@ -1561,7 +1153,6 @@
 
                     </div>
 
-
                     <div class="stat-card">
 
                         <div class="stat-icon purple">
@@ -1570,9 +1161,7 @@
 
                         <div class="stat-content">
 
-                            <span>
-                                کل درخواست‌ها
-                            </span>
+                            <span>کل درخواست‌ها</span>
 
                             <strong id="reportTotalLeaves">
                                 0
@@ -1582,7 +1171,6 @@
 
                     </div>
 
-
                     <div class="stat-card">
 
                         <div class="stat-icon orange">
@@ -1591,9 +1179,7 @@
 
                         <div class="stat-content">
 
-                            <span>
-                                درخواست‌های در انتظار
-                            </span>
+                            <span>درخواست‌های در انتظار</span>
 
                             <strong id="reportPendingLeaves">
                                 0
@@ -1603,23 +1189,18 @@
 
                     </div>
 
-
                 </div>
 
-
                 <div class="dashboard-panels">
-
 
                     <div class="dashboard-panel">
 
                         <div class="panel-header">
 
                             <div>
-
                                 <h3>
                                     درخواست‌های تأیید شده
                                 </h3>
-
                             </div>
 
                             <strong id="reportApprovedLeaves">
@@ -1630,17 +1211,14 @@
 
                     </div>
 
-
                     <div class="dashboard-panel">
 
                         <div class="panel-header">
 
                             <div>
-
                                 <h3>
                                     درخواست‌های رد شده
                                 </h3>
-
                             </div>
 
                             <strong id="reportRejectedLeaves">
@@ -1651,9 +1229,7 @@
 
                     </div>
 
-
                 </div>
-
 
                 <div class="dashboard-panel">
 
@@ -1674,6 +1250,7 @@
                         <button
                             class="secondary-btn"
                             id="downloadReportBtn"
+                            type="button"
                         >
                             📊 دریافت گزارش
                         </button>
@@ -1682,19 +1259,14 @@
 
                 </div>
 
-
             </section>
 
-
-            <!-- ==================================================
-                 NOTIFICATIONS
-            ================================================== -->
+            <!-- ================= NOTIFICATIONS ================= -->
 
             <section
                 class="page"
                 id="notificationsPage"
             >
-
 
                 <div class="page-toolbar">
 
@@ -1715,6 +1287,7 @@
                         <button
                             class="secondary-btn"
                             id="markAllNotifications"
+                            type="button"
                         >
                             ✓ خواندن همه
                         </button>
@@ -1722,6 +1295,7 @@
                         <button
                             class="danger-btn"
                             id="clearAllNotifications"
+                            type="button"
                         >
                             🗑️ حذف همه
                         </button>
@@ -1729,7 +1303,6 @@
                     </div>
 
                 </div>
-
 
                 <div class="notification-summary">
 
@@ -1743,12 +1316,10 @@
 
                 </div>
 
-
                 <div
                     class="notifications-container"
                     id="notificationsContainer"
                 ></div>
-
 
                 <div
                     class="empty-state"
@@ -1770,19 +1341,14 @@
 
                 </div>
 
-
             </section>
 
-
-            <!-- ==================================================
-                 SETTINGS
-            ================================================== -->
+            <!-- ================= SETTINGS ================= -->
 
             <section
                 class="page"
                 id="settingsPage"
             >
-
 
                 <div class="page-toolbar">
 
@@ -1800,9 +1366,7 @@
 
                 </div>
 
-
                 <div class="settings-grid">
-
 
                     <div class="settings-card">
 
@@ -1824,7 +1388,6 @@
 
                     </div>
 
-
                     <div class="settings-card">
 
                         <div class="settings-icon">
@@ -1844,7 +1407,6 @@
                         </div>
 
                     </div>
-
 
                     <div class="settings-card">
 
@@ -1866,7 +1428,6 @@
 
                     </div>
 
-
                     <div class="settings-card">
 
                         <div class="settings-icon">
@@ -1887,19 +1448,15 @@
 
                     </div>
 
-
                 </div>
 
-
             </section>
-
 
         </div>
 
     </main>
 
 </div>
-
 
 
 <!-- ==================================================
@@ -1913,7 +1470,6 @@
 
     <div class="modal">
 
-
         <div class="modal-header">
 
             <h3 id="modalTitle">
@@ -1923,21 +1479,19 @@
             <button
                 class="modal-close"
                 id="closeModal"
+                type="button"
             >
                 ×
             </button>
 
         </div>
 
-
         <div class="modal-body">
-
 
             <form
                 id="employeeForm"
                 class="employee-form"
             >
-
 
                 <div class="form-group">
 
@@ -1954,7 +1508,6 @@
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label for="personnelCode">
@@ -1970,7 +1523,6 @@
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label for="phone">
@@ -1985,17 +1537,13 @@
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label for="department">
                         واحد سازمانی *
                     </label>
 
-                    <select
-                        id="department"
-                        required
-                    >
+                    <select id="department" required>
 
                         <option value="">
                             انتخاب واحد
@@ -2021,7 +1569,6 @@
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label for="position">
@@ -2035,7 +1582,6 @@
                     >
 
                 </div>
-
 
                 <div class="form-group">
 
@@ -2057,7 +1603,6 @@
 
                 </div>
 
-
                 <div class="form-group full">
 
                     <label for="address">
@@ -2071,7 +1616,6 @@
                     ></textarea>
 
                 </div>
-
 
                 <div class="modal-actions">
 
@@ -2092,11 +1636,7 @@
 
                 </div>
 
-
             </form>
-
-
-            <!-- Profile View -->
 
             <div
                 id="profileView"
@@ -2114,79 +1654,42 @@
 
                     <div>
 
-                        <h3 id="profileName">
-                            -
-                        </h3>
+                        <h3 id="profileName">-</h3>
 
-                        <p id="profilePosition">
-                            -
-                        </p>
+                        <p id="profilePosition">-</p>
 
                     </div>
 
                 </div>
-
 
                 <div class="profile-grid">
 
-
                     <div>
-                        <span>
-                            کد پرسنلی
-                        </span>
-
-                        <strong id="profileCode">
-                            -
-                        </strong>
+                        <span>کد پرسنلی</span>
+                        <strong id="profileCode">-</strong>
                     </div>
 
-
                     <div>
-                        <span>
-                            واحد
-                        </span>
-
-                        <strong id="profileDepartment">
-                            -
-                        </strong>
+                        <span>واحد</span>
+                        <strong id="profileDepartment">-</strong>
                     </div>
 
-
                     <div>
-                        <span>
-                            تلفن
-                        </span>
-
-                        <strong id="profilePhone">
-                            -
-                        </strong>
+                        <span>تلفن</span>
+                        <strong id="profilePhone">-</strong>
                     </div>
 
-
                     <div>
-                        <span>
-                            وضعیت
-                        </span>
-
-                        <strong id="profileStatus">
-                            -
-                        </strong>
+                        <span>وضعیت</span>
+                        <strong id="profileStatus">-</strong>
                     </div>
-
 
                     <div class="full">
-                        <span>
-                            آدرس
-                        </span>
-
-                        <strong id="profileAddress">
-                            -
-                        </strong>
+                        <span>آدرس</span>
+                        <strong id="profileAddress">-</strong>
                     </div>
 
-
                 </div>
-
 
                 <div class="modal-actions">
 
@@ -2202,13 +1705,11 @@
 
             </div>
 
-
         </div>
 
     </div>
 
 </div>
-
 
 
 <!-- ==================================================
@@ -2222,7 +1723,6 @@
 
     <div class="modal">
 
-
         <div class="modal-header">
 
             <h3>
@@ -2232,18 +1732,16 @@
             <button
                 class="modal-close"
                 id="closeLeaveModal"
+                type="button"
             >
                 ×
             </button>
 
         </div>
 
-
         <div class="modal-body">
 
-
             <form id="leaveForm">
-
 
                 <div class="form-group">
 
@@ -2263,7 +1761,6 @@
                     </select>
 
                 </div>
-
 
                 <div class="form-group">
 
@@ -2300,9 +1797,7 @@
 
                 </div>
 
-
                 <div class="form-row">
-
 
                     <div class="form-group">
 
@@ -2318,7 +1813,6 @@
 
                     </div>
 
-
                     <div class="form-group">
 
                         <label for="leaveEnd">
@@ -2333,9 +1827,7 @@
 
                     </div>
 
-
                 </div>
-
 
                 <div class="form-group">
 
@@ -2353,7 +1845,6 @@
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label for="leaveDescription">
@@ -2367,7 +1858,6 @@
                     ></textarea>
 
                 </div>
-
 
                 <div class="modal-actions">
 
@@ -2388,7 +1878,6 @@
 
                 </div>
 
-
             </form>
 
         </div>
@@ -2398,10 +1887,7 @@
 </div>
 
 
-
-<!-- ==================================================
-     OVERLAY FOR MOBILE
-================================================== -->
+<!-- ================= MOBILE OVERLAY ================= -->
 
 <div
     class="sidebar-overlay"
@@ -2409,18 +1895,9 @@
 ></div>
 
 
-
-<!-- ==================================================
-     JAVASCRIPT
-================================================== -->
+<!-- ================= JAVASCRIPT ================= -->
 
 <script src="app.js"></script>
 
-
 </body>
-
-    </html>
-<!-- دکمه باز کردن منو -->
-<button id="mobileMenu" class="mobile-menu-btn" aria-label="باز کردن منو">
-    ☰
-</button>
+</html>
