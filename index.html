@@ -27,11 +27,15 @@
 
 <div id="app">
 
-    <!-- =========================
-         LOGIN
-    ========================== -->
+    <!-- ================= LOGIN ================= -->
 
-    <section id="loginPage" class="auth-page">
+    <section id="authPage" class="auth-page">
+
+        <div class="auth-decoration">
+            <div class="auth-circle one"></div>
+            <div class="auth-circle two"></div>
+            <i class="fa-solid fa-seedling"></i>
+        </div>
 
         <div class="auth-card">
 
@@ -42,188 +46,177 @@
             <h1>میرزا کوچک خان</h1>
 
             <p class="auth-subtitle">
-                سامانه جامع منابع انسانی
+                سامانه جامع منابع انسانی و حضور و غیاب
             </p>
 
-            <form id="loginForm">
+            <!-- LOGIN -->
 
-                <div class="input-group">
-                    <label>نام کاربری</label>
+            <div id="loginBox">
 
-                    <div class="input-with-icon">
+                <div class="auth-tabs">
+
+                    <button
+                        class="auth-tab active"
+                        data-auth="employee"
+                        type="button"
+                    >
                         <i class="fa-solid fa-user"></i>
-                        <input
-                            id="loginUsername"
-                            type="text"
-                            required
-                            placeholder="نام کاربری"
-                        >
-                    </div>
+                        کارمند
+                    </button>
+
+                    <button
+                        class="auth-tab"
+                        data-auth="manager"
+                        type="button"
+                    >
+                        <i class="fa-solid fa-user-tie"></i>
+                        مدیر
+                    </button>
+
                 </div>
 
-                <div class="input-group">
-                    <label>رمز عبور</label>
+                <form id="loginForm">
 
-                    <div class="input-with-icon">
-                        <i class="fa-solid fa-lock"></i>
+                    <div class="form-group">
 
-                        <input
-                            id="loginPassword"
-                            type="password"
-                            required
-                            placeholder="رمز عبور"
-                        >
-
-                        <button
-                            type="button"
-                            id="togglePassword"
-                            class="password-toggle"
-                        >
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <button class="primary-btn auth-submit" type="submit">
-                    <i class="fa-solid fa-right-to-bracket"></i>
-                    ورود به سامانه
-                </button>
-
-            </form>
-
-            <div class="auth-divider">
-                <span>یا</span>
-            </div>
-
-            <button
-                id="showRegisterBtn"
-                class="secondary-btn full-btn"
-                type="button"
-            >
-                <i class="fa-solid fa-user-plus"></i>
-                ثبت‌نام کارمند
-            </button>
-
-            <div class="demo-login">
-                <strong>ورود آزمایشی مدیر</strong>
-                <span>admin / 123456</span>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         REGISTER
-    ========================== -->
-
-    <section id="registerPage" class="auth-page hidden">
-
-        <div class="auth-card register-card">
-
-            <div class="auth-logo">
-                <i class="fa-solid fa-user-plus"></i>
-            </div>
-
-            <h1>ثبت‌نام کارمند</h1>
-
-            <p class="auth-subtitle">
-                برای ساخت حساب، اطلاعات خود را وارد کنید
-            </p>
-
-            <form id="registerForm">
-
-                <div class="form-grid">
-
-                    <div class="input-group">
-                        <label>نام و نام خانوادگی</label>
-                        <input id="registerName" required>
-                    </div>
-
-                    <div class="input-group">
-                        <label>کد ملی</label>
-                        <input
-                            id="registerNationalId"
-                            maxlength="10"
-                            required
-                        >
-                    </div>
-
-                    <div class="input-group">
-                        <label>کد پرسنلی</label>
-                        <input
-                            id="registerEmployeeCode"
-                            required
-                        >
-                    </div>
-
-                    <div class="input-group">
-                        <label>تاریخ تولد</label>
-                        <input
-                            id="registerBirthDate"
-                            type="date"
-                            required
-                        >
-                    </div>
-
-                    <div class="input-group">
-                        <label>شماره تماس</label>
-                        <input
-                            id="registerPhone"
-                            type="tel"
-                            required
-                        >
-                    </div>
-
-                    <div class="input-group">
                         <label>نام کاربری</label>
-                        <input
-                            id="registerUsername"
-                            required
-                        >
+
+                        <div class="input-icon">
+                            <i class="fa-solid fa-user"></i>
+
+                            <input
+                                id="loginUsername"
+                                required
+                                autocomplete="username"
+                                placeholder="نام کاربری"
+                            >
+                        </div>
+
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
+
                         <label>رمز عبور</label>
-                        <input
-                            id="registerPassword"
-                            type="password"
-                            minlength="4"
-                            required
-                        >
+
+                        <div class="input-icon">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            <input
+                                id="loginPassword"
+                                type="password"
+                                required
+                                autocomplete="current-password"
+                                placeholder="رمز عبور"
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="togglePassword"
+                            >
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+
+                        </div>
+
                     </div>
 
-                </div>
+                    <button class="primary-btn auth-submit" type="submit">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        ورود به سامانه
+                    </button>
 
-                <button class="primary-btn full-btn" type="submit">
-                    <i class="fa-solid fa-user-check"></i>
-                    ایجاد حساب
+                </form>
+
+                <button
+                    id="showRegister"
+                    class="register-link"
+                    type="button"
+                >
+                    حساب کاربری ندارید؟ ثبت‌نام کنید
                 </button>
 
-            </form>
+                <div class="demo-info">
+                    <strong>ورود مدیر آزمایشی</strong>
+                    <span>نام کاربری: admin</span>
+                    <span>رمز عبور: 123456</span>
+                </div>
 
-            <button
-                id="backToLoginBtn"
-                class="secondary-btn full-btn"
-                type="button"
-            >
-                <i class="fa-solid fa-arrow-right"></i>
-                بازگشت به ورود
-            </button>
+            </div>
+
+
+            <!-- REGISTER -->
+
+            <div id="registerBox" class="hidden">
+
+                <h2>ثبت‌نام کارمند</h2>
+
+                <p class="auth-description">
+                    اطلاعات خود را وارد کنید تا حساب کاربری ساخته شود.
+                </p>
+
+                <form id="registerForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>نام و نام خانوادگی</label>
+                            <input id="registerName" required placeholder="مثلاً علی احمدی">
+                        </div>
+
+                        <div class="form-group">
+                            <label>کد ملی</label>
+                            <input id="registerNationalId" required maxlength="10" placeholder="۱۰ رقمی">
+                        </div>
+
+                        <div class="form-group">
+                            <label>تاریخ تولد</label>
+                            <input id="registerBirthDate" type="date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>شماره تماس</label>
+                            <input id="registerPhone" type="tel" required placeholder="09xxxxxxxxx">
+                        </div>
+
+                        <div class="form-group">
+                            <label>نام کاربری</label>
+                            <input id="registerUsername" required placeholder="نام کاربری">
+                        </div>
+
+                        <div class="form-group">
+                            <label>رمز عبور</label>
+                            <input id="registerPassword" type="password" required minlength="4">
+                        </div>
+
+                    </div>
+
+                    <button class="primary-btn auth-submit" type="submit">
+                        <i class="fa-solid fa-user-plus"></i>
+                        ثبت‌نام
+                    </button>
+
+                </form>
+
+                <button
+                    id="backToLogin"
+                    class="register-link"
+                    type="button"
+                >
+                    بازگشت به ورود
+                </button>
+
+            </div>
 
         </div>
 
     </section>
 
 
-    <!-- =========================
-         MAIN APPLICATION
-    ========================== -->
+    <!-- ================= MAIN APP ================= -->
 
     <div id="mainApp" class="app hidden">
-
-        <!-- MOBILE MENU -->
 
         <div id="menuOverlay" class="menu-overlay"></div>
 
@@ -247,25 +240,30 @@
                 </div>
 
                 <div class="brand-text">
+
                     <strong>میرزا کوچک خان</strong>
-                    <span>سامانه جامع منابع انسانی</span>
+
+                    <span>
+                        سامانه منابع انسانی
+                    </span>
+
                 </div>
 
             </div>
 
 
-            <!-- مدیر -->
+            <!-- MANAGER MENU -->
 
             <nav id="managerMenu" class="sidebar-menu">
 
-                <button class="menu-item active" data-page="dashboard">
+                <button class="menu-item active" data-page="dashboard" type="button">
                     <span class="menu-icon">
                         <i class="fa-solid fa-chart-pie"></i>
                     </span>
                     <span>داشبورد</span>
                 </button>
 
-                <button class="menu-item" data-page="employees">
+                <button class="menu-item" data-page="employees" type="button">
                     <span class="menu-icon">
                         <i class="fa-solid fa-users"></i>
                     </span>
@@ -273,14 +271,14 @@
                     <span id="employeeMenuBadge" class="menu-badge">0</span>
                 </button>
 
-                <button class="menu-item" data-page="attendance">
+                <button class="menu-item" data-page="attendance" type="button">
                     <span class="menu-icon">
                         <i class="fa-solid fa-clock"></i>
                     </span>
                     <span>حضور و غیاب</span>
                 </button>
 
-                <button class="menu-item" data-page="leave">
+                <button class="menu-item" data-page="leave" type="button">
                     <span class="menu-icon">
                         <i class="fa-solid fa-calendar-days"></i>
                     </span>
@@ -288,21 +286,21 @@
                     <span id="leaveMenuBadge" class="menu-badge warning">0</span>
                 </button>
 
-                <button class="menu-item" data-page="payroll">
+                <button class="menu-item" data-page="payroll" type="button">
                     <span class="menu-icon">
                         <i class="fa-solid fa-money-bill-wave"></i>
                     </span>
                     <span>حقوق و کسورات</span>
                 </button>
 
-                <button class="menu-item" data-page="reports">
+                <button class="menu-item" data-page="reports" type="button">
                     <span class="menu-icon">
                         <i class="fa-solid fa-chart-column"></i>
                     </span>
                     <span>گزارش‌ها</span>
                 </button>
 
-                <button class="menu-item" data-page="notifications">
+                <button class="menu-item" data-page="notifications" type="button">
                     <span class="menu-icon">
                         <i class="fa-solid fa-bell"></i>
                     </span>
@@ -313,30 +311,37 @@
             </nav>
 
 
-            <!-- کارمند -->
+            <!-- EMPLOYEE MENU -->
 
             <nav id="employeeMenu" class="sidebar-menu hidden">
 
-                <button class="menu-item active" data-page="myProfile">
+                <button class="menu-item active" data-page="employeeProfile" type="button">
                     <span class="menu-icon">
                         <i class="fa-solid fa-user"></i>
                     </span>
                     <span>پروفایل من</span>
                 </button>
 
-                <button class="menu-item" data-page="myAttendance">
+                <button class="menu-item" data-page="employeePayroll" type="button">
+                    <span class="menu-icon">
+                        <i class="fa-solid fa-wallet"></i>
+                    </span>
+                    <span>حقوق و کسورات</span>
+                </button>
+
+                <button class="menu-item" data-page="employeeAttendance" type="button">
                     <span class="menu-icon">
                         <i class="fa-solid fa-clock"></i>
                     </span>
                     <span>حضور و غیاب من</span>
                 </button>
 
-                <button class="menu-item" data-page="myLeave">
+                <button class="menu-item" data-page="employeeLeave" type="button">
                     <span class="menu-icon">
-                        <i class="fa-solid fa-calendar-check"></i>
+                        <i class="fa-solid fa-calendar-days"></i>
                     </span>
                     <span>مرخصی من</span>
-                    <span id="myLeaveBadge" class="menu-badge warning">0</span>
+                    <span id="employeeLeaveBadge" class="menu-badge warning">0</span>
                 </button>
 
             </nav>
@@ -353,18 +358,24 @@
         </aside>
 
 
-        <!-- MAIN -->
+        <!-- MAIN LAYOUT -->
 
         <div class="main-layout">
 
             <header class="topbar">
 
                 <div class="topbar-title">
-                    <h1 id="pageTitle">داشبورد</h1>
+
+                    <h1 id="pageTitle">
+                        داشبورد
+                    </h1>
+
                     <span id="pageSubtitle">
                         مدیریت جامع منابع انسانی
                     </span>
+
                 </div>
+
 
                 <div class="topbar-actions">
 
@@ -377,22 +388,35 @@
                         <span id="notificationBadge">0</span>
                     </button>
 
+
                     <button
                         id="profileButton"
                         class="user-button"
                         type="button"
                     >
-                        <span id="topAvatar" class="user-avatar">م</span>
+
+                        <span id="topUserAvatar" class="user-avatar">
+                            م
+                        </span>
 
                         <span class="user-info">
-                            <strong id="topUserName">مدیر سیستم</strong>
-                            <small id="topUserRole">مدیریت منابع انسانی</small>
+
+                            <strong id="topUserName">
+                                مدیر سیستم
+                            </strong>
+
+                            <small id="topUserRole">
+                                مدیریت منابع انسانی
+                            </small>
+
                         </span>
+
                     </button>
+
 
                     <button
                         id="logoutButton"
-                        class="logout-button"
+                        class="logout-btn"
                         type="button"
                         title="خروج"
                     >
@@ -406,7 +430,8 @@
 
             <main class="content">
 
-                <!-- ================= DASHBOARD ================= -->
+
+                <!-- ================= MANAGER DASHBOARD ================= -->
 
                 <section id="page-dashboard" class="page active-page">
 
@@ -433,18 +458,12 @@
 
                             <div class="hero-actions">
 
-                                <button
-                                    class="primary-btn"
-                                    data-page="employees"
-                                >
+                                <button class="primary-btn" data-page="employees" type="button">
                                     <i class="fa-solid fa-users"></i>
                                     مدیریت کارکنان
                                 </button>
 
-                                <button
-                                    class="secondary-btn"
-                                    data-page="attendance"
-                                >
+                                <button class="secondary-btn" data-page="attendance" type="button">
                                     <i class="fa-solid fa-clock"></i>
                                     حضور و غیاب
                                 </button>
@@ -454,9 +473,12 @@
                         </div>
 
                         <div class="hero-decoration">
+
                             <div class="hero-circle circle-one"></div>
                             <div class="hero-circle circle-two"></div>
+
                             <i class="fa-solid fa-seedling"></i>
+
                         </div>
 
                     </div>
@@ -509,6 +531,7 @@
                                 <button
                                     class="text-button"
                                     data-page="employees"
+                                    type="button"
                                 >
                                     مشاهده همه
                                     <i class="fa-solid fa-arrow-left"></i>
@@ -542,18 +565,17 @@
                     <div class="page-toolbar">
 
                         <div>
-                            <h2 class="section-title">
-                                مدیریت کارکنان
-                            </h2>
+                            <h2 class="section-title">مدیریت کارکنان</h2>
 
                             <p class="section-subtitle">
-                                ثبت، ویرایش و مدیریت اطلاعات کارکنان
+                                ثبت و مدیریت کامل اطلاعات کارکنان
                             </p>
                         </div>
 
                         <button
                             id="addEmployeeBtn"
                             class="primary-btn"
+                            type="button"
                         >
                             <i class="fa-solid fa-user-plus"></i>
                             افزودن کارمند
@@ -567,19 +589,23 @@
                         <div class="table-header">
 
                             <div class="search-box">
+
                                 <i class="fa-solid fa-magnifying-glass"></i>
 
                                 <input
                                     id="employeeSearch"
                                     type="search"
-                                    placeholder="جستجوی نام، کد پرسنلی، کد ملی یا سمت..."
+                                    placeholder="جستجوی نام، کد ملی، کد پرسنلی یا سمت..."
                                 >
+
                             </div>
+
 
                             <select
                                 id="employeeDepartmentFilter"
                                 class="filter-select"
                             >
+
                                 <option value="">همه واحدها</option>
                                 <option>منابع انسانی</option>
                                 <option>مالی</option>
@@ -587,6 +613,7 @@
                                 <option>فنی</option>
                                 <option>اداری</option>
                                 <option>حراست</option>
+
                             </select>
 
                         </div>
@@ -597,15 +624,16 @@
                             <table>
 
                                 <thead>
+
                                     <tr>
                                         <th>کارمند</th>
                                         <th>کد پرسنلی</th>
                                         <th>واحد</th>
                                         <th>سمت</th>
-                                        <th>حقوق</th>
                                         <th>وضعیت</th>
                                         <th>عملیات</th>
                                     </tr>
+
                                 </thead>
 
                                 <tbody id="employeesTableBody"></tbody>
@@ -626,12 +654,10 @@
                     <div class="page-toolbar">
 
                         <div>
-                            <h2 class="section-title">
-                                حضور و غیاب
-                            </h2>
+                            <h2 class="section-title">حضور و غیاب</h2>
 
                             <p class="section-subtitle">
-                                ثبت و مدیریت وضعیت حضور کارکنان
+                                ثبت و مدیریت حضور کارکنان
                             </p>
                         </div>
 
@@ -676,6 +702,7 @@
                             <table>
 
                                 <thead>
+
                                     <tr>
                                         <th>کارمند</th>
                                         <th>ورود</th>
@@ -683,6 +710,7 @@
                                         <th>وضعیت</th>
                                         <th>عملیات</th>
                                     </tr>
+
                                 </thead>
 
                                 <tbody id="attendanceTableBody"></tbody>
@@ -696,16 +724,14 @@
                 </section>
 
 
-                <!-- ================= LEAVE ================= -->
+                <!-- ================= LEAVE MANAGER ================= -->
 
                 <section id="page-leave" class="page">
 
                     <div class="page-toolbar">
 
                         <div>
-                            <h2 class="section-title">
-                                مدیریت مرخصی
-                            </h2>
+                            <h2 class="section-title">مدیریت مرخصی</h2>
 
                             <p class="section-subtitle">
                                 بررسی و مدیریت درخواست‌های مرخصی
@@ -715,6 +741,7 @@
                         <button
                             id="addLeaveBtn"
                             class="primary-btn"
+                            type="button"
                         >
                             <i class="fa-solid fa-calendar-plus"></i>
                             ثبت درخواست
@@ -755,6 +782,7 @@
                             <table>
 
                                 <thead>
+
                                     <tr>
                                         <th>کارمند</th>
                                         <th>نوع</th>
@@ -764,6 +792,7 @@
                                         <th>وضعیت</th>
                                         <th>عملیات</th>
                                     </tr>
+
                                 </thead>
 
                                 <tbody id="leaveTableBody"></tbody>
@@ -777,16 +806,14 @@
                 </section>
 
 
-                <!-- ================= PAYROLL ================= -->
+                <!-- ================= PAYROLL MANAGER ================= -->
 
                 <section id="page-payroll" class="page">
 
                     <div class="page-toolbar">
 
                         <div>
-                            <h2 class="section-title">
-                                حقوق و کسورات
-                            </h2>
+                            <h2 class="section-title">حقوق و کسورات</h2>
 
                             <p class="section-subtitle">
                                 مدیریت حقوق، مزایا و کسورات کارکنان
@@ -796,6 +823,7 @@
                         <button
                             id="calculatePayrollBtn"
                             class="primary-btn"
+                            type="button"
                         >
                             <i class="fa-solid fa-calculator"></i>
                             محاسبه حقوق
@@ -831,6 +859,7 @@
                             <table>
 
                                 <thead>
+
                                     <tr>
                                         <th>کارمند</th>
                                         <th>حقوق پایه</th>
@@ -840,6 +869,7 @@
                                         <th>خالص پرداختی</th>
                                         <th>عملیات</th>
                                     </tr>
+
                                 </thead>
 
                                 <tbody id="payrollTableBody"></tbody>
@@ -860,9 +890,7 @@
                     <div class="page-toolbar">
 
                         <div>
-                            <h2 class="section-title">
-                                گزارش‌ها
-                            </h2>
+                            <h2 class="section-title">گزارش‌ها</h2>
 
                             <p class="section-subtitle">
                                 گزارش‌های مدیریتی سامانه
@@ -872,6 +900,7 @@
                         <button
                             id="printReportBtn"
                             class="secondary-btn"
+                            type="button"
                         >
                             <i class="fa-solid fa-print"></i>
                             چاپ گزارش
@@ -921,10 +950,7 @@
                                 </div>
 
                                 <div class="progress">
-                                    <div
-                                        id="attendanceProgress"
-                                        class="progress-bar"
-                                    ></div>
+                                    <div id="attendanceProgress" class="progress-bar"></div>
                                 </div>
 
                             </div>
@@ -954,9 +980,7 @@
                     <div class="page-toolbar">
 
                         <div>
-                            <h2 class="section-title">
-                                اعلان‌ها
-                            </h2>
+                            <h2 class="section-title">اعلان‌ها</h2>
 
                             <p class="section-subtitle">
                                 اطلاعیه‌ها و رویدادهای سامانه
@@ -966,6 +990,7 @@
                         <button
                             id="markAllNotifications"
                             class="secondary-btn"
+                            type="button"
                         >
                             <i class="fa-solid fa-check-double"></i>
                             خواندن همه
@@ -983,16 +1008,14 @@
                 </section>
 
 
-                <!-- ================= MY PROFILE ================= -->
+                <!-- ================= EMPLOYEE PROFILE ================= -->
 
-                <section id="page-myProfile" class="page">
+                <section id="page-employeeProfile" class="page">
 
                     <div class="page-toolbar">
 
                         <div>
-                            <h2 class="section-title">
-                                پروفایل من
-                            </h2>
+                            <h2 class="section-title">پروفایل من</h2>
 
                             <p class="section-subtitle">
                                 اطلاعات شخصی و شغلی شما
@@ -1002,24 +1025,131 @@
                     </div>
 
 
-                    <div id="employeeProfileContent"></div>
+                    <div class="profile-card-large">
+
+                        <div class="profile-header">
+
+                            <div id="employeeProfileAvatar" class="large-avatar">
+                                م
+                            </div>
+
+                            <div>
+                                <h2 id="employeeProfileName">-</h2>
+                                <p id="employeeProfilePosition">-</p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-grid">
+
+                            <div class="profile-item">
+                                <span>نام و نام خانوادگی</span>
+                                <strong id="myName">-</strong>
+                            </div>
+
+                            <div class="profile-item">
+                                <span>کد ملی</span>
+                                <strong id="myNationalId">-</strong>
+                            </div>
+
+                            <div class="profile-item">
+                                <span>تاریخ تولد</span>
+                                <strong id="myBirthDate">-</strong>
+                            </div>
+
+                            <div class="profile-item">
+                                <span>شماره تماس</span>
+                                <strong id="myPhone">-</strong>
+                            </div>
+
+                            <div class="profile-item">
+                                <span>کد پرسنلی</span>
+                                <strong id="myEmployeeCode">-</strong>
+                            </div>
+
+                            <div class="profile-item">
+                                <span>واحد</span>
+                                <strong id="myDepartment">-</strong>
+                            </div>
+
+                            <div class="profile-item">
+                                <span>سمت</span>
+                                <strong id="myPosition">-</strong>
+                            </div>
+
+                            <div class="profile-item">
+                                <span>تاریخ استخدام</span>
+                                <strong id="myHireDate">-</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </section>
 
 
-                <!-- ================= MY ATTENDANCE ================= -->
+                <!-- ================= EMPLOYEE PAYROLL ================= -->
 
-                <section id="page-myAttendance" class="page">
+                <section id="page-employeePayroll" class="page">
 
                     <div class="page-toolbar">
 
                         <div>
-                            <h2 class="section-title">
-                                حضور و غیاب من
-                            </h2>
+                            <h2 class="section-title">حقوق و کسورات من</h2>
 
                             <p class="section-subtitle">
-                                سوابق حضور و غیاب شما
+                                مشاهده جزئیات حقوق و پرداختی
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="payroll-summary">
+
+                        <div class="payroll-summary-card">
+                            <span>حقوق پایه</span>
+                            <strong id="myBaseSalary">۰ تومان</strong>
+                        </div>
+
+                        <div class="payroll-summary-card">
+                            <span>اضافه‌کاری</span>
+                            <strong id="myOvertime">۰ تومان</strong>
+                        </div>
+
+                        <div class="payroll-summary-card">
+                            <span>پاداش</span>
+                            <strong id="myBonus">۰ تومان</strong>
+                        </div>
+
+                        <div class="payroll-summary-card">
+                            <span>مجموع کسورات</span>
+                            <strong id="myDeductions">۰ تومان</strong>
+                        </div>
+
+                        <div class="payroll-summary-card highlight">
+                            <span>حقوق خالص</span>
+                            <strong id="myNetSalary">۰ تومان</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ================= EMPLOYEE ATTENDANCE ================= -->
+
+                <section id="page-employeeAttendance" class="page">
+
+                    <div class="page-toolbar">
+
+                        <div>
+                            <h2 class="section-title">حضور و غیاب من</h2>
+
+                            <p class="section-subtitle">
+                                مشاهده سوابق ورود و خروج
                             </p>
                         </div>
 
@@ -1033,12 +1163,14 @@
                             <table>
 
                                 <thead>
+
                                     <tr>
                                         <th>تاریخ</th>
                                         <th>ورود</th>
                                         <th>خروج</th>
                                         <th>وضعیت</th>
                                     </tr>
+
                                 </thead>
 
                                 <tbody id="myAttendanceBody"></tbody>
@@ -1052,25 +1184,24 @@
                 </section>
 
 
-                <!-- ================= MY LEAVE ================= -->
+                <!-- ================= EMPLOYEE LEAVE ================= -->
 
-                <section id="page-myLeave" class="page">
+                <section id="page-employeeLeave" class="page">
 
                     <div class="page-toolbar">
 
                         <div>
-                            <h2 class="section-title">
-                                مرخصی من
-                            </h2>
+                            <h2 class="section-title">مرخصی من</h2>
 
                             <p class="section-subtitle">
-                                درخواست و سوابق مرخصی شما
+                                ثبت و پیگیری درخواست‌های مرخصی
                             </p>
                         </div>
 
                         <button
-                            id="myLeaveRequestBtn"
+                            id="employeeAddLeaveBtn"
                             class="primary-btn"
+                            type="button"
                         >
                             <i class="fa-solid fa-calendar-plus"></i>
                             درخواست مرخصی
@@ -1086,13 +1217,16 @@
                             <table>
 
                                 <thead>
+
                                     <tr>
                                         <th>نوع</th>
                                         <th>شروع</th>
                                         <th>پایان</th>
                                         <th>روز</th>
+                                        <th>توضیحات</th>
                                         <th>وضعیت</th>
                                     </tr>
+
                                 </thead>
 
                                 <tbody id="myLeaveBody"></tbody>
@@ -1105,6 +1239,7 @@
 
                 </section>
 
+
             </main>
 
         </div>
@@ -1112,9 +1247,7 @@
     </div>
 
 
-    <!-- =========================
-         EMPLOYEE MODAL
-    ========================== -->
+    <!-- ================= EMPLOYEE MODAL ================= -->
 
     <div id="employeeModal" class="modal">
 
@@ -1123,13 +1256,8 @@
             <div class="modal-header">
 
                 <div>
-                    <h3 id="employeeModalTitle">
-                        افزودن کارمند
-                    </h3>
-
-                    <p>
-                        اطلاعات کامل کارمند
-                    </p>
+                    <h3 id="employeeModalTitle">افزودن کارمند</h3>
+                    <p>اطلاعات کامل کارمند را وارد کنید</p>
                 </div>
 
                 <button
@@ -1149,27 +1277,32 @@
 
                 <div class="form-grid">
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>نام و نام خانوادگی</label>
                         <input id="employeeName" required>
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>کد ملی</label>
-                        <input id="employeeNationalId" maxlength="10" required>
+                        <input id="employeeNationalId" required maxlength="10">
                     </div>
 
-                    <div class="input-group">
-                        <label>کد پرسنلی</label>
-                        <input id="employeeCode" required>
-                    </div>
-
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>تاریخ تولد</label>
                         <input id="employeeBirthDate" type="date">
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
+                        <label>شماره تماس</label>
+                        <input id="employeePhone" type="tel">
+                    </div>
+
+                    <div class="form-group">
+                        <label>کد پرسنلی</label>
+                        <input id="employeeCode" required>
+                    </div>
+
+                    <div class="form-group">
                         <label>واحد سازمانی</label>
 
                         <select id="employeeDepartment" required>
@@ -1184,27 +1317,32 @@
 
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>سمت</label>
                         <input id="employeePosition" required>
                     </div>
 
-                    <div class="input-group">
-                        <label>شماره تماس</label>
-                        <input id="employeePhone" type="tel">
-                    </div>
-
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>تاریخ استخدام</label>
                         <input id="employeeHireDate" type="date">
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>حقوق پایه</label>
                         <input id="employeeSalary" type="number" min="0">
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
+                        <label>نام کاربری</label>
+                        <input id="employeeUsername">
+                    </div>
+
+                    <div class="form-group">
+                        <label>رمز عبور</label>
+                        <input id="employeePassword" type="password">
+                    </div>
+
+                    <div class="form-group">
                         <label>وضعیت</label>
 
                         <select id="employeeStatus">
@@ -1214,26 +1352,13 @@
 
                     </div>
 
-                    <div class="input-group">
-                        <label>نام کاربری</label>
-                        <input id="employeeUsername">
-                    </div>
-
-                    <div class="input-group">
-                        <label>رمز عبور</label>
-                        <input id="employeePassword" type="password">
-                    </div>
-
                 </div>
 
 
                 <div class="form-actions">
 
-                    <button
-                        class="primary-btn"
-                        type="submit"
-                    >
-                        <i class="fa-solid fa-floppy-disk"></i>
+                    <button class="primary-btn" type="submit">
+                        <i class="fa-solid fa-check"></i>
                         ذخیره اطلاعات
                     </button>
 
@@ -1254,89 +1379,7 @@
     </div>
 
 
-    <!-- =========================
-         ATTENDANCE MODAL
-    ========================== -->
-
-    <div id="attendanceModal" class="modal">
-
-        <div class="modal-content small-modal">
-
-            <div class="modal-header">
-
-                <div>
-                    <h3>ثبت حضور و غیاب</h3>
-                    <p>وضعیت امروز کارمند</p>
-                </div>
-
-                <button
-                    class="close-modal"
-                    data-close="attendanceModal"
-                    type="button"
-                >
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-
-            </div>
-
-
-            <form id="attendanceForm">
-
-                <input id="attendanceEmployeeId" type="hidden">
-
-                <div class="form-grid">
-
-                    <div class="input-group">
-                        <label>ساعت ورود</label>
-                        <input id="attendanceEntry" type="time">
-                    </div>
-
-                    <div class="input-group">
-                        <label>ساعت خروج</label>
-                        <input id="attendanceExit" type="time">
-                    </div>
-
-                    <div class="input-group full">
-                        <label>وضعیت</label>
-
-                        <select id="attendanceStatus">
-                            <option value="present">حاضر</option>
-                            <option value="late">تأخیر</option>
-                            <option value="absent">غایب</option>
-                            <option value="leave">مرخصی</option>
-                        </select>
-                    </div>
-
-                </div>
-
-
-                <div class="form-actions">
-
-                    <button class="primary-btn" type="submit">
-                        <i class="fa-solid fa-check"></i>
-                        ثبت حضور
-                    </button>
-
-                    <button
-                        class="secondary-btn"
-                        data-close="attendanceModal"
-                        type="button"
-                    >
-                        انصراف
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         LEAVE MODAL
-    ========================== -->
+    <!-- ================= LEAVE MODAL ================= -->
 
     <div id="leaveModal" class="modal">
 
@@ -1362,40 +1405,60 @@
 
             <form id="leaveForm">
 
-                <div
-                    id="leaveEmployeeWrapper"
-                    class="input-group"
-                >
-                    <label>کارمند</label>
-
-                    <select id="leaveEmployee" required></select>
-                </div>
-
-
                 <div class="form-grid">
 
-                    <div class="input-group">
+                    <div
+                        id="leaveEmployeeGroup"
+                        class="form-group"
+                    >
+
+                        <label>کارمند</label>
+
+                        <select id="leaveEmployee"></select>
+
+                    </div>
+
+                    <div class="form-group">
+
                         <label>نوع مرخصی</label>
 
                         <select id="leaveType">
+
                             <option>استحقاقی</option>
                             <option>استعلاجی</option>
                             <option>بدون حقوق</option>
                             <option>ساعتی</option>
+
                         </select>
+
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
+
                         <label>تاریخ شروع</label>
-                        <input id="leaveStart" type="date" required>
+
+                        <input
+                            id="leaveStart"
+                            type="date"
+                            required
+                        >
+
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
+
                         <label>تاریخ پایان</label>
-                        <input id="leaveEnd" type="date" required>
+
+                        <input
+                            id="leaveEnd"
+                            type="date"
+                            required
+                        >
+
                     </div>
 
-                    <div class="input-group full">
+                    <div class="form-group full">
+
                         <label>توضیحات</label>
 
                         <textarea
@@ -1403,6 +1466,7 @@
                             rows="4"
                             placeholder="توضیحات درخواست..."
                         ></textarea>
+
                     </div>
 
                 </div>
@@ -1432,9 +1496,7 @@
     </div>
 
 
-    <!-- =========================
-         PAYROLL MODAL
-    ========================== -->
+    <!-- ================= PAYROLL MODAL ================= -->
 
     <div id="payrollModal" class="modal">
 
@@ -1464,32 +1526,32 @@
 
                 <div class="form-grid">
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>حقوق پایه</label>
                         <input id="payrollBase" type="number" min="0">
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>اضافه‌کاری</label>
                         <input id="payrollOvertime" type="number" min="0">
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>پاداش</label>
                         <input id="payrollBonus" type="number" min="0">
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>بیمه</label>
                         <input id="payrollInsurance" type="number" min="0">
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>مالیات</label>
                         <input id="payrollTax" type="number" min="0">
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label>سایر کسورات</label>
                         <input id="payrollOther" type="number" min="0">
                     </div>
@@ -1532,9 +1594,63 @@
     </div>
 
 
-    <!-- =========================
-         TOAST
-    ========================== -->
+    <!-- ================= PROFILE MODAL ================= -->
+
+    <div id="profileModal" class="modal">
+
+        <div class="modal-content small-modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3>پروفایل حساب</h3>
+                    <p>اطلاعات حساب کاربری</p>
+                </div>
+
+                <button
+                    class="close-modal"
+                    data-close="profileModal"
+                    type="button"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+            <div class="profile-mini">
+
+                <div id="modalProfileAvatar" class="large-avatar">
+                    م
+                </div>
+
+                <h3 id="modalProfileName">-</h3>
+
+                <p id="modalProfileRole">-</p>
+
+            </div>
+
+
+            <div class="profile-grid">
+
+                <div class="profile-item">
+                    <span>نام کاربری</span>
+                    <strong id="modalProfileUsername">-</strong>
+                </div>
+
+                <div class="profile-item">
+                    <span>نقش</span>
+                    <strong id="modalProfileRole2">-</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TOAST ================= -->
 
     <div id="toast" class="toast">
 
@@ -1544,6 +1660,7 @@
 
         <div>
             <strong id="toastTitle">موفق</strong>
+
             <p id="toastMessage">
                 عملیات با موفقیت انجام شد.
             </p>
@@ -1552,6 +1669,7 @@
     </div>
 
 </div>
+
 
 <script src="app.js"></script>
 
