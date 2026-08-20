@@ -3200,3 +3200,176 @@ body::after {
 /* =========================================================
    END OF STYLE.CSS — VERSION 1.9
 ========================================================= */
+/* =========================================================
+   MIRZA KHAN HR
+   MENU BUTTON — 3 LINES
+========================================================= */
+
+.mobile-menu-btn {
+    position: fixed;
+
+    top: 16px;
+    right: 16px;
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 10001;
+
+    border: 1px solid rgba(217, 173, 85, 0.35);
+    border-radius: 14px;
+
+    color: #fff;
+
+    font-size: 23px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(38, 53, 76, 0.98),
+            rgba(10, 21, 36, 0.98)
+        );
+
+    box-shadow:
+        0 7px 0 rgba(65, 43, 14, 0.8),
+        0 12px 25px rgba(0, 0, 0, 0.35),
+        inset 0 2px 2px rgba(255,255,255,.12);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+/* حالت هاور */
+
+.mobile-menu-btn:hover {
+
+    color: #ffe9a7;
+
+    transform:
+        translateY(-3px);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(55, 72, 98, 1),
+            rgba(14, 27, 45, 1)
+        );
+
+    box-shadow:
+        0 10px 0 rgba(65, 43, 14, 0.8),
+        0 18px 30px rgba(217,173,85,.18),
+        inset 0 2px 2px rgba(255,255,255,.15);
+}
+
+/* حالت فشرده شدن */
+
+.mobile-menu-btn:active {
+
+    transform:
+        translateY(5px);
+
+    box-shadow:
+        0 2px 0 rgba(65, 43, 14, 0.8),
+        0 6px 12px rgba(0,0,0,.25);
+}
+
+
+/* =========================================================
+   SIDEBAR MOBILE
+========================================================= */
+
+@media (max-width: 991px) {
+
+    .sidebar,
+    #sidebar {
+
+        transform:
+            translateX(110%);
+
+        transition:
+            transform .3s cubic-bezier(.2,.8,.2,1);
+
+    }
+
+    .sidebar.open,
+    #sidebar.open {
+
+        transform:
+            translateX(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (min-width: 992px) {
+
+    .mobile-menu-btn {
+
+        display: flex;
+
+    }
+
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.menu-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1999;
+
+    background:
+        rgba(0,0,0,.55);
+
+    backdrop-filter:
+        blur(4px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+}
+
+
+.menu-overlay.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+}
+
+
+/* =========================================================
+   SIDEBAR ABOVE OVERLAY
+========================================================= */
+
+.sidebar,
+#sidebar {
+
+    z-index: 2000;
+
+}
