@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#166534">
 
-    <title>سامانه منابع انسانی میرزا کوچک خان</title>
+    <title>سامانه جامع منابع انسانی و حضور و غیاب میرزا کوچک خان</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,1006 +25,458 @@
 
 <body>
 
-<div id="app">
+<!-- ================= LOGIN ================= -->
 
-    <!-- ================= LOGIN ================= -->
+<div id="loginPage" class="auth-page">
 
-    <section id="loginPage" class="auth-page">
+    <div class="auth-box">
 
-        <div class="auth-decoration decoration-one"></div>
-        <div class="auth-decoration decoration-two"></div>
+        <div class="auth-logo">
+            <i class="fa-solid fa-seedling"></i>
+        </div>
 
-        <div class="auth-card">
+        <h1>میرزا کوچک خان</h1>
 
-            <div class="auth-logo">
+        <p class="auth-subtitle">
+            سامانه جامع منابع انسانی
+        </p>
+
+        <div class="auth-title">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            ورود به سامانه
+        </div>
+
+        <div class="form-group">
+            <label>نام کاربری</label>
+            <div class="input-icon">
+                <i class="fa-solid fa-user"></i>
+                <input
+                    id="loginUsername"
+                    type="text"
+                    placeholder="نام کاربری"
+                >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>رمز عبور</label>
+            <div class="input-icon">
+                <i class="fa-solid fa-lock"></i>
+                <input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="رمز عبور"
+                >
+            </div>
+        </div>
+
+        <button id="loginBtn" class="auth-primary-btn">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            ورود
+        </button>
+
+        <button id="showRegisterBtn" class="auth-secondary-btn">
+            <i class="fa-solid fa-user-plus"></i>
+            ثبت نام کارمند
+        </button>
+
+        <div class="demo-login">
+            <strong>ورود آزمایشی مدیر</strong>
+            <span>admin / 1234</span>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ================= REGISTER ================= -->
+
+<div id="registerPage" class="auth-page hidden">
+
+    <div class="auth-box">
+
+        <div class="auth-logo">
+            <i class="fa-solid fa-user-plus"></i>
+        </div>
+
+        <h1>ثبت نام کارمند</h1>
+
+        <p class="auth-subtitle">
+            ایجاد حساب کاربری شخصی
+        </p>
+
+        <div class="form-group">
+            <label>نام و نام خانوادگی</label>
+            <input
+                id="registerName"
+                type="text"
+                placeholder="مثلاً علی احمدی"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>کد ملی</label>
+            <input
+                id="registerNationalCode"
+                type="text"
+                maxlength="10"
+                placeholder="۱۰ رقم"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>تاریخ تولد</label>
+            <input
+                id="registerBirthDate"
+                type="date"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>شماره تماس</label>
+            <input
+                id="registerPhone"
+                type="tel"
+                placeholder="09xxxxxxxxx"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>نام کاربری</label>
+            <input
+                id="registerUsername"
+                type="text"
+                placeholder="نام کاربری دلخواه"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>رمز عبور</label>
+            <input
+                id="registerPassword"
+                type="password"
+                placeholder="رمز عبور"
+            >
+        </div>
+
+        <button id="registerBtn" class="auth-primary-btn">
+            <i class="fa-solid fa-user-check"></i>
+            ثبت نام
+        </button>
+
+        <button id="backToLoginBtn" class="auth-secondary-btn">
+            <i class="fa-solid fa-arrow-right"></i>
+            بازگشت به ورود
+        </button>
+
+    </div>
+</div>
+
+
+<!-- ================= APPLICATION ================= -->
+
+<div id="application" class="app hidden">
+
+    <div id="menuOverlay" class="menu-overlay"></div>
+
+    <button
+        id="mobileMenuBtn"
+        class="mobile-menu-btn"
+        type="button"
+    >
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside id="sidebar" class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
                 <i class="fa-solid fa-seedling"></i>
             </div>
 
-            <h1>میرزا کوچک خان</h1>
-
-            <p class="auth-subtitle">
-                سامانه جامع منابع انسانی
-            </p>
-
-            <div class="login-type">
-
-                <button
-                    id="employeeLoginTab"
-                    class="login-type-btn active"
-                    type="button"
-                >
-                    <i class="fa-solid fa-user"></i>
-                    ورود کارمند
-                </button>
-
-                <button
-                    id="adminLoginTab"
-                    class="login-type-btn"
-                    type="button"
-                >
-                    <i class="fa-solid fa-user-shield"></i>
-                    ورود مدیر
-                </button>
-
-            </div>
-
-            <form id="loginForm">
-
-                <div class="input-group">
-
-                    <label for="loginUsername">
-                        نام کاربری
-                    </label>
-
-                    <div class="input-wrapper">
-
-                        <i class="fa-solid fa-user"></i>
-
-                        <input
-                            id="loginUsername"
-                            type="text"
-                            placeholder="نام کاربری خود را وارد کنید"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-                <div class="input-group">
-
-                    <label for="loginPassword">
-                        رمز عبور
-                    </label>
-
-                    <div class="input-wrapper">
-
-                        <i class="fa-solid fa-lock"></i>
-
-                        <input
-                            id="loginPassword"
-                            type="password"
-                            placeholder="رمز عبور"
-                            required
-                        >
-
-                        <button
-                            id="togglePassword"
-                            type="button"
-                            class="password-toggle"
-                        >
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
-
-                    </div>
-
-                </div>
-
-                <button
-                    class="auth-submit"
-                    type="submit"
-                >
-                    <i class="fa-solid fa-right-to-bracket"></i>
-                    ورود به سامانه
-                </button>
-
-            </form>
-
-            <div class="auth-register">
-
-                <span>
-                    هنوز حساب کاربری ندارید؟
-                </span>
-
-                <button
-                    id="showRegisterBtn"
-                    type="button"
-                >
-                    ثبت‌نام کارمند
-                </button>
-
-            </div>
-
-            <div class="demo-login">
-
-                <strong>
-                    ورود آزمایشی مدیر
-                </strong>
-
-                <span>
-                    نام کاربری: admin
-                </span>
-
-                <span>
-                    رمز عبور: 123456
-                </span>
-
+            <div class="brand-text">
+                <strong>میرزا کوچک خان</strong>
+                <span>سامانه منابع انسانی</span>
             </div>
 
         </div>
 
-    </section>
 
+        <nav class="sidebar-menu" id="adminMenu">
 
-    <!-- ================= REGISTER ================= -->
-
-    <section id="registerPage" class="auth-page hidden">
-
-        <div class="auth-card register-card">
-
-            <button
-                id="backToLogin"
-                class="back-button"
-                type="button"
-            >
-                <i class="fa-solid fa-arrow-right"></i>
-                بازگشت به ورود
-            </button>
-
-            <div class="auth-logo">
-                <i class="fa-solid fa-user-plus"></i>
-            </div>
-
-            <h1>ثبت‌نام کارمند</h1>
-
-            <p class="auth-subtitle">
-                اطلاعات خود را برای ایجاد حساب وارد کنید
-            </p>
-
-            <form id="registerForm">
-
-                <div class="form-grid">
-
-                    <div class="input-group">
-
-                        <label>
-                            نام و نام خانوادگی
-                        </label>
-
-                        <input
-                            id="registerName"
-                            type="text"
-                            placeholder="مثلاً علی احمدی"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="input-group">
-
-                        <label>
-                            کد ملی
-                        </label>
-
-                        <input
-                            id="registerNationalId"
-                            type="text"
-                            maxlength="10"
-                            placeholder="۱۰ رقم"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="input-group">
-
-                        <label>
-                            کد پرسنلی
-                        </label>
-
-                        <input
-                            id="registerPersonnelCode"
-                            type="text"
-                            placeholder="مثلاً MK-1001"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="input-group">
-
-                        <label>
-                            تاریخ تولد
-                        </label>
-
-                        <input
-                            id="registerBirthDate"
-                            type="date"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="input-group">
-
-                        <label>
-                            شماره موبایل
-                        </label>
-
-                        <input
-                            id="registerPhone"
-                            type="tel"
-                            placeholder="09xxxxxxxxx"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="input-group">
-
-                        <label>
-                            نام کاربری
-                        </label>
-
-                        <input
-                            id="registerUsername"
-                            type="text"
-                            placeholder="نام کاربری"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="input-group">
-
-                        <label>
-                            رمز عبور
-                        </label>
-
-                        <input
-                            id="registerPassword"
-                            type="password"
-                            placeholder="حداقل ۶ کاراکتر"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="input-group">
-
-                        <label>
-                            تکرار رمز عبور
-                        </label>
-
-                        <input
-                            id="registerPasswordConfirm"
-                            type="password"
-                            placeholder="تکرار رمز"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-                <button
-                    class="auth-submit"
-                    type="submit"
-                >
-                    <i class="fa-solid fa-user-check"></i>
-                    ایجاد حساب کاربری
-                </button>
-
-            </form>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= EMPLOYEE PANEL ================= -->
-
-    <section id="employeePanel" class="dashboard-app hidden">
-
-        <aside class="dashboard-sidebar">
-
-            <div class="sidebar-brand">
-
-                <div class="sidebar-logo">
-                    <i class="fa-solid fa-seedling"></i>
-                </div>
-
-                <div>
-                    <strong>میرزا کوچک خان</strong>
-                    <small>پنل کارمند</small>
-                </div>
-
-            </div>
-
-            <nav>
-
-                <button
-                    class="panel-menu active"
-                    data-panel="employeeHome"
-                >
-                    <i class="fa-solid fa-house"></i>
-                    داشبورد من
-                </button>
-
-                <button
-                    class="panel-menu"
-                    data-panel="employeeProfile"
-                >
-                    <i class="fa-solid fa-id-card"></i>
-                    اطلاعات شخصی
-                </button>
-
-                <button
-                    class="panel-menu"
-                    data-panel="employeePayroll"
-                >
-                    <i class="fa-solid fa-money-bill-wave"></i>
-                    حقوق و مزایا
-                </button>
-
-                <button
-                    class="panel-menu"
-                    data-panel="employeeAttendance"
-                >
-                    <i class="fa-solid fa-clock"></i>
-                    حضور و غیاب
-                </button>
-
-                <button
-                    class="panel-menu"
-                    data-panel="employeeLeave"
-                >
-                    <i class="fa-solid fa-calendar-days"></i>
-                    مرخصی
-                </button>
-
-            </nav>
-
-            <button
-                id="employeeLogout"
-                class="logout-button"
-            >
-                <i class="fa-solid fa-right-from-bracket"></i>
-                خروج
-            </button>
-
-        </aside>
-
-
-        <main class="dashboard-main">
-
-            <header class="dashboard-header">
-
-                <div>
-                    <h2 id="employeePageTitle">
-                        داشبورد من
-                    </h2>
-
-                    <p>
-                        سامانه جامع منابع انسانی
-                    </p>
-                </div>
-
-                <div class="header-user">
-
-                    <div class="header-avatar" id="employeeAvatar">
-                        م
-                    </div>
-
-                    <div>
-                        <strong id="employeeHeaderName">
-                            کارمند
-                        </strong>
-
-                        <small>
-                            کارمند سازمان
-                        </small>
-                    </div>
-
-                </div>
-
-            </header>
-
-
-            <!-- EMPLOYEE HOME -->
-
-            <section
-                id="employeeHome"
-                class="panel-page active"
-            >
-
-                <div class="welcome-card">
-
-                    <div>
-
-                        <span>
-                            خوش آمدید 👋
-                        </span>
-
-                        <h1>
-                            <span id="welcomeName">
-                                کارمند
-                            </span>
-                        </h1>
-
-                        <p>
-                            از این قسمت می‌توانید اطلاعات شخصی،
-                            حقوق، حضور و غیاب و مرخصی‌های خود را مشاهده کنید.
-                        </p>
-
-                    </div>
-
-                    <i class="fa-solid fa-user-tie"></i>
-
-                </div>
-
-
-                <div class="employee-stats">
-
-                    <div class="employee-stat">
-
-                        <div class="stat-icon green">
-                            <i class="fa-solid fa-money-bill"></i>
-                        </div>
-
-                        <span>
-                            حقوق پایه
-                        </span>
-
-                        <strong id="homeSalary">
-                            ۰ تومان
-                        </strong>
-
-                    </div>
-
-
-                    <div class="employee-stat">
-
-                        <div class="stat-icon blue">
-                            <i class="fa-solid fa-calendar-check"></i>
-                        </div>
-
-                        <span>
-                            مانده مرخصی
-                        </span>
-
-                        <strong id="homeLeave">
-                            ۰ روز
-                        </strong>
-
-                    </div>
-
-
-                    <div class="employee-stat">
-
-                        <div class="stat-icon orange">
-                            <i class="fa-solid fa-clock"></i>
-                        </div>
-
-                        <span>
-                            وضعیت امروز
-                        </span>
-
-                        <strong id="homeAttendance">
-                            ثبت نشده
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="dashboard-cards">
-
-                    <div class="info-card">
-
-                        <h3>
-                            <i class="fa-solid fa-user"></i>
-                            اطلاعات من
-                        </h3>
-
-                        <div class="quick-info">
-
-                            <div>
-                                <span>کد پرسنلی</span>
-                                <strong id="homePersonnelCode">-</strong>
-                            </div>
-
-                            <div>
-                                <span>واحد</span>
-                                <strong id="homeDepartment">-</strong>
-                            </div>
-
-                            <div>
-                                <span>سمت</span>
-                                <strong id="homePosition">-</strong>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="info-card">
-
-                        <h3>
-                            <i class="fa-solid fa-file-invoice-dollar"></i>
-                            آخرین وضعیت حقوق
-                        </h3>
-
-                        <div class="salary-box">
-
-                            <span>
-                                حقوق خالص
-                            </span>
-
-                            <strong id="homeNetSalary">
-                                ۰ تومان
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- PROFILE -->
-
-            <section
-                id="employeeProfile"
-                class="panel-page"
-            >
-
-                <div class="section-heading">
-
-                    <h2>
-                        اطلاعات شخصی من
-                    </h2>
-
-                    <p>
-                        اطلاعات ثبت‌شده توسط منابع انسانی
-                    </p>
-
-                </div>
-
-                <div class="profile-info-grid">
-
-                    <div class="profile-info">
-                        <span>نام و نام خانوادگی</span>
-                        <strong id="profileName">-</strong>
-                    </div>
-
-                    <div class="profile-info">
-                        <span>کد ملی</span>
-                        <strong id="profileNationalId">-</strong>
-                    </div>
-
-                    <div class="profile-info">
-                        <span>تاریخ تولد</span>
-                        <strong id="profileBirthDate">-</strong>
-                    </div>
-
-                    <div class="profile-info">
-                        <span>شماره تماس</span>
-                        <strong id="profilePhone">-</strong>
-                    </div>
-
-                    <div class="profile-info">
-                        <span>کد پرسنلی</span>
-                        <strong id="profilePersonnelCode">-</strong>
-                    </div>
-
-                    <div class="profile-info">
-                        <span>نام کاربری</span>
-                        <strong id="profileUsername">-</strong>
-                    </div>
-
-                    <div class="profile-info">
-                        <span>واحد سازمانی</span>
-                        <strong id="profileDepartment">-</strong>
-                    </div>
-
-                    <div class="profile-info">
-                        <span>سمت</span>
-                        <strong id="profilePosition">-</strong>
-                    </div>
-
-                    <div class="profile-info">
-                        <span>تاریخ استخدام</span>
-                        <strong id="profileHireDate">-</strong>
-                    </div>
-
-                    <div class="profile-info">
-                        <span>وضعیت</span>
-                        <strong class="status-active">
-                            فعال
-                        </strong>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- PAYROLL -->
-
-            <section
-                id="employeePayroll"
-                class="panel-page"
-            >
-
-                <div class="section-heading">
-
-                    <h2>
-                        حقوق و مزایا
-                    </h2>
-
-                    <p>
-                        اطلاعات حقوقی شما
-                    </p>
-
-                </div>
-
-                <div class="salary-summary">
-
-                    <div>
-                        <span>حقوق پایه</span>
-                        <strong id="salaryBase">۰ تومان</strong>
-                    </div>
-
-                    <div>
-                        <span>اضافه‌کاری</span>
-                        <strong id="salaryOvertime">۰ تومان</strong>
-                    </div>
-
-                    <div>
-                        <span>پاداش</span>
-                        <strong id="salaryBonus">۰ تومان</strong>
-                    </div>
-
-                    <div>
-                        <span>مجموع کسورات</span>
-                        <strong id="salaryDeduction">۰ تومان</strong>
-                    </div>
-
-                    <div class="net-salary">
-                        <span>حقوق خالص</span>
-                        <strong id="salaryNet">۰ تومان</strong>
-                    </div>
-
-                </div>
-
-                <div class="info-card">
-
-                    <h3>
-                        <i class="fa-solid fa-file-invoice"></i>
-                        جزئیات کسورات
-                    </h3>
-
-                    <div class="deduction-list">
-
-                        <div>
-                            <span>بیمه</span>
-                            <strong id="insurance">۰ تومان</strong>
-                        </div>
-
-                        <div>
-                            <span>مالیات</span>
-                            <strong id="tax">۰ تومان</strong>
-                        </div>
-
-                        <div>
-                            <span>سایر کسورات</span>
-                            <strong id="otherDeduction">۰ تومان</strong>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- ATTENDANCE -->
-
-            <section
-                id="employeeAttendance"
-                class="panel-page"
-            >
-
-                <div class="section-heading">
-
-                    <h2>
-                        حضور و غیاب من
-                    </h2>
-
-                    <p>
-                        وضعیت حضور و غیاب شما
-                    </p>
-
-                </div>
-
-                <div class="attendance-user-card">
-
-                    <div class="attendance-icon">
-                        <i class="fa-solid fa-clock"></i>
-                    </div>
-
-                    <div>
-
-                        <span>
-                            وضعیت امروز
-                        </span>
-
-                        <strong id="attendanceStatus">
-                            ثبت نشده
-                        </strong>
-
-                    </div>
-
-                </div>
-
-                <div class="attendance-history">
-
-                    <h3>
-                        سوابق حضور و غیاب
-                    </h3>
-
-                    <div id="attendanceHistory">
-                        هنوز سابقه‌ای ثبت نشده است.
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- LEAVE -->
-
-            <section
-                id="employeeLeave"
-                class="panel-page"
-            >
-
-                <div class="section-heading">
-
-                    <h2>
-                        مرخصی‌های من
-                    </h2>
-
-                    <p>
-                        سوابق و وضعیت درخواست‌های مرخصی
-                    </p>
-
-                </div>
-
-                <div class="leave-summary">
-
-                    <div>
-                        <span>مانده مرخصی</span>
-                        <strong id="leaveBalance">۰ روز</strong>
-                    </div>
-
-                    <div>
-                        <span>در انتظار بررسی</span>
-                        <strong id="leavePending">۰</strong>
-                    </div>
-
-                    <div>
-                        <span>تأیید شده</span>
-                        <strong id="leaveApproved">۰</strong>
-                    </div>
-
-                </div>
-
-                <div class="info-card">
-
-                    <h3>
-                        درخواست‌های من
-                    </h3>
-
-                    <div id="employeeLeaveList">
-                        هنوز درخواستی ثبت نشده است.
-                    </div>
-
-                </div>
-
-            </section>
-
-        </main>
-
-    </section>
-
-
-    <!-- ================= ADMIN PANEL ================= -->
-
-    <section id="adminPanel" class="dashboard-app hidden">
-
-        <aside class="dashboard-sidebar admin-sidebar">
-
-            <div class="sidebar-brand">
-
-                <div class="sidebar-logo">
-                    <i class="fa-solid fa-seedling"></i>
-                </div>
-
-                <div>
-                    <strong>میرزا کوچک خان</strong>
-                    <small>مدیریت منابع انسانی</small>
-                </div>
-
-            </div>
-
-            <nav>
-
-                <button
-                    class="panel-menu admin-menu active"
-                    data-panel="adminHome"
-                >
+            <button class="menu-item active" data-page="dashboard">
+                <span class="menu-icon">
                     <i class="fa-solid fa-chart-pie"></i>
-                    داشبورد
-                </button>
-
-                <button
-                    class="panel-menu admin-menu"
-                    data-panel="adminEmployees"
-                >
-                    <i class="fa-solid fa-users"></i>
-                    کارکنان
-                </button>
-
-                <button
-                    class="panel-menu admin-menu"
-                    data-panel="adminPayroll"
-                >
-                    <i class="fa-solid fa-money-bill-wave"></i>
-                    حقوق و کسورات
-                </button>
-
-                <button
-                    class="panel-menu admin-menu"
-                    data-panel="adminAttendance"
-                >
-                    <i class="fa-solid fa-clock"></i>
-                    حضور و غیاب
-                </button>
-
-            </nav>
-
-            <button
-                id="adminLogout"
-                class="logout-button"
-            >
-                <i class="fa-solid fa-right-from-bracket"></i>
-                خروج
+                </span>
+                <span>داشبورد</span>
             </button>
 
-        </aside>
+            <button class="menu-item" data-page="employees">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-users"></i>
+                </span>
+                <span>کارکنان</span>
+                <span id="employeeMenuBadge" class="menu-badge">0</span>
+            </button>
+
+            <button class="menu-item" data-page="attendance">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-clock"></i>
+                </span>
+                <span>حضور و غیاب</span>
+            </button>
+
+            <button class="menu-item" data-page="leave">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </span>
+                <span>مرخصی</span>
+                <span id="leaveMenuBadge" class="menu-badge warning">0</span>
+            </button>
+
+            <button class="menu-item" data-page="payroll">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                </span>
+                <span>حقوق و کسورات</span>
+            </button>
+
+            <button class="menu-item" data-page="reports">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-chart-column"></i>
+                </span>
+                <span>گزارش‌ها</span>
+            </button>
+
+            <button class="menu-item" data-page="notifications">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-bell"></i>
+                </span>
+                <span>اعلان‌ها</span>
+                <span id="notificationMenuBadge" class="notification-menu-badge">0</span>
+            </button>
+
+        </nav>
 
 
-        <main class="dashboard-main">
+        <nav class="sidebar-menu employee-only-menu hidden">
 
-            <header class="dashboard-header">
+            <button class="menu-item active" data-page="employeeHome">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-house"></i>
+                </span>
+                <span>صفحه اصلی</span>
+            </button>
 
-                <div>
-                    <h2 id="adminPageTitle">
-                        داشبورد مدیریت
-                    </h2>
+            <button class="menu-item" data-page="myProfile">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-user"></i>
+                </span>
+                <span>پروفایل من</span>
+            </button>
 
-                    <p>
-                        مدیریت منابع انسانی میرزا کوچک خان
-                    </p>
-                </div>
+            <button class="menu-item" data-page="myAttendance">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-clock"></i>
+                </span>
+                <span>حضور و غیاب من</span>
+            </button>
 
-                <div class="header-user">
+            <button class="menu-item" data-page="myLeave">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </span>
+                <span>مرخصی من</span>
+            </button>
 
-                    <div class="header-avatar">
+            <button class="menu-item" data-page="myPayroll">
+                <span class="menu-icon">
+                    <i class="fa-solid fa-wallet"></i>
+                </span>
+                <span>حقوق من</span>
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+            <div>سامانه منابع انسانی</div>
+            <small>MIRZA KHAN HR</small>
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="main-layout">
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+                <h1 id="pageTitle">داشبورد</h1>
+                <span id="pageSubtitle">مدیریت جامع منابع انسانی</span>
+            </div>
+
+            <div class="topbar-actions">
+
+                <button
+                    id="notificationButton"
+                    class="icon-button"
+                    title="اعلان‌ها"
+                >
+                    <i class="fa-regular fa-bell"></i>
+                    <span id="notificationBadge">0</span>
+                </button>
+
+                <button id="profileButton" class="user-button">
+
+                    <span class="user-avatar" id="topUserAvatar">
                         م
-                    </div>
+                    </span>
 
-                    <div>
-                        <strong>
-                            مدیر سیستم
-                        </strong>
+                    <span class="user-info">
+                        <strong id="topUserName">مدیر سیستم</strong>
+                        <small id="topUserRole">مدیریت منابع انسانی</small>
+                    </span>
 
-                        <small>
-                            منابع انسانی
-                        </small>
-                    </div>
+                </button>
 
-                </div>
+                <button
+                    id="logoutBtn"
+                    class="logout-button"
+                    title="خروج"
+                >
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
 
-            </header>
+            </div>
+
+        </header>
 
 
-            <!-- ADMIN HOME -->
+        <main class="content">
 
-            <section
-                id="adminHome"
-                class="panel-page active"
-            >
 
-                <div class="welcome-card admin-welcome">
+            <!-- ================= ADMIN DASHBOARD ================= -->
 
-                    <div>
+            <section id="page-dashboard" class="page active-page">
 
-                        <span>
-                            پنل مدیریت 👨‍💼
+                <div class="dashboard-hero">
+
+                    <div class="hero-content">
+
+                        <span class="hero-label">
+                            <i class="fa-solid fa-leaf"></i>
+                            سامانه جامع منابع انسانی
                         </span>
 
-                        <h1>
-                            سامانه منابع انسانی
-                        </h1>
+                        <h2>
+                            مدیریت هوشمند
+                            <span class="green-text">
+                                سرمایه انسانی
+                            </span>
+                        </h2>
 
                         <p>
-                            مدیریت کارکنان، حقوق، حضور و غیاب و اطلاعات سازمان.
+                            مدیریت کارکنان، حضور و غیاب، مرخصی،
+                            حقوق و کسورات در یک سامانه یکپارچه.
                         </p>
+
+                        <div class="hero-actions">
+
+                            <button class="primary-btn" data-page="employees">
+                                <i class="fa-solid fa-users"></i>
+                                مدیریت کارکنان
+                            </button>
+
+                            <button class="secondary-btn" data-page="attendance">
+                                <i class="fa-solid fa-clock"></i>
+                                حضور و غیاب
+                            </button>
+
+                        </div>
 
                     </div>
 
-                    <i class="fa-solid fa-building"></i>
+                    <div class="hero-decoration">
+                        <div class="hero-circle circle-one"></div>
+                        <div class="hero-circle circle-two"></div>
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
 
                 </div>
 
-                <div class="employee-stats">
 
-                    <div class="employee-stat">
+                <div class="stats-grid">
 
-                        <div class="stat-icon green">
+                    <div class="stat-card green-card">
+                        <div class="stat-icon">
                             <i class="fa-solid fa-users"></i>
                         </div>
-
-                        <span>کل کارکنان</span>
-
-                        <strong id="adminTotalEmployees">
-                            ۰
-                        </strong>
-
+                        <h3 id="totalEmployees">0</h3>
+                        <p>کل کارکنان</p>
                     </div>
 
-                    <div class="employee-stat">
-
-                        <div class="stat-icon blue">
+                    <div class="stat-card success-card">
+                        <div class="stat-icon">
                             <i class="fa-solid fa-user-check"></i>
                         </div>
+                        <h3 id="presentEmployees">0</h3>
+                        <p>حاضر امروز</p>
+                    </div>
 
-                        <span>کارکنان فعال</span>
+                    <div class="stat-card danger-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-user-xmark"></i>
+                        </div>
+                        <h3 id="absentEmployees">0</h3>
+                        <p>غایب امروز</p>
+                    </div>
 
-                        <strong id="adminActiveEmployees">
-                            ۰
-                        </strong>
+                    <div class="stat-card warning-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-person-walking-arrow-right"></i>
+                        </div>
+                        <h3 id="lateEmployees">0</h3>
+                        <p>تأخیر امروز</p>
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="card dashboard-section">
+
+                        <div class="dashboard-section-title">
+                            <h3>کارکنان اخیر</h3>
+
+                            <button
+                                class="text-button"
+                                data-page="employees"
+                            >
+                                مشاهده همه
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </button>
+                        </div>
+
+                        <div id="recentEmployees"></div>
 
                     </div>
 
-                    <div class="employee-stat">
 
-                        <div class="stat-icon orange">
-                            <i class="fa-solid fa-money-bill"></i>
+                    <div class="card dashboard-section">
+
+                        <div class="dashboard-section-title">
+                            <h3>فعالیت‌های اخیر</h3>
                         </div>
 
-                        <span>مجموع حقوق</span>
-
-                        <strong id="adminTotalSalary">
-                            ۰ تومان
-                        </strong>
+                        <div id="recentActivities"></div>
 
                     </div>
 
@@ -1033,46 +485,71 @@
             </section>
 
 
-            <!-- ADMIN EMPLOYEES -->
+            <!-- ================= EMPLOYEES ================= -->
 
-            <section
-                id="adminEmployees"
-                class="panel-page"
-            >
+            <section id="page-employees" class="page">
 
-                <div class="section-heading">
+                <div class="page-toolbar">
 
-                    <h2>
-                        مدیریت کارکنان
-                    </h2>
+                    <div>
+                        <h2 class="section-title">مدیریت کارکنان</h2>
+                        <p class="section-subtitle">
+                            ثبت و مدیریت اطلاعات کارکنان سازمان
+                        </p>
+                    </div>
 
-                    <p>
-                        اطلاعات کارکنان سازمان
-                    </p>
+                    <button id="addEmployeeBtn" class="primary-btn">
+                        <i class="fa-solid fa-user-plus"></i>
+                        افزودن کارمند
+                    </button>
 
                 </div>
 
-                <div class="info-card table-card">
 
-                    <div class="table-scroll">
+                <div class="card">
+
+                    <div class="table-header">
+
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input
+                                id="employeeSearch"
+                                type="search"
+                                placeholder="جستجوی نام، کد پرسنلی یا سمت..."
+                            >
+                        </div>
+
+                        <select id="employeeDepartmentFilter" class="filter-select">
+                            <option value="">همه واحدها</option>
+                            <option>منابع انسانی</option>
+                            <option>مالی</option>
+                            <option>تولید</option>
+                            <option>فنی</option>
+                            <option>اداری</option>
+                            <option>حراست</option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="table-container">
 
                         <table>
 
                             <thead>
-
                                 <tr>
                                     <th>کارمند</th>
-                                    <th>کد ملی</th>
                                     <th>کد پرسنلی</th>
+                                    <th>کد ملی</th>
                                     <th>واحد</th>
                                     <th>سمت</th>
-                                    <th>حقوق پایه</th>
+                                    <th>حقوق</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
                                 </tr>
-
                             </thead>
 
-                            <tbody id="adminEmployeesTable">
-                            </tbody>
+                            <tbody id="employeesTableBody"></tbody>
 
                         </table>
 
@@ -1083,46 +560,201 @@
             </section>
 
 
-            <!-- ADMIN PAYROLL -->
+            <!-- ================= ATTENDANCE ================= -->
 
-            <section
-                id="adminPayroll"
-                class="panel-page"
-            >
+            <section id="page-attendance" class="page">
 
-                <div class="section-heading">
+                <div class="page-toolbar">
 
-                    <h2>
-                        حقوق و کسورات
-                    </h2>
+                    <div>
+                        <h2 class="section-title">حضور و غیاب</h2>
+                        <p class="section-subtitle">
+                            ثبت و مدیریت وضعیت حضور کارکنان
+                        </p>
+                    </div>
 
-                    <p>
-                        اطلاعات مالی کارکنان
-                    </p>
+                    <input id="attendanceDate" class="date-input" type="date">
 
                 </div>
 
-                <div class="info-card table-card">
 
-                    <div class="table-scroll">
+                <div class="attendance-stats">
+
+                    <div class="attendance-stat">
+                        <strong id="attendancePresent">0</strong>
+                        <span>حاضر</span>
+                    </div>
+
+                    <div class="attendance-stat">
+                        <strong id="attendanceAbsent">0</strong>
+                        <span>غایب</span>
+                    </div>
+
+                    <div class="attendance-stat">
+                        <strong id="attendanceLate">0</strong>
+                        <span>تأخیر</span>
+                    </div>
+
+                    <div class="attendance-stat">
+                        <strong id="attendanceLeave">0</strong>
+                        <span>مرخصی</span>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="table-container">
 
                         <table>
 
                             <thead>
+                                <tr>
+                                    <th>کارمند</th>
+                                    <th>ورود</th>
+                                    <th>خروج</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
 
+                            <tbody id="attendanceTableBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= LEAVE ================= -->
+
+            <section id="page-leave" class="page">
+
+                <div class="page-toolbar">
+
+                    <div>
+                        <h2 class="section-title">مدیریت مرخصی</h2>
+                        <p class="section-subtitle">
+                            بررسی و مدیریت درخواست‌های مرخصی
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="leave-stats">
+
+                    <div class="leave-stat">
+                        <strong id="pendingLeaves">0</strong>
+                        <span>در انتظار بررسی</span>
+                    </div>
+
+                    <div class="leave-stat">
+                        <strong id="approvedLeaves">0</strong>
+                        <span>تأیید شده</span>
+                    </div>
+
+                    <div class="leave-stat">
+                        <strong id="rejectedLeaves">0</strong>
+                        <span>رد شده</span>
+                    </div>
+
+                    <div class="leave-stat">
+                        <strong id="totalLeaveDays">0</strong>
+                        <span>مجموع روزها</span>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>کارمند</th>
+                                    <th>نوع</th>
+                                    <th>شروع</th>
+                                    <th>پایان</th>
+                                    <th>روز</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="leaveTableBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= PAYROLL ================= -->
+
+            <section id="page-payroll" class="page">
+
+                <div class="page-toolbar">
+
+                    <div>
+                        <h2 class="section-title">حقوق و کسورات</h2>
+                        <p class="section-subtitle">
+                            مدیریت حقوق، مزایا و کسورات کارکنان
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="payroll-summary">
+
+                    <div class="payroll-summary-card">
+                        <span>مجموع حقوق ناخالص</span>
+                        <strong id="grossPayroll">۰ تومان</strong>
+                    </div>
+
+                    <div class="payroll-summary-card">
+                        <span>مجموع کسورات</span>
+                        <strong id="deductionPayroll">۰ تومان</strong>
+                    </div>
+
+                    <div class="payroll-summary-card">
+                        <span>حقوق خالص</span>
+                        <strong id="netPayroll">۰ تومان</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
                                 <tr>
                                     <th>کارمند</th>
                                     <th>حقوق پایه</th>
                                     <th>اضافه‌کاری</th>
                                     <th>پاداش</th>
                                     <th>کسورات</th>
-                                    <th>خالص</th>
+                                    <th>خالص پرداختی</th>
+                                    <th>عملیات</th>
                                 </tr>
-
                             </thead>
 
-                            <tbody id="adminPayrollTable">
-                            </tbody>
+                            <tbody id="payrollTableBody"></tbody>
 
                         </table>
 
@@ -1133,46 +765,474 @@
             </section>
 
 
-            <!-- ADMIN ATTENDANCE -->
+            <!-- ================= REPORTS ================= -->
 
-            <section
-                id="adminAttendance"
-                class="panel-page"
-            >
+            <section id="page-reports" class="page">
 
-                <div class="section-heading">
+                <div class="page-toolbar">
 
-                    <h2>
-                        حضور و غیاب کارکنان
-                    </h2>
+                    <div>
+                        <h2 class="section-title">گزارش‌ها</h2>
+                        <p class="section-subtitle">
+                            گزارش‌های مدیریتی سامانه
+                        </p>
+                    </div>
 
-                    <p>
-                        مشاهده وضعیت حضور کارکنان
-                    </p>
+                    <button id="printReportBtn" class="secondary-btn">
+                        <i class="fa-solid fa-print"></i>
+                        چاپ گزارش
+                    </button>
 
                 </div>
 
-                <div class="info-card table-card">
 
-                    <div class="table-scroll">
+                <div class="report-stats">
+
+                    <div class="report-stat">
+                        <strong id="reportEmployees">0</strong>
+                        <span>کارکنان فعال</span>
+                    </div>
+
+                    <div class="report-stat">
+                        <strong id="reportAttendance">0%</strong>
+                        <span>نرخ حضور</span>
+                    </div>
+
+                    <div class="report-stat">
+                        <strong id="reportLeaves">0</strong>
+                        <span>درخواست مرخصی</span>
+                    </div>
+
+                    <div class="report-stat">
+                        <strong id="reportPayroll">۰</strong>
+                        <span>مجموع پرداختی</span>
+                    </div>
+
+                </div>
+
+
+                <div class="report-grid">
+
+                    <div class="card report-card">
+
+                        <div class="report-card-header">
+                            <h3>وضعیت حضور</h3>
+                        </div>
+
+                        <div class="report-progress">
+
+                            <div class="progress-label">
+                                <span>نرخ حضور کارکنان</span>
+                                <strong id="attendancePercent">0%</strong>
+                            </div>
+
+                            <div class="progress">
+                                <div id="attendanceProgress" class="progress-bar"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card report-card">
+
+                        <div class="report-card-header">
+                            <h3>واحدهای سازمانی</h3>
+                        </div>
+
+                        <div id="departmentReport"></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= NOTIFICATIONS ================= -->
+
+            <section id="page-notifications" class="page">
+
+                <div class="page-toolbar">
+
+                    <div>
+                        <h2 class="section-title">اعلان‌ها</h2>
+                        <p class="section-subtitle">
+                            اطلاعیه‌ها و رویدادهای سامانه
+                        </p>
+                    </div>
+
+                    <button id="markAllNotifications" class="secondary-btn">
+                        <i class="fa-solid fa-check-double"></i>
+                        خواندن همه
+                    </button>
+
+                </div>
+
+                <div class="card">
+                    <div id="notificationsList"></div>
+                </div>
+
+            </section>
+
+
+            <!-- ================= PROFILE ================= -->
+
+            <section id="page-profile" class="page">
+
+                <div class="page-toolbar">
+
+                    <div>
+                        <h2 class="section-title">پروفایل</h2>
+                        <p class="section-subtitle">
+                            اطلاعات حساب کاربری
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="profile-header">
+
+                        <div id="profileAvatar" class="large-avatar">
+                            م
+                        </div>
+
+                        <div>
+                            <h2 id="profileName">مدیر سیستم</h2>
+                            <p id="profilePosition">مدیریت منابع انسانی</p>
+                        </div>
+
+                    </div>
+
+                    <div class="profile-grid">
+
+                        <div class="profile-item">
+                            <span>نام کاربری</span>
+                            <strong id="profileUsername">admin</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>نقش</span>
+                            <strong id="profileRole">مدیر سیستم</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>کد ملی</span>
+                            <strong id="profileNationalCode">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>تاریخ تولد</span>
+                            <strong id="profileBirthDate">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>شماره تماس</span>
+                            <strong id="profilePhone">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>وضعیت</span>
+                            <strong class="profile-active">فعال</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= EMPLOYEE HOME ================= -->
+
+            <section id="page-employeeHome" class="page">
+
+                <div class="dashboard-hero employee-hero">
+
+                    <div class="hero-content">
+
+                        <span class="hero-label">
+                            <i class="fa-solid fa-user"></i>
+                            پنل کارمند
+                        </span>
+
+                        <h2>
+                            سلام
+                            <span id="employeeWelcomeName" class="green-text">
+                                کارمند
+                            </span>
+                            👋
+                        </h2>
+
+                        <p>
+                            از این بخش می‌توانید اطلاعات شخصی،
+                            حقوق، حضور و غیاب و درخواست‌های مرخصی خود را مشاهده کنید.
+                        </p>
+
+                        <div class="hero-actions">
+
+                            <button class="primary-btn" data-page="myProfile">
+                                <i class="fa-solid fa-user"></i>
+                                پروفایل من
+                            </button>
+
+                            <button class="secondary-btn" data-page="myLeave">
+                                <i class="fa-solid fa-calendar-plus"></i>
+                                درخواست مرخصی
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card green-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <h3 id="employeeHomeSalary">۰</h3>
+                        <p>حقوق خالص</p>
+                    </div>
+
+                    <div class="stat-card success-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-user-check"></i>
+                        </div>
+                        <h3 id="employeeHomePresent">0</h3>
+                        <p>حضور</p>
+                    </div>
+
+                    <div class="stat-card warning-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <h3 id="employeeHomeLeave">0</h3>
+                        <p>مرخصی‌های من</p>
+                    </div>
+
+                    <div class="stat-card danger-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <h3 id="employeeHomeLate">0</h3>
+                        <p>تأخیر</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= MY PROFILE ================= -->
+
+            <section id="page-myProfile" class="page">
+
+                <div class="page-toolbar">
+
+                    <div>
+                        <h2 class="section-title">پروفایل من</h2>
+                        <p class="section-subtitle">
+                            اطلاعات شخصی و شغلی من
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="card employee-profile-card">
+
+                    <div class="profile-header">
+
+                        <div id="myProfileAvatar" class="large-avatar">
+                            م
+                        </div>
+
+                        <div>
+                            <h2 id="myProfileName">---</h2>
+                            <p id="myProfilePosition">---</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-grid">
+
+                        <div class="profile-item">
+                            <span>نام و نام خانوادگی</span>
+                            <strong id="myName">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>کد ملی</span>
+                            <strong id="myNationalCode">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>تاریخ تولد</span>
+                            <strong id="myBirthDate">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>شماره تماس</span>
+                            <strong id="myPhone">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>کد پرسنلی</span>
+                            <strong id="myEmployeeCode">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>واحد</span>
+                            <strong id="myDepartment">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>سمت</span>
+                            <strong id="myPosition">---</strong>
+                        </div>
+
+                        <div class="profile-item">
+                            <span>تاریخ استخدام</span>
+                            <strong id="myHireDate">---</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= MY ATTENDANCE ================= -->
+
+            <section id="page-myAttendance" class="page">
+
+                <div class="page-toolbar">
+
+                    <div>
+                        <h2 class="section-title">حضور و غیاب من</h2>
+                        <p class="section-subtitle">
+                            سوابق حضور و غیاب شما
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="table-container">
 
                         <table>
 
                             <thead>
-
                                 <tr>
-                                    <th>کارمند</th>
-                                    <th>کد پرسنلی</th>
+                                    <th>تاریخ</th>
+                                    <th>ورود</th>
+                                    <th>خروج</th>
                                     <th>وضعیت</th>
                                 </tr>
-
                             </thead>
 
-                            <tbody id="adminAttendanceTable">
-                            </tbody>
+                            <tbody id="myAttendanceBody"></tbody>
 
                         </table>
 
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= MY LEAVE ================= -->
+
+            <section id="page-myLeave" class="page">
+
+                <div class="page-toolbar">
+
+                    <div>
+                        <h2 class="section-title">مرخصی من</h2>
+                        <p class="section-subtitle">
+                            درخواست و سوابق مرخصی
+                        </p>
+                    </div>
+
+                    <button id="employeeAddLeaveBtn" class="primary-btn">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        درخواست مرخصی
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>نوع</th>
+                                    <th>شروع</th>
+                                    <th>پایان</th>
+                                    <th>روز</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="myLeaveBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= MY PAYROLL ================= -->
+
+            <section id="page-myPayroll" class="page">
+
+                <div class="page-toolbar">
+
+                    <div>
+                        <h2 class="section-title">حقوق من</h2>
+                        <p class="section-subtitle">
+                            اطلاعات حقوق و کسورات
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="payroll-summary">
+
+                    <div class="payroll-summary-card">
+                        <span>حقوق پایه</span>
+                        <strong id="myBaseSalary">۰ تومان</strong>
+                    </div>
+
+                    <div class="payroll-summary-card">
+                        <span>مزایا</span>
+                        <strong id="myBenefits">۰ تومان</strong>
+                    </div>
+
+                    <div class="payroll-summary-card">
+                        <span>کسورات</span>
+                        <strong id="myDeductions">۰ تومان</strong>
+                    </div>
+
+                    <div class="payroll-summary-card">
+                        <span>حقوق خالص</span>
+                        <strong id="myNetSalary">۰ تومان</strong>
                     </div>
 
                 </div>
@@ -1181,25 +1241,419 @@
 
         </main>
 
-    </section>
+    </div>
+
+
+    <!-- ================= EMPLOYEE MODAL ================= -->
+
+    <div id="employeeModal" class="modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3 id="employeeModalTitle">افزودن کارمند</h3>
+                    <p>اطلاعات کامل کارمند</p>
+                </div>
+
+                <button class="close-modal" data-close="employeeModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+            <form id="employeeForm">
+
+                <input id="employeeId" type="hidden">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>نام و نام خانوادگی</label>
+                        <input id="employeeName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>کد پرسنلی</label>
+                        <input id="employeeCode" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>کد ملی</label>
+                        <input id="employeeNationalCode" maxlength="10" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>تاریخ تولد</label>
+                        <input id="employeeBirthDate" type="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>شماره تماس</label>
+                        <input id="employeePhone" type="tel">
+                    </div>
+
+                    <div class="form-group">
+                        <label>تاریخ استخدام</label>
+                        <input id="employeeHireDate" type="date">
+                    </div>
+
+                    <div class="form-group">
+                        <label>واحد سازمانی</label>
+
+                        <select id="employeeDepartment" required>
+                            <option value="">انتخاب واحد</option>
+                            <option>منابع انسانی</option>
+                            <option>مالی</option>
+                            <option>تولید</option>
+                            <option>فنی</option>
+                            <option>اداری</option>
+                            <option>حراست</option>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>سمت</label>
+                        <input id="employeePosition" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>حقوق پایه</label>
+                        <input id="employeeSalary" type="number" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>وضعیت</label>
+
+                        <select id="employeeStatus">
+                            <option value="active">فعال</option>
+                            <option value="inactive">غیرفعال</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button class="primary-btn" type="submit">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        ذخیره اطلاعات
+                    </button>
+
+                    <button
+                        class="secondary-btn"
+                        data-close="employeeModal"
+                        type="button"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                        انصراف
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= LEAVE MODAL ================= -->
+
+    <div id="leaveModal" class="modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3>ثبت درخواست مرخصی</h3>
+                    <p>درخواست شما برای مدیر ارسال خواهد شد.</p>
+                </div>
+
+                <button class="close-modal" data-close="leaveModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+            <form id="leaveForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group" id="adminLeaveEmployeeGroup">
+
+                        <label>کارمند</label>
+
+                        <select id="leaveEmployee"></select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>نوع مرخصی</label>
+
+                        <select id="leaveType">
+
+                            <option>استحقاقی</option>
+                            <option>استعلاجی</option>
+                            <option>بدون حقوق</option>
+                            <option>ساعتی</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>تاریخ شروع</label>
+                        <input id="leaveStart" type="date" required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>تاریخ پایان</label>
+                        <input id="leaveEnd" type="date" required>
+
+                    </div>
+
+                    <div class="form-group full">
+
+                        <label>توضیحات</label>
+
+                        <textarea
+                            id="leaveDescription"
+                            rows="4"
+                            placeholder="توضیحات درخواست..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button class="primary-btn" type="submit">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        ثبت درخواست
+                    </button>
+
+                    <button
+                        class="secondary-btn"
+                        data-close="leaveModal"
+                        type="button"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                        انصراف
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= PAYROLL MODAL ================= -->
+
+    <div id="payrollModal" class="modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3>ویرایش حقوق و کسورات</h3>
+                    <p>اطلاعات پرداختی کارمند</p>
+                </div>
+
+                <button class="close-modal" data-close="payrollModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+            <form id="payrollForm">
+
+                <input id="payrollEmployeeId" type="hidden">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>حقوق پایه</label>
+                        <input id="payrollBase" type="number" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>اضافه‌کاری</label>
+                        <input id="payrollOvertime" type="number" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>پاداش</label>
+                        <input id="payrollBonus" type="number" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>بیمه</label>
+                        <input id="payrollInsurance" type="number" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>مالیات</label>
+                        <input id="payrollTax" type="number" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>سایر کسورات</label>
+                        <input id="payrollOther" type="number" min="0">
+                    </div>
+
+                </div>
+
+
+                <div class="payroll-preview">
+
+                    <span>حقوق خالص:</span>
+
+                    <strong id="payrollNetPreview">
+                        ۰ تومان
+                    </strong>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button class="primary-btn" type="submit">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        ذخیره
+                    </button>
+
+                    <button
+                        class="secondary-btn"
+                        data-close="payrollModal"
+                        type="button"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                        انصراف
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ATTENDANCE MODAL ================= -->
+
+    <div id="attendanceModal" class="modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3>ثبت حضور و غیاب</h3>
+                    <p>وضعیت حضور کارمند را ثبت کنید.</p>
+                </div>
+
+                <button class="close-modal" data-close="attendanceModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+            <form id="attendanceForm">
+
+                <input id="attendanceEmployeeId" type="hidden">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>ساعت ورود</label>
+                        <input id="attendanceIn" type="time">
+                    </div>
+
+                    <div class="form-group">
+                        <label>ساعت خروج</label>
+                        <input id="attendanceOut" type="time">
+                    </div>
+
+                    <div class="form-group full">
+                        <label>وضعیت</label>
+
+                        <select id="attendanceStatus">
+                            <option value="present">حاضر</option>
+                            <option value="late">تأخیر</option>
+                            <option value="absent">غایب</option>
+                            <option value="leave">مرخصی</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button class="primary-btn" type="submit">
+                        <i class="fa-solid fa-check"></i>
+                        ثبت حضور
+                    </button>
+
+                    <button
+                        class="secondary-btn"
+                        data-close="attendanceModal"
+                        type="button"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                        انصراف
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 
     <!-- ================= TOAST ================= -->
 
     <div id="toast" class="toast">
 
-        <i id="toastIcon" class="fa-solid fa-check"></i>
+        <div id="toastIcon">
+            <i class="fa-solid fa-check"></i>
+        </div>
 
         <div>
             <strong id="toastTitle">موفق</strong>
-            <p id="toastMessage"></p>
+            <p id="toastMessage">عملیات با موفقیت انجام شد.</p>
         </div>
 
     </div>
 
 </div>
 
+
 <script src="app.js"></script>
 
 </body>
-</html>
+                                </html>
