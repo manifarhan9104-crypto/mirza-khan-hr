@@ -2923,7 +2923,225 @@ select option {
 
 .card:hover,
 .report-card:hover {
+/* =========================================================
+   MIRZA KHAN HR - FIX PAGE OVERLAP
+   VERSION 1.9
+========================================================= */
 
+/* لایه‌بندی اصلی */
+:root {
+    --header-height: 72px;
+    --sidebar-width: 270px;
+}
+
+/* جلوگیری از بیرون‌زدگی محتوا */
+html,
+body {
+    overflow-x: hidden;
+}
+
+/* هدر همیشه بالاتر از محتوا */
+.header,
+.topbar,
+.navbar,
+header {
+    position: relative;
+    z-index: 1000;
+}
+
+/* سایدبار بالاتر از صفحات */
+.sidebar,
+#sidebar {
+    position: fixed;
+    z-index: 2000;
+}
+
+/* صفحه اصلی زیر هدر قرار بگیرد */
+.main-content,
+.main,
+.content,
+main {
+    position: relative;
+    z-index: 1;
+}
+
+/* هر صفحه در لایه مناسب */
+.page {
+    position: relative;
+    z-index: 1;
+}
+
+/* منو بالاتر از کارت‌ها و جداول */
+.menu,
+.sidebar-menu,
+.nav-menu {
+    position: relative;
+    z-index: 2100;
+}
+
+/* منوی باز موبایل */
+.sidebar.open,
+#sidebar.open {
+    z-index: 5000;
+}
+
+/* جلوگیری از پوشانده شدن منو توسط کارت‌ها */
+.card,
+.dashboard-card,
+.stat-card,
+.table-card,
+.panel,
+.modal-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* مودال باید از همه بالاتر باشد */
+.modal,
+#employeeModal,
+#leaveModal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+}
+
+/* محتوای مودال */
+.modal-content {
+    position: relative;
+    z-index: 10001;
+}
+
+/* دکمه موبایل */
+.mobile-menu,
+#mobileMenu {
+    position: relative;
+    z-index: 6000;
+}
+
+/* لینک‌های منو */
+.menu-item,
+.sidebar a,
+.sidebar button {
+    position: relative;
+    z-index: 2200;
+}
+
+/* جلوگیری از بریده شدن منو */
+.sidebar,
+.sidebar-inner,
+.sidebar-menu {
+    overflow: visible;
+}
+
+/* محتوای اصلی */
+.main-content {
+    min-height: 100vh;
+}
+
+/* دسکتاپ */
+@media (min-width: 992px) {
+
+    .main-content,
+    main {
+        margin-right: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
+    }
+
+}
+
+/* موبایل */
+@media (max-width: 991px) {
+
+    .main-content,
+    main {
+        margin-right: 0;
+        width: 100%;
+    }
+
+    .sidebar,
+    #sidebar {
+        transform: translateX(110%);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.open,
+    #sidebar.open {
+        transform: translateX(0);
+    }
+
+}
+
+/* صفحات فعال */
+.active-page {
+    display: block !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* صفحات غیرفعال */
+.page:not(.active-page) {
+    display: none;
+}
+
+/* جلوگیری از تداخل جدول */
+.table-container,
+.table-wrapper {
+    position: relative;
+    z-index: 1;
+    overflow-x: auto;
+}
+
+/* هدر جدول پایین‌تر از منو */
+table {
+    position: relative;
+    z-index: 1;
+}
+
+/* اعلان‌ها */
+.notification-dropdown,
+.notifications-panel {
+    position: absolute;
+    z-index: 9000;
+}
+
+/* Toast / پیام‌ها */
+.toast,
+.alert,
+.notification-toast {
+    position: fixed;
+    z-index: 15000;
+}
+
+/* انتخاب‌ها و فرم‌ها */
+select,
+input,
+textarea,
+button {
+    position: relative;
+}
+
+/* اصلاح مشکل transform والد */
+.sidebar,
+.header,
+.main-content {
+    isolation: isolate;
+}
+
+/* دراپ‌داون */
+.dropdown,
+.dropdown-menu {
+    position: absolute;
+    z-index: 9999;
+}
+
+/* اسکرول صحیح */
+body {
+    min-height: 100vh;
+}
+
+/* =========================================================
+   END FIX
+========================================================= */
     border-color:
         rgba(217,173,85,.16);
 
